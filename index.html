@@ -18,7 +18,6 @@
             background-color: black;
             font-family: "Courier New", serif;
             color: white;
-            /*animation: fadein 2s;*/
         }
 
         @keyframes fadein {
@@ -26,7 +25,7 @@
                 opacity: 0;
             }
             to {
-                opacity: 1;
+                opacity: 0.8;
             }
         }
 
@@ -38,12 +37,14 @@
             align-content: center;
             align-items: center;
         }
+
         .flex-item {
             opacity: 0.8;
             padding: 1em;
+            animation: fadein 1s;
         }
 
-        .icon{
+        .icon {
             height: 2em;
             width: 2em;
         }
