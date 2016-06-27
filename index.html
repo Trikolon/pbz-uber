@@ -32,7 +32,7 @@
         .flex-container {
             display: flex;
             flex-direction: column;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             text-align: center;
             justify-content: center;
             align-content: center;
@@ -65,24 +65,36 @@
 </head>
 <body>
 <div class="flex-container monitor">
-    <div id="heading" class="flex-item overlay">
+    <div id="heading" class="flex-item">
         Paul Zuehlcke
     </div>
-    <div class="flex-item flex-container">
-        <a href="//keybase.io/pbz"><img class="icon" src="icon/key-128.png" alt=""></a>
-        <a href="//keybase.io/pbz">keybase</a>
-    </div>
-    <div class="flex-item flex-container">
-        <a href="//github.com/trikolon"><img class="icon" src="icon/github-128.png" alt=""></a>
-        <a href="//github.com/trikolon">github</a>
-    </div>
-    <div class="flex-item flex-container">
-        <a href="//twitter.com/deppaws"><img class="icon" src="icon/twitter-128.png" alt=""></a>
-        <a href="//twitter.com/deppaws">twitter</a>
-    </div>
-    <div class="flex-item flex-container">
-        <a href="mailto:paul@zuehlcke.de"><img class="icon" src="icon/envelope-128.png" alt=""></a>
-        <a href="mailto:paul@zuehlcke.de">e-mail</a>
+    <div class="flex-item ">
+        <div class="flex-container">
+            <div class="flex-item">
+                <div class="flex-container">
+                    <a href="//keybase.io/pbz"><img class="icon" src="icon/key-128.png" alt=""></a>
+                    <a href="//keybase.io/pbz">keybase</a>
+                </div>
+            </div>
+            <div class="flex-item">
+                <div class="flex-container">
+                    <a href="//github.com/trikolon"><img class="icon" src="icon/github-128.png" alt=""></a>
+                    <a href="//github.com/trikolon">github</a>
+                </div>
+            </div>
+            <div class="flex-item">
+                <div class="flex-container">
+                    <a href="//twitter.com/deppaws"><img class="icon" src="icon/twitter-128.png" alt=""></a>
+                    <a href="//twitter.com/deppaws">twitter</a>
+                </div>
+            </div>
+            <div class="flex-item">
+                <div class="flex-container">
+                    <a href="mailto:paul@zuehlcke.de"><img class="icon" src="icon/envelope-128.png" alt=""></a>
+                    <a href="mailto:paul@zuehlcke.de">e-mail</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>
