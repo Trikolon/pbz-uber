@@ -22,7 +22,7 @@ a, a:hover {
 .flex-container {
     display: flex;
     flex-direction: column;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     text-align: center;
     justify-content: center;
     align-content: center;
@@ -45,7 +45,7 @@ a, a:hover {
 }
 
 #heading {
-    padding: 1.5em;
+    margin: 1.5em;
 }
 
 #heading:hover:after, #heading:hover:before {
