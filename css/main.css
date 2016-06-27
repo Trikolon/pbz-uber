@@ -40,7 +40,7 @@ a, a:hover {
     width: 2em;
 }
 
-.flex-item:hover {
+.highlight:hover {
     opacity: 1;
 }
 
