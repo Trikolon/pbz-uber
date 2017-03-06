@@ -3,7 +3,7 @@ function LWConsole() {
     var consoleOutDOM = document.getElementById("consoleOut");
     var consoleInDOM = document.getElementById("consoleIn");
     var consoleOut = "";
-    var motd = "Welcome to paul.zuehlcke.de!\nType 'help' for help.\n";
+    var motd = "Welcome to " + window.location.hostname + "\nType 'help' for help.\n";
     var commands = [
         {
             name: "help",
