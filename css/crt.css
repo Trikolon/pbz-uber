@@ -64,7 +64,7 @@
     }
 }
 
-.monitor {
+#monitor {
     background: #121010;
     width: 100%;
     height: 100%;
@@ -75,7 +75,7 @@
     position: absolute;
 }
 
-.monitor::after {
+#monitor::after {
     content: " ";
     display: block;
     position: absolute;
@@ -90,7 +90,7 @@
     animation: flicker 0.15s infinite;
 }
 
-.monitor::before {
+#monitor::before {
     content: " ";
     display: block;
     position: absolute;
