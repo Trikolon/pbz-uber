@@ -26,6 +26,12 @@ function LWConsole() {
             handler: echoCMD
         },
         {
+            name: "ip",
+            description: "Lookup an IP: Usage: ip [ip] (queries your IP if no argument is provided)",
+            visible: true,
+            handler: ipCMD
+        },
+        {
             name: "invert",
             description: "Invert website colors",
             visible: true,
@@ -156,6 +162,38 @@ function LWConsole() {
             str += args[arg];
         }
         return str;
+    }
+
+    function ipCMD(args) {
+        var queryUrl = "https://ipinfo.io/";
+
+        if (args.length > 1) {
+            return "Invalid Syntax! ip [addr]";
+        }
+        else {
+            if (args.length === 1) { //one arg => query arg ip
+                queryUrl += args[0]
+            }
+        }
+
+        queryUrl += "/json";
+
+        var xmlHttp = new XMLHttpRequest();
+        try {
+            xmlHttp.open("GET", queryUrl, false);
+            xmlHttp.send(null);
+        }
+        catch(e) {
+            console.error(e);
+            return "Error: Could not send request to ipinfo.io. Check your internet connection.";
+        }
+
+        if (xmlHttp.status === 200) {
+            return xmlHttp.responseText;
+        }
+        else {
+            return "Error: ipinfo.io returned code " + xmlHttp.responseText;
+        }
     }
 }
 
