@@ -142,8 +142,9 @@ function LWConsole() {
 
         for (var arg in args) {
             if (!init) {
-                str += "";
+                str += " ";
             }
+            init = false;
             str += args[arg];
         }
         return str;
