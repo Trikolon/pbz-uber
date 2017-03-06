@@ -6,34 +6,48 @@ function LWConsole() {
     var motd = "Welcome to paul.zuehlcke.de!\nType 'help' for help.\n";
     var commands = [
         {
-            "name": "clear",
-            "description": "Clears the console",
-            "handler": clearCMD
+            name: "clear",
+            description: "Clears the console",
+            visible: true, //Visible in help page?
+            handler: clearCMD
         },
         {
-            "name": "motd",
-            "description": "Shows the message of the day",
-            "handler": motdCMD
+            name: "motd",
+            description: "Shows the message of the day",
+            visible: true,
+            handler: motdCMD
         },
         {
-            "name": "help",
-            "description": "Shows a list of commands",
-            "handler": helpCMD
+            name: "help",
+            description: "Shows a list of commands",
+            visible: true,
+            handler: helpCMD
         },
         {
-            "name": "invert",
-            "description": "Invert website colors",
-            "handler": invertCMD
+            name: "invert",
+            description: "Invert website colors",
+            visible: true,
+            handler: invertCMD
         },
         {
-            "name": "exit",
-            "description": "Exit console",
-            "handler": exitCMD
+            name: "exit",
+            description: "Exit console",
+            visible: true,
+            handler: exitCMD
         },
         {
-            "name": "echo",
-            "description": "Displays message on console - no pipes yet :-(",
-            "handler": echoCMD
+            name: "echo",
+            description: "Displays message on console - no pipes yet :-(",
+            visible: true,
+            handler: echoCMD
+        },
+        {
+            name: "kleinhase",
+            description: "Secret message",
+            visible: false,
+            handler: function () {
+                return "<3";
+            }
         }
     ];
 
@@ -122,7 +136,9 @@ function LWConsole() {
     function helpCMD() {
         var msg = "Available commands:";
         for (var c in commands) {
-            msg += "\n" + commands[c].name + ": " + commands[c].description;
+            if (commands[c].visible) {
+                msg += "\n" + commands[c].name + ": " + commands[c].description;
+            }
         }
         return msg;
     }
