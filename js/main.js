@@ -9,9 +9,7 @@ function JSUtil() {
         else {
             invertStr = "0%";
         }
-        var monitor = document.getElementById("monitor");
-        console.log(monitor);
-        document.getElementById("monitor").style.filter = "invert(" + invertStr + ")";
+        document.getElementById("content").style.filter = "invert(" + invertStr + ")";
     }
 
     this.toggleInvert = function () {
