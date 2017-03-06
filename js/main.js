@@ -29,6 +29,11 @@ function LWConsole() {
             "name": "exit",
             "description": "Exit console",
             "handler": exitCMD
+        },
+        {
+            "name": "echo",
+            "description": "Displays message on console - no pipes yet :-(",
+            "handler": echoCMD
         }
     ];
 
@@ -85,14 +90,16 @@ function LWConsole() {
      * @param cmd raw cmd by user
      */
     function sendCMD(cmd) {
+        var splitCMD = cmd.split(" "); //split cmd by space (cmd name, args)
         print("> " + cmd); //Print cmd from user
-        print(executeCMD(cmd)); //Print result of cmd-execution
+        print(executeCMD(splitCMD)); //Print result of cmd-execution
     }
 
     function executeCMD(cmd) {
         for (var c in commands) {
-            if (commands[c].name === cmd) {
-                return commands[c].handler();
+            if (commands[c].name === cmd[0]) {
+                cmd.shift(); //remove cmd name from array, only leaving args
+                return commands[c].handler(cmd); //Execute handler with array of args
             }
         }
         return "Unknown command.";
@@ -125,6 +132,19 @@ function LWConsole() {
 
     function exitCMD() { //hide for now, could destroy in the future
         util.toggleConsole();
+    }
+
+    function echoCMD(args) {
+        var init = true;
+        var str = "";
+
+        for (var arg in args) {
+            if (!init) {
+                str += "";
+            }
+            str += args[arg];
+        }
+        return str;
     }
 }
 
