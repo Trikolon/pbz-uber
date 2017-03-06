@@ -57,44 +57,19 @@ a, a:hover {
 }
 
 #bottom {
-    height: 20%;
-    position: absolute;
-    padding: 5px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
 
-    font-size: small;
-}
-
-/* TODO: wrapped state doesn't look nice */
-/*#bottom div {*/
-/*padding: 3px;*/
-/*}*/
-
-#bottomControl {
-    opacity: 0.8;
-}
-
-#bottomControl div {
-    margin-left: 2px;
-    margin-right: 2px;
-}
-
-#bottomControl div:hover {
-    text-decoration: underline;
-    cursor: pointer;
 }
 
 /* Initial state for console */
 #lwConsole {
-    opacity: 0.8;
+    font-size: small;
+    height: 90%;
     width: 30%;
-    height: 100%;
-    /*visibility: hidden;*/
+    position: absolute;
+    bottom: 15px;
+    right: 0;
+    opacity: 0.8;
+    visibility: hidden;
 }
 
 #lwConsole:hover {
@@ -103,16 +78,14 @@ a, a:hover {
 
 #lwConsole textarea {
     resize: none;
-    /*overflow: hidden;*/
     height: 90%;
 }
 
 #lwConsole input {
-    height: 10%;
 }
 
 #lwConsole textarea, input {
-    width: 100%;
+    width: 90%;
     color: white;
     background: rgba(0, 0, 0, 0.3);
     border: 0;

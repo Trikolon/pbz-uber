@@ -62,6 +62,8 @@ function LWConsole() {
         if (state) {
             consoleDiv.style.visibility = "visible";
             this.visible = true;
+            //Set focus to console
+            consoleInDOM.focus();
         }
         else {
             consoleDiv.style.visibility = "hidden";
