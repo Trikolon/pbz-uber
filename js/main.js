@@ -123,7 +123,7 @@ function LWConsole() {
 
     function executeCMD(cmd) {
         for (var c in commands) {
-            if (commands[c].name === cmd[0]) {
+            if (commands[c].name === cmd[0].toLowerCase()) {
                 cmd.shift(); //remove cmd name from array, only leaving args
                 return commands[c].handler(cmd); //Execute handler with array of args
             }
