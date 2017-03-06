@@ -183,17 +183,18 @@ function LWConsole() {
             xmlHttp.open("GET", queryUrl, false);
             xmlHttp.send(null);
         }
-        catch(e) {
+        catch (e) {
             console.error(e);
             return "Error: Could not send request to ipinfo.io. Check your internet connection.";
         }
 
-        if (xmlHttp.status === 200) {
-            return xmlHttp.responseText;
+        var result = xmlHttp.responseText;
+
+        if (xmlHttp.status !== 200) {
+            result += "\nError: ipinfo.io returned code " + xmlHttp.status;
         }
-        else {
-            return "Error: ipinfo.io returned code " + xmlHttp.responseText;
-        }
+
+        return result;
     }
 }
 
