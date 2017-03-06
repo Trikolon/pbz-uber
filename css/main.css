@@ -91,15 +91,19 @@ a, a:hover {
 
 /* Initial state for console */
 #lwConsole {
+    opacity: 0.8;
     width: 30%;
     height: 100%;
     /*visibility: hidden;*/
 }
 
-/* TODO: style textarea + input accordingly: black background, white text, no frames / box shadows */
+#lwConsole:hover {
+    opacity: 1.0;
+}
+
 #lwConsole textarea {
     resize: none;
-    overflow: hidden;
+    /*overflow: hidden;*/
     height: 90%;
 }
 
@@ -107,6 +111,13 @@ a, a:hover {
     height: 10%;
 }
 
-#lwConsole input, textarea {
+#lwConsole textarea, input {
     width: 100%;
+    color: white;
+    background: rgba(0, 0, 0, 0.3);
+    border: 0;
+}
+
+#lwConsole textarea:focus, input:focus {
+    outline: none;
 }
