@@ -9,7 +9,9 @@ function JSUtil() {
         else {
             invertStr = "0%";
         }
-        document.getElementById("content").style.filter = "invert(" + invertStr + ")";
+        document.getElementById("monitor").style.filter = "invert(" + invertStr + ")";
+        //Firefox fix (button needs individual filter)
+        document.getElementById("invertButton").style.filter = "invert(" + invertStr + ")";
     }
 
     this.toggleInvert = function () {
