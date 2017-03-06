@@ -6,40 +6,50 @@ function LWConsole() {
     var motd = "Welcome to paul.zuehlcke.de!\nType 'help' for help.\n";
     var commands = [
         {
-            name: "clear",
-            description: "Clears the console",
-            visible: true, //Visible in help page?
-            handler: clearCMD
-        },
-        {
-            name: "motd",
-            description: "Shows the message of the day",
-            visible: true,
-            handler: motdCMD
-        },
-        {
             name: "help",
             description: "Shows a list of commands",
             visible: true,
             handler: helpCMD
         },
         {
-            name: "invert",
-            description: "Invert website colors",
+            name: "motd",
+            description: "Shows the message of the day",
             visible: true,
-            handler: invertCMD
-        },
-        {
-            name: "exit",
-            description: "Exit console",
-            visible: true,
-            handler: exitCMD
+            handler: function () {
+                return motd;
+            }
         },
         {
             name: "echo",
             description: "Displays message on console - no pipes yet :-(",
             visible: true,
             handler: echoCMD
+        },
+        {
+            name: "invert",
+            description: "Invert website colors",
+            visible: true,
+            handler: function () {
+                util.toggleInvert();
+                return "Page inverted!";
+            }
+        },
+        {
+            name: "clear",
+            description: "Clears the console",
+            visible: true, //Visible in help page?
+            handler: function () {
+                consoleOut = "";
+                consoleOutDOM.value = consoleOut;
+            }
+        },
+        {
+            name: "exit",
+            description: "Exit console",
+            visible: true,
+            handler: function () {
+                util.toggleConsole();
+            }
         },
         {
             name: "kleinhase",
@@ -124,15 +134,6 @@ function LWConsole() {
 
     // Command handlers
 
-    function clearCMD() {
-        consoleOut = "";
-        consoleOutDOM.value = consoleOut;
-    }
-
-    function motdCMD() {
-        return motd;
-    }
-
     function helpCMD() {
         var msg = "Available commands:";
         for (var c in commands) {
@@ -141,15 +142,6 @@ function LWConsole() {
             }
         }
         return msg;
-    }
-
-    function invertCMD() {
-        util.toggleInvert();
-        return "Page inverted!";
-    }
-
-    function exitCMD() { //hide for now, could destroy in the future
-        util.toggleConsole();
     }
 
     function echoCMD(args) {
