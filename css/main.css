@@ -29,6 +29,10 @@ a, a:hover {
     align-items: center;
 }
 
+.flex-row {
+    flex-direction: row;
+}
+
 .flex-item {
     opacity: 0.8;
     padding: 1em;
@@ -52,14 +56,57 @@ a, a:hover {
     content: " - ";
 }
 
-.bottomRight {
-    opacity: 0.8;
+#bottom {
+    height: 20%;
     position: absolute;
-    right: 10px;
-    bottom: 10px;
+    padding: 5px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
     font-size: small;
 }
 
-.trigger:hover {
+/* TODO: wrapped state doesn't look nice */
+/*#bottom div {*/
+/*padding: 3px;*/
+/*}*/
+
+#bottomControl {
+    opacity: 0.8;
+}
+
+#bottomControl div {
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+#bottomControl div:hover {
+    text-decoration: underline;
     cursor: pointer;
+}
+
+/* Initial state for console */
+#lwConsole {
+    width: 30%;
+    height: 100%;
+    /*visibility: hidden;*/
+}
+
+/* TODO: style textarea + input accordingly: black background, white text, no frames / box shadows */
+#lwConsole textarea {
+    resize: none;
+    overflow: hidden;
+    height: 90%;
+}
+
+#lwConsole input {
+    height: 10%;
+}
+
+#lwConsole input, textarea {
+    width: 100%;
 }
