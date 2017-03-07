@@ -130,10 +130,10 @@ function LWConsole() {
     }
 
     function executeCMD(cmd) {
-        for (var c in commands) {
-            if (commands[c].name === cmd[0].toLowerCase()) {
+        for (var i = 0; i < commands.length; i++) {
+            if (commands[i].name === cmd[0].toLowerCase()) {
                 cmd.shift(); //remove cmd name from array, only leaving args
-                return commands[c].handler(cmd); //Execute handler with array of args
+                return commands[i].handler(cmd); //Execute handler with array of args
             }
         }
         return "Unknown command.";
@@ -144,9 +144,9 @@ function LWConsole() {
 
     function helpCMD() {
         var msg = "Available commands:";
-        for (var c in commands) {
-            if (commands[c].visible) {
-                msg += "\n" + commands[c].name + ": " + commands[c].description;
+        for (var i = 0; i < commands.length; i++) {
+            if (commands[i].visible) {
+                msg += "\n" + commands[i].name + ": " + commands[i].description;
             }
         }
         return msg;
@@ -156,12 +156,12 @@ function LWConsole() {
         var init = true;
         var str = "";
 
-        for (var arg in args) {
+        for (var i = 0; i < args.length; i++) {
             if (!init) {
                 str += " ";
             }
             init = false;
-            str += args[arg];
+            str += args[i];
         }
         return str;
     }
