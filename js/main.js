@@ -172,11 +172,11 @@ function LWConsole() {
         }
         else {
             if (args.length === 1) { //one arg => query arg ip
-                queryUrl += args[0]
+                queryUrl += args[0] + "/"
             }
         }
 
-        queryUrl += "/json";
+        queryUrl += "json";
 
         var xmlHttp = new XMLHttpRequest();
         try {
