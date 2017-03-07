@@ -4,6 +4,7 @@ function LWConsole() {
     var consoleInDOM = document.getElementById("consoleIn");
     var consoleOut = "";
     var motd = "Welcome to " + window.location.hostname + "\nType 'help' for help.\n";
+    var isInverted = false;
     var commands = [
         {
             name: "help",
@@ -36,7 +37,8 @@ function LWConsole() {
             description: "Invert website colors",
             visible: true,
             handler: function () {
-                util.toggleInvert();
+                isInverted = !isInverted;
+                invert(isInverted);
                 return "Page inverted!";
             }
         },
@@ -164,6 +166,7 @@ function LWConsole() {
         return str;
     }
 
+    //TODO: Make async
     function ipCMD(args) {
         var queryUrl = "https://ipinfo.io/";
 
@@ -196,12 +199,6 @@ function LWConsole() {
 
         return result;
     }
-}
-
-
-function JSUtil() {
-    var isInverted = false;
-    var lwConsole = new LWConsole();
 
     function invert(state) {
         var invertStr;
@@ -213,11 +210,11 @@ function JSUtil() {
         }
         document.getElementById("monitor").style.filter = "invert(" + invertStr + ")";
     }
+}
 
-    this.toggleInvert = function () {
-        isInverted = !isInverted;
-        invert(isInverted);
-    };
+
+function JSUtil() {
+    var lwConsole = new LWConsole();
 
     this.toggleConsole = function () {
         lwConsole.show(!lwConsole.isVisible());
