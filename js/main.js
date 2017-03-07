@@ -1,7 +1,12 @@
-function LWConsole() {
-    var consoleDiv = document.getElementById("lwConsole");
-    var consoleOutDOM = document.getElementById("consoleOut");
-    var consoleInDOM = document.getElementById("consoleIn");
+/**
+ * Lightweight Console
+ *
+ * @param consoleDiv dom of div holding the console
+ * @param consoleOutDOM dom of text-area for console-output
+ * @param consoleInDOM dom of text-input for console-input
+ * @constructor
+ */
+function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM) {
     var consoleOut = "";
     var motd = "Welcome to " + window.location.hostname + "\nType 'help' for help.\n";
     var isInverted = false;
@@ -214,7 +219,11 @@ function LWConsole() {
 
 
 function JSUtil() {
-    var lwConsole = new LWConsole();
+    var lwConsole = new LWConsole(
+        document.getElementById("lwConsole"),
+        document.getElementById("consoleOut"),
+        document.getElementById("consoleIn")
+    );
 
     this.toggleConsole = function () {
         lwConsole.show(!lwConsole.isVisible());
