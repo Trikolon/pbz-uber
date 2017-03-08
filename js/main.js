@@ -4,11 +4,12 @@
  * @param consoleDiv dom of div holding the console
  * @param consoleOutDOM dom of text-area for console-output
  * @param consoleInDOM dom of text-input for console-input
+ * @param hostname included in motd, may have further use in the future
  * @constructor
  */
-function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM) {
+function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     var consoleOut = "";
-    var motd = "Welcome to " + window.location.hostname + "\nType 'help' for help.\n";
+    var motd = "Welcome to " + hostname + "!\nType 'help' for help.\n";
     var isInverted = false;
     var commands = [
         {
@@ -219,7 +220,8 @@ function JSUtil() {
     var lwConsole = new LWConsole(
         document.getElementById("lwConsole"),
         document.getElementById("consoleOut"),
-        document.getElementById("consoleIn")
+        document.getElementById("consoleIn"),
+        window.location.hostname
     );
 
     this.toggleConsole = function () {
