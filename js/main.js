@@ -96,7 +96,10 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
 
 
     //Methods ======================================
-
+    /**
+     * Changes visibility of console-div depending on parameter
+     * @param state boolean true = visible; false = hidden
+     */
     this.show = function (state) {
         if (state) {
             consoleDiv.style.visibility = "visible";
@@ -110,6 +113,10 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
         }
     };
 
+    /**
+     * Getter for visibility state
+     * @returns {boolean}
+     */
     this.isVisible = function () {
         return this.visible;
     };
@@ -136,6 +143,11 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
         print(executeCMD(splitCMD)); //Print result of cmd-execution
     }
 
+    /**
+     * Takes command as array and calls corresponding cmd-handler on match
+     * @param cmd command-array. cmd[0] is command name, cmd[>1] is parameter
+     * @returns {String} result of command
+     */
     function executeCMD(cmd) {
         for (var i = 0; i < commands.length; i++) {
             if (commands[i].name === cmd[0].toLowerCase()) {
@@ -228,7 +240,9 @@ function JSUtil() {
         lwConsole.show(!lwConsole.isVisible());
     };
 
-    //Console shortcuts 'C'=> open and 'ESC'=> close
+    /**
+     * Handler for  console shortcuts 'C'=> open and 'ESC'=> close
+     */
     document.addEventListener("keydown", function (e) {
         if (!lwConsole.isVisible() && e.keyCode == 67) {
             e.preventDefault();
