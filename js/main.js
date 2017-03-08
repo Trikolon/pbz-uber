@@ -48,6 +48,23 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM) {
             }
         },
         {
+            name: "test",
+            description: "testing stuff",
+            visible: true,
+            handler: function () {
+                var i = 0;
+                var interval = setInterval(function () {
+                    i++;
+                    if (i > 10) {
+                        clearInterval(interval);
+                    }
+                    else {
+                        print("lol this is just a test", i);
+                    }
+                }, 500)
+            }
+        },
+        {
             name: "clear",
             description: "Clears the console",
             visible: true, //Visible in help page?
@@ -171,7 +188,6 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM) {
         return str;
     }
 
-    //TODO: Make async
     function ipCMD(args) {
         var queryUrl = "https://ipinfo.io/";
 
@@ -186,23 +202,20 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM) {
 
         queryUrl += "json";
 
-        var xmlHttp = new XMLHttpRequest();
-        try {
-            xmlHttp.open("GET", queryUrl, false);
-            xmlHttp.send(null);
-        }
-        catch (e) {
+        var request = new XMLHttpRequest();
+        request.onload = function () {
+            if (request.status !== 200) {
+                print("\nError: ipinfo.io returned code " + request.status);
+            }
+            print(request.responseText);
+        };
+        request.onerror = function (e) {
             console.error(e);
-            return "Error: Could not send request to ipinfo.io. Check your internet connection.";
-        }
-
-        var result = xmlHttp.responseText;
-
-        if (xmlHttp.status !== 200) {
-            result += "\nError: ipinfo.io returned code " + xmlHttp.status;
-        }
-
-        return result;
+            print("Error: Could not send request to ipinfo.io. Check your internet connection.");
+        };
+        request.open("GET", queryUrl, true);
+        request.send();
+        return "Getting data ...";
     }
 
     function invert(state) {
