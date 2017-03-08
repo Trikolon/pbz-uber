@@ -226,12 +226,17 @@ function JSUtil() {
         lwConsole.show(!lwConsole.isVisible());
     };
 
-    //Console shortcut 'C'
+    //Console shortcuts 'C'=> open and 'ESC'=> close
     document.addEventListener("keydown", function (e) {
         if (!lwConsole.isVisible() && e.keyCode == 67) {
             e.preventDefault();
             lwConsole.show(true);
         }
+        else if (lwConsole.isVisible() && e.keyCode == 27) {
+            e.preventDefault();
+            lwConsole.show(false);
+        }
+
     });
 }
 var util = new JSUtil();
