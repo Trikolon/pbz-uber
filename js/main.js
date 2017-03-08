@@ -48,23 +48,6 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM) {
             }
         },
         {
-            name: "test",
-            description: "testing stuff",
-            visible: true,
-            handler: function () {
-                var i = 0;
-                var interval = setInterval(function () {
-                    i++;
-                    if (i > 10) {
-                        clearInterval(interval);
-                    }
-                    else {
-                        print("lol this is just a test", i);
-                    }
-                }, 500)
-            }
-        },
-        {
             name: "clear",
             description: "Clears the console",
             visible: true, //Visible in help page?
@@ -97,6 +80,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM) {
     //Attach key handler to enter key
     document.addEventListener("keydown", function (e) {
         if (consoleInDOM === document.activeElement && e.keyCode == 13) {
+            e.preventDefault();
             var value = consoleInDOM.value;
             if (value === "") { //Do not trigger cmd when input is empty
                 return;
@@ -240,6 +224,14 @@ function JSUtil() {
 
     this.toggleConsole = function () {
         lwConsole.show(!lwConsole.isVisible());
-    }
+    };
+
+    //Console shortcut 'C'
+    document.addEventListener("keydown", function (e) {
+        if (!lwConsole.isVisible() && e.keyCode == 67) {
+            e.preventDefault();
+            lwConsole.show(true);
+        }
+    });
 }
 var util = new JSUtil();
