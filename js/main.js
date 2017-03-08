@@ -76,7 +76,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     ];
 
     //Get initial state depending on dom
-    this.visible = window.getComputedStyle(consoleDiv).getPropertyValue("visibility") === "visible";
+    this.visible = window.getComputedStyle(consoleDiv).getPropertyValue("display") === "flex";
 
     //Attach key handler to enter key
     document.addEventListener("keydown", function (e) {
@@ -102,13 +102,13 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
      */
     this.show = function (state) {
         if (state) {
-            consoleDiv.style.visibility = "visible";
+            consoleDiv.style.display = "flex";
             this.visible = true;
             //Set focus to console
             consoleInDOM.focus();
         }
         else {
-            consoleDiv.style.visibility = "hidden";
+            consoleDiv.style.display = "none";
             this.visible = false;
         }
     };
