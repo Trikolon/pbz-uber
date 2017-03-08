@@ -56,22 +56,22 @@ a, a:hover {
     content: " - ";
 }
 
-#bottom {
-
+#monitor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: nowrap;
+    justify-content: space-between;
 }
 
 /* Initial state for console */
 #lwConsole {
+    min-height: 30%;
     font-size: small;
-    height: 90%;
-    width: 30%;
-    position: absolute;
-    bottom: 15px;
-    right: 0;
+    height: 30%;
+    width: 100%;
     opacity: 0.8;
-    visibility: hidden;
-
-    display: flex;
+    display: none;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: space-around;
@@ -90,7 +90,7 @@ a, a:hover {
 }
 
 #lwConsole textarea, input {
-    width: 90%;
+    /*width: %;*/
     color: white;
     background: rgba(0, 0, 0, 0.3);
     border: 0;

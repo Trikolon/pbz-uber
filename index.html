@@ -14,7 +14,11 @@
     <title>Paul Zühlcke</title>
 </head>
 <body>
-<div id="monitor" class="flex-container">
+<div id="monitor">
+    <div id="lwConsole">
+        <textarea id="consoleOut" title="console" readonly>Javascript disabled. Please enable it in order to use the console.</textarea>
+        <input id="consoleIn" title="console" type="text" autofocus>
+    </div>
     <div class="flex-container">
         <div id="heading" class="flex-item">
             Paul Zühlcke
@@ -49,11 +53,6 @@
                 <a href="#" onclick="util.toggleConsole()">console</a>
             </div>
         </div>
-    </div>
-
-    <div id="lwConsole">
-        <textarea id="consoleOut" title="console" readonly>Javascript disabled. Please enable it in order to use the console.</textarea>
-        <input id="consoleIn" title="console" type="text" autofocus>
     </div>
 </div>
 
