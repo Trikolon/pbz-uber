@@ -8,10 +8,10 @@
  * @constructor
  */
 function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
-    var consoleOut = "";
-    var motd = "Welcome to " + hostname + "!\nType 'help' for help.\n";
-    var isInverted = false;
-    var commands = [
+    let consoleOut = "";
+    let motd = "Welcome to " + hostname + "!\nType 'help' for help.\n";
+    let isInverted = false;
+    let commands = [
         {
             name: "help",
             description: "Shows a list of commands",
@@ -82,7 +82,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     document.addEventListener("keydown", function (e) {
         if (consoleInDOM === document.activeElement && e.keyCode == 13) {
             e.preventDefault();
-            var value = consoleInDOM.value;
+            let value = consoleInDOM.value;
             if (value === "") { //Do not trigger cmd when input is empty
                 return;
             }
@@ -138,7 +138,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
      * @param cmd raw cmd by user
      */
     function sendCMD(cmd) {
-        var splitCMD = cmd.split(" "); //split cmd by space (cmd name, args)
+        let splitCMD = cmd.split(" "); //split cmd by space (cmd name, args)
         print("> " + cmd); //Print cmd from user
         print(executeCMD(splitCMD)); //Print result of cmd-execution
     }
@@ -149,7 +149,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
      * @returns {String} result of command
      */
     function executeCMD(cmd) {
-        for (var i = 0; i < commands.length; i++) {
+        for (let i = 0; i < commands.length; i++) {
             if (commands[i].name === cmd[0].toLowerCase()) {
                 cmd.shift(); //remove cmd name from array, only leaving args
                 return commands[i].handler(cmd); //Execute handler with array of args
@@ -162,8 +162,8 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     // Command handlers
 
     function helpCMD() {
-        var msg = "Available commands:";
-        for (var i = 0; i < commands.length; i++) {
+        let msg = "Available commands:";
+        for (let i = 0; i < commands.length; i++) {
             if (commands[i].visible) {
                 msg += "\n" + commands[i].name + ": " + commands[i].description;
             }
@@ -172,10 +172,10 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     }
 
     function echoCMD(args) {
-        var init = true;
-        var str = "";
+        let init = true;
+        let str = "";
 
-        for (var i = 0; i < args.length; i++) {
+        for (let i = 0; i < args.length; i++) {
             if (!init) {
                 str += " ";
             }
@@ -186,7 +186,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     }
 
     function ipCMD(args) {
-        var queryUrl = "https://ipinfo.io/";
+        let queryUrl = "https://ipinfo.io/";
 
         if (args.length > 1) {
             return "Invalid Syntax! ip [addr]";
@@ -199,7 +199,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
 
         queryUrl += "json";
 
-        var request = new XMLHttpRequest();
+        let request = new XMLHttpRequest();
         request.onload = function () {
             if (request.status !== 200) {
                 print("\nError: ipinfo.io returned code " + request.status);
@@ -216,7 +216,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     }
 
     function invert(state) {
-        var invertStr;
+        let invertStr;
         if (state) {
             invertStr = "100%";
         }
@@ -229,7 +229,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
 
 
 function JSUtil() {
-    var lwConsole = new LWConsole(
+    let lwConsole = new LWConsole(
         document.getElementById("lwConsole"),
         document.getElementById("consoleOut"),
         document.getElementById("consoleIn"),
@@ -255,4 +255,4 @@ function JSUtil() {
 
     });
 }
-var util = new JSUtil();
+let util = new JSUtil();
