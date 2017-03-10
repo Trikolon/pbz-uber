@@ -102,7 +102,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
             description: "",
             visible: false,
             handler: function () {
-                return "Please don't delete anything. We don't have any backups.";
+                return "Please don't delete anything. We don't have backups.";
             }
         },
         {
