@@ -30,7 +30,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
         },
         {
             name: "open",
-            description: "Usage: open [keybase/github/twitter/email",
+            description: "Usage: open [keybase/github/twitter/email]",
             visible: true, //Visible in help page?
             handler: openCMD
         },
