@@ -29,6 +29,12 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
             }
         },
         {
+            name: "open",
+            description: "Usage: open [keybase/github/twitter/email",
+            visible: true, //Visible in help page?
+            handler: openCMD
+        },
+        {
             name: "echo",
             description: "Displays message on console - no pipes yet :-(",
             visible: true,
@@ -247,6 +253,32 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
         request.open("GET", queryUrl, true);
         request.send();
         return "Getting data ...";
+    }
+
+    function openCMD(args) {
+        if (args.length !== 1) {
+            return "Invalid arguments!";
+        }
+        let url;
+        switch (args[0]) {
+            default:
+                return "Sorry, I don't know this service";
+                break;
+            case "keybase":
+                url = "//keybase.io/pbz";
+                break;
+            case "github":
+                url = "//github.com/Trikolon";
+                break;
+            case "twitter":
+                url = "//twitter.com/deppaws";
+                break;
+            case "email":
+                url = "mailto:paul@zuehlcke.de";
+                break;
+        }
+        window.open(url);
+        return args[0] + " opened.";
     }
 
     function invert(state) {
