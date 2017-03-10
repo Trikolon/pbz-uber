@@ -74,6 +74,38 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
             handler: function () {
                 return "<3";
             }
+        },
+        {
+            name: "shutdown",
+            description: "",
+            visible: false,
+            handler: function () {
+                return "You're not my master!";
+            }
+        },
+        {
+            name: "make_me_a_sandwich",
+            description: "<3 xkcd",
+            visible: false,
+            handler: function () {
+                return "Make it yourself!";
+            }
+        },
+        {
+            name: "rm",
+            description: "",
+            visible: false,
+            handler: function () {
+                return "Please don't delete anything. We don't have any backups.";
+            }
+        },
+        {
+            name: "ls",
+            description: "",
+            visible: false,
+            handler: function () {
+                return "cia_secrets, cute_cat_gifs, videos, passwords.txt";
+            }
         }
     ];
 
