@@ -11,118 +11,14 @@
  */
 function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     let consoleOut = "";
-    let motd = "Welcome to " + hostname + "!\nType 'help' for help.\n";
-    let isInverted = false;
-    let commands = [
-        {
-            name: "help",
-            description: "Shows a list of commands",
-            visible: true,
-            handler: helpCMD
-        },
-        {
-            name: "motd",
-            description: "Shows the message of the day",
-            visible: true,
-            handler: function () {
-                return motd;
-            }
-        },
-        {
-            name: "open",
-            description: "Usage: open [keybase/github/twitter/email]",
-            visible: true, //Visible in help page?
-            handler: openCMD
-        },
-        {
-            name: "echo",
-            description: "Displays message on console - no pipes yet :-(",
-            visible: true,
-            handler: echoCMD
-        },
-        {
-            name: "ip",
-            description: "Lookup an IP: Usage: ip [ip] (queries your IP if no argument is provided)",
-            visible: true,
-            handler: ipCMD
-        },
-        {
-            name: "time",
-            description: "Show time in different formats",
-            visible: true,
-            handler: timeCMD
-        },
-        {
-            name: "invert",
-            description: "Invert website colors",
-            visible: true,
-            handler: function () {
-                isInverted = !isInverted;
-                invert(isInverted);
-                return "Page inverted!";
-            }
-        },
-        {
-            name: "clear",
-            description: "Clears the console",
-            visible: true, //Visible in help page?
-            handler: function () {
-                consoleOut = "";
-                consoleOutDOM.value = consoleOut;
-            }
-        },
-        {
-            name: "exit",
-            description: "Exit console",
-            visible: true,
-            handler: function () {
-                util.toggleConsole();
-            }
-        },
-        {
-            name: "kleinhase",
-            description: "Secret message",
-            visible: false,
-            handler: function () {
-                return "<3";
-            }
-        },
-        {
-            name: "shutdown",
-            description: "",
-            visible: false,
-            handler: function () {
-                return "You're not my master!";
-            }
-        },
-        {
-            name: "make_me_a_sandwich",
-            description: "<3 xkcd",
-            visible: false,
-            handler: function () {
-                return "Make it yourself!";
-            }
-        },
-        {
-            name: "rm",
-            description: "",
-            visible: false,
-            handler: function () {
-                return "Please don't delete anything. We don't have backups.";
-            }
-        },
-        {
-            name: "ls",
-            description: "",
-            visible: false,
-            handler: function () {
-                return "cia_secrets, cute_cat_gifs, videos, passwords.txt";
-            }
-        }
-    ];
+    this.motd = "Welcome to " + hostname + "!\nType 'help' for help.\n";
+    let cmdList = new CommandList(this);
+    //bind methods called in CommandList to console
+    this.print = print;
+    this.clear = clear;
 
     //Get initial state depending on dom
-    this.visible = window.getComputedStyle(consoleDiv).getPropertyValue("display") === "flex";
+    let visible = window.getComputedStyle(consoleDiv).getPropertyValue("display") === "flex";
 
     //Attach key handler to enter key
     document.addEventListener("keydown", function (e) {
@@ -144,7 +40,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     // };
 
     //Set initial content of textarea
-    print(motd);
+    print(this.motd);
 
 
     //Methods ======================================
@@ -155,13 +51,13 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     this.show = function (state) {
         if (state) {
             consoleDiv.style.display = "flex";
-            this.visible = true;
+            visible = true;
             //Set focus to console
             consoleInDOM.focus();
         }
         else {
             consoleDiv.style.display = "none";
-            this.visible = false;
+            visible = false;
         }
     };
 
@@ -170,7 +66,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
      * @returns {boolean}
      */
     this.isVisible = function () {
-        return this.visible;
+        return visible;
     };
 
     /**
@@ -183,6 +79,14 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
             consoleOutDOM.value = consoleOut; //update textarea text
             consoleOutDOM.scrollTop = consoleOutDOM.scrollHeight; //scroll down in textarea for console-like behavior
         }
+    }
+
+    /**
+     * Clears console content
+     */
+    function clear() {
+        consoleOut = "";
+        consoleOutDOM.value = consoleOut;
     }
 
     /**
@@ -201,131 +105,9 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
      * @returns {String} result of command
      */
     function executeCMD(cmd) {
-        for (let i = 0; i < commands.length; i++) {
-            if (commands[i].name === cmd[0].toLowerCase()) {
-                cmd.shift(); //remove cmd name from array, only leaving args
-                return commands[i].handler(cmd); //Execute handler with array of args
-            }
-        }
-        return "Unknown command.";
-    }
-
-
-    // Command handlers
-
-    function helpCMD() {
-        let msg = "Available commands:";
-        for (let i = 0; i < commands.length; i++) {
-            if (commands[i].visible) {
-                msg += "\n" + commands[i].name + ": " + commands[i].description;
-            }
-        }
-        return msg;
-    }
-
-    function echoCMD(args) {
-        let init = true;
-        let str = "";
-
-        for (let i = 0; i < args.length; i++) {
-            if (!init) {
-                str += " ";
-            }
-            init = false;
-            str += args[i];
-        }
-        return str;
-    }
-
-    function ipCMD(args) {
-        let queryUrl = "https://ipinfo.io/";
-
-        if (args.length > 1) {
-            return "Invalid Syntax! ip [addr]";
-        }
-        else {
-            if (args.length === 1) { //one arg => query arg ip
-                queryUrl += args[0] + "/"
-            }
-        }
-
-        queryUrl += "json";
-
-        let request = new XMLHttpRequest();
-        request.onload = function () {
-            if (request.status !== 200) {
-                print("\nError: ipinfo.io returned code " + request.status);
-            }
-            print(request.responseText);
-        };
-        request.onerror = function (e) {
-            console.error(e);
-            print("Error: Could not send request to ipinfo.io. Check your internet connection.");
-        };
-        request.open("GET", queryUrl, true);
-        request.send();
-        return "Getting data ...";
-    }
-
-    function openCMD(args) {
-        if (args.length !== 1) {
-            return "Invalid arguments!";
-        }
-        let url;
-        switch (args[0]) {
-            default:
-                return "Sorry, I don't know this service";
-                break;
-            case "keybase":
-                url = "//keybase.io/pbz";
-                break;
-            case "github":
-                url = "//github.com/Trikolon";
-                break;
-            case "twitter":
-                url = "//twitter.com/deppaws";
-                break;
-            case "email":
-                url = "mailto:paul@zuehlcke.de";
-                break;
-        }
-        window.open(url);
-        return args[0] + " opened.";
-    }
-
-    function invert(state) {
-        let invertStr;
-        if (state) {
-            invertStr = "100%";
-        }
-        else {
-            invertStr = "0%";
-        }
-        document.getElementById("monitor").style.filter = "invert(" + invertStr + ")";
-    }
-
-    //TODO: support more arguments / extend functionality
-    function timeCMD(args) {
-        let date = new Date();
-        let found = false;
-
-        if (args && args.length == 1) {
-            switch (args[0].toLowerCase()) {
-                case "utc":
-                    date = date.toUTCString();
-                    found = true;
-                    break;
-                case "local":
-                    date = date.toLocaleString();
-                    found = true;
-            }
-        }
-        if (!found) {
-            return "Usage: time [utc/local]";
-        }
-        else {
-            return date;
-        }
+        let cmdName = cmd[0]; //Name
+        cmd.shift(); //args
+        return cmdList.getCommandHandler(cmdName)(cmd);
     }
 }
 
