@@ -47,6 +47,12 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
             handler: ipCMD
         },
         {
+            name: "time",
+            description: "Show time in different formats",
+            visible: true,
+            handler: timeCMD
+        },
+        {
             name: "invert",
             description: "Invert website colors",
             visible: true,
@@ -130,6 +136,12 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
             consoleInDOM.value = ""; //Empty after cmd sent
         }
     });
+
+    //TODO: optional, this helps in parts of the user experience but breaks others
+    //Focus the console-input whenever the console div is clicked.
+    // consoleDiv.onclick  = function() {
+    //     consoleInDOM.focus();
+    // };
 
     //Set initial content of textarea
     print(motd);
@@ -290,6 +302,30 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
             invertStr = "0%";
         }
         document.getElementById("monitor").style.filter = "invert(" + invertStr + ")";
+    }
+
+    //TODO: support more arguments / extend functionality
+    function timeCMD(args) {
+        let date = new Date();
+        let found = false;
+
+        if (args && args.length == 1) {
+            switch (args[0].toLowerCase()) {
+                case "utc":
+                    date = date.toUTCString();
+                    found = true;
+                    break;
+                case "local":
+                    date = date.toLocaleString();
+                    found = true;
+            }
+        }
+        if (!found) {
+            return "Usage: time [utc/local]";
+        }
+        else {
+            return date;
+        }
     }
 }
 
