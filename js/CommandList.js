@@ -1,6 +1,8 @@
 /**
  * Created by pbz on 12.03.17.
  */
+"use strict";
+
 function CommandList(console) {
     let isInverted = false;
 
@@ -129,21 +131,28 @@ function CommandList(console) {
             visible: true,
             handler: function (args) { //TODO: support more arguments / extend functionality
                 let date = new Date();
-                let found = false;
+                let found = true;
 
                 if (args && args.length == 1) {
                     switch (args[0].toLowerCase()) {
                         case "utc":
                             date = date.toUTCString();
-                            found = true;
                             break;
                         case "local":
                             date = date.toLocaleString();
-                            found = true;
+                            break;
+                        case "unix":
+                            date = Math.floor(date / 1000);
+                            break;
+                        default:
+                            found = false;
                     }
                 }
+                else {
+                    found = false;
+                }
                 if (!found) {
-                    return "Usage: time [utc/local]";
+                    return "Usage: time [utc/local/unix]";
                 }
                 else {
                     return date;
