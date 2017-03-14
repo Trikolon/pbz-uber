@@ -60,6 +60,9 @@
             <div class="flex-container">
                 <a href="#" onclick="util.toggleConsole()"><img class="icon" src="icon/console-128.png" alt=""></a>
                 <a href="#" onclick="util.toggleConsole()">console</a>
+                <div id="consoleButtonJSWarning">[javascript
+                    disabled]
+                </div>
             </div>
         </div>
     </div>
@@ -69,6 +72,9 @@
     </div>
 </div>
 
+<script>
+    document.getElementById("consoleButtonJSWarning").style.display = "none"; //Remove javascript-disabled message
+</script>
 <script src="js/CommandList.js"></script>
 <script src="js/LWConsole.js"></script>
 <script src="js/main.js"></script>
