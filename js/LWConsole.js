@@ -37,8 +37,11 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
                 consoleInDOM.value = ""; //Empty after cmd sent
             }
             else if (e.keyCode == 38) { //keyup => get last cmd
-                consoleInDOM.value = cmdHistory.get();
-                //TODO: set caret to end of input
+                e.preventDefault();
+                let lastCmd = cmdHistory.get();
+                if (lastCmd) {
+                    consoleInDOM.value = lastCmd;
+                }
             }
 
         }
