@@ -24,7 +24,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     //Get initial state depending on dom
     let visible = window.getComputedStyle(consoleDiv).getPropertyValue("display") === "flex";
 
-    //Attach key handler
+    //Attach key handler for cmd-send and cmd-history
     document.addEventListener("keydown", function (e) {
         if (consoleInDOM === document.activeElement) {
             if (e.keyCode == 13) { // enter => send cmd
@@ -47,11 +47,12 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
         }
     });
 
-    //TODO: optional, this helps in parts of the user experience but breaks others
-    //Focus the console-input whenever the console div is clicked.
-    // consoleDiv.onclick  = function() {
-    //     consoleInDOM.focus();
-    // };
+    // Focus the console-input whenever the console div is clicked.
+    consoleDiv.onclick = function () {
+        if (window.getSelection().toString() == "") { //Do not steal focus if user is selecting text
+            consoleInDOM.focus();
+        }
+    };
 
     //Set initial content of textarea
     print(this.motd);
