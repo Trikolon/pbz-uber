@@ -98,3 +98,8 @@ a, a:hover {
 #lwConsole textarea:focus, input:focus {
     outline: none;
 }
+
+#consoleButtonJSWarning {
+    text-transform: capitalize;
+    font-size: x-small;
+}
