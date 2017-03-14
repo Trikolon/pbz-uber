@@ -6,38 +6,65 @@
 function CommandList(console) {
     let isInverted = false;
 
-    this.getCommandHandler = function (commandName) {
+
+    this.getCommandHandler = getCommandHandler;
+    this.getCommand = getCommand;
+
+    function getCommandHandler(commandName) {
+        let result = getCommand(commandName);
+        if (result) {
+            return result.handler;
+        }
+        else {
+            //No matching command found
+            return function () {
+                return "Unknown command.";
+            }
+        }
+    }
+
+    function getCommand(commandName) {
         commandName = commandName.toLowerCase();
         for (let i = 0; i < commands.length; i++) {
             if (commands[i].name == commandName) {
-                return commands[i].handler;
+                return commands[i]
             }
         }
-
-        //No matching command found
-        return function () {
-            return "Unknown command.";
-        }
-    };
+    }
 
     let commands = [
         {
             name: "help",
             description: "Shows a list of commands",
+            usage: "help [command]",
             visible: true,
-            handler: function () {
-                let msg = "Available commands:";
-                for (let i = 0; i < commands.length; i++) {
-                    if (commands[i].visible) {
-                        msg += "\n" + commands[i].name + ": " + commands[i].description;
-                    }
+            handler: function (args) {
+                if (args.length > 1) {
+                    return this.handler(["help"]); //Show help for cmd help
                 }
-                return msg;
+                if (args.length === 0) { //Show list of commands without usage
+                    let msg = "Available commands:";
+                    for (let i = 0; i < commands.length; i++) {
+                        if (commands[i].visible) {
+                            msg += "\n" + commands[i].name + ": " + commands[i].description;
+                        }
+                    }
+                    return msg;
+                }
+                else { //Show usage for single cmd
+                    let cmd = getCommand(args[0]);
+                    if (!cmd) {
+                        return "No help page available: Unknown command.";
+                    }
+                    return cmd.name + ":\nDescription: " + cmd.description + "\nUsage: " + cmd.usage;
+                }
+
             }
         },
         {
             name: "motd",
             description: "Shows the message of the day",
+            usage: "motd",
             visible: true,
             handler: function () {
                 return console.motd;
@@ -45,7 +72,8 @@ function CommandList(console) {
         },
         {
             name: "open",
-            description: "Usage: open [keybase/github/twitter/email]",
+            description: "Opens page from main navigation",
+            usage: "open [keybase/github/twitter/email]",
             visible: true, //Visible in help page?
             handler: function (args) {
                 if (args.length !== 1) {
@@ -76,6 +104,7 @@ function CommandList(console) {
         {
             name: "echo",
             description: "Displays message on console - no pipes yet :-(",
+            usage: "echo <message>",
             visible: true,
             handler: function (args) {
                 let init = true;
@@ -93,7 +122,8 @@ function CommandList(console) {
         },
         {
             name: "ip",
-            description: "Lookup an IP: Usage: ip [ip] (queries your IP if no argument is provided)",
+            description: "Lookup an IP (queries your IP if no argument is provided)",
+            usage: "ip [ip]",
             visible: true,
             handler: function (args) {
                 let queryUrl = "https://ipinfo.io/";
@@ -128,6 +158,7 @@ function CommandList(console) {
         {
             name: "time",
             description: "Show time in different formats",
+            usage: "time <utc/local/unix>",
             visible: true,
             handler: function (args) { //TODO: support more arguments / extend functionality
                 let date = new Date();
@@ -152,7 +183,7 @@ function CommandList(console) {
                     found = false;
                 }
                 if (!found) {
-                    return "Usage: time [utc/local/unix]";
+                    return "Usage: " + this.usage;
                 }
                 else {
                     return date;
@@ -162,6 +193,7 @@ function CommandList(console) {
         {
             name: "invert",
             description: "Invert website colors",
+            usage: "invert",
             visible: true,
             handler: function () {
                 function invert(state) {
@@ -183,6 +215,7 @@ function CommandList(console) {
         {
             name: "clear",
             description: "Clears the console",
+            usage: "clear",
             visible: true, //Visible in help page?
             handler: function () {
                 console.clear();
@@ -191,6 +224,7 @@ function CommandList(console) {
         {
             name: "exit",
             description: "Exit console",
+            usage: "exit",
             visible: true,
             handler: function () {
                 util.toggleConsole();
@@ -199,6 +233,7 @@ function CommandList(console) {
         {
             name: "kleinhase",
             description: "Secret message",
+            usage: "kleinhase",
             visible: false,
             handler: function () {
                 return "<3";
@@ -207,6 +242,7 @@ function CommandList(console) {
         {
             name: "shutdown",
             description: "",
+            usage: "shutdown",
             visible: false,
             handler: function () {
                 return "You're not my master!";
@@ -215,6 +251,7 @@ function CommandList(console) {
         {
             name: "make_me_a_sandwich",
             description: "<3 xkcd",
+            usage: "make_me_a_sandwich",
             visible: false,
             handler: function () {
                 return "Make it yourself!";
@@ -223,6 +260,7 @@ function CommandList(console) {
         {
             name: "rm",
             description: "",
+            usage: "rm",
             visible: false,
             handler: function () {
                 return "Please don't delete anything. We don't have backups.";
@@ -231,6 +269,7 @@ function CommandList(console) {
         {
             name: "ls",
             description: "",
+            usage: "ls",
             visible: false,
             handler: function () {
                 return "cia_secrets, cute_cat_gifs, videos, passwords.txt";
