@@ -40,7 +40,7 @@ function CommandList(console) {
             visible: true,
             handler: function (args) {
                 if (args.length > 1) {
-                    return this.handler(["help"]); //Show help for cmd help
+                    return getCommandHandler("help")(["help"]);
                 }
                 if (args.length === 0) { //Show list of commands without usage
                     let msg = "Available commands:";
