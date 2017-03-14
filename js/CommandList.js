@@ -183,7 +183,7 @@ function CommandList(console) {
                     found = false;
                 }
                 if (!found) {
-                    return "Usage: " + this.usage;
+                    return "Usage: " + getCommand("time").usage;
                 }
                 else {
                     return date;
