@@ -48,6 +48,10 @@ a, a:hover {
     opacity: 1;
 }
 
+.navLabel {
+    padding-top: 8px;
+}
+
 #heading {
     margin: 1.5em;
 }
