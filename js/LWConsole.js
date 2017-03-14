@@ -16,6 +16,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     let consoleOut = "";
     this.motd = "Welcome to " + hostname + "!\nType 'help' for help.\n";
     let cmdList = new CommandList(this);
+    let cmdHistory = new CommandHistory();
     //bind methods called in CommandList to console
     this.print = print;
     this.clear = clear;
@@ -23,16 +24,23 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     //Get initial state depending on dom
     let visible = window.getComputedStyle(consoleDiv).getPropertyValue("display") === "flex";
 
-    //Attach key handler to enter key
+    //Attach key handler
     document.addEventListener("keydown", function (e) {
-        if (consoleInDOM === document.activeElement && e.keyCode == 13) {
-            e.preventDefault();
-            let value = consoleInDOM.value;
-            if (value === "") { //Do not trigger cmd when input is empty
-                return;
+        if (consoleInDOM === document.activeElement) {
+            if (e.keyCode == 13) { // enter => send cmd
+                e.preventDefault();
+                let value = consoleInDOM.value;
+                if (value === "") { //Do not trigger cmd when input is empty
+                    return;
+                }
+                sendCMD(value);
+                consoleInDOM.value = ""; //Empty after cmd sent
             }
-            sendCMD(value);
-            consoleInDOM.value = ""; //Empty after cmd sent
+            else if (e.keyCode == 38) { //keyup => get last cmd
+                consoleInDOM.value = cmdHistory.get();
+                //TODO: set caret to end of input
+            }
+
         }
     });
 
@@ -99,6 +107,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     function sendCMD(cmd) {
         let splitCMD = cmd.split(" "); //split cmd by space (cmd name, args)
         print("> " + cmd); //Print cmd from user
+        cmdHistory.add(cmd); //Save cmd
         print(executeCMD(splitCMD)); //Print result of cmd-execution
     }
 
@@ -118,4 +127,47 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
             return "Error in command execution. Check browser console for details.";
         }
     }
+}
+
+function CommandHistory(size) {
+    if (!size) {
+        size = 20; //default
+    }
+    let history = new Array(size);
+    let writePos = 0;
+    let readPos = 0;
+    let s = size;
+
+    this.get = get;
+
+    /**
+     * Get command in cmd history, goes one back in history every call
+     * @returns{String} cmd
+     */
+    function get() {
+        let result = history[readPos];
+        readPos--;
+        if (readPos === -1) {
+            readPos = s - 1;
+        }
+        if (typeof history[readPos] === "undefined") { //if history-array is not completely filled yet
+            readPos = writePos === 0 ? s - 1 : writePos - 1
+        }
+        return result;
+    }
+
+    /**
+     * Add command to history array
+     * @param cmd
+     */
+    this.add = function (cmd) {
+        if (typeof cmd !== "undefined") {
+            readPos = writePos; //On cmd-add, reset readpos
+            history[writePos] = cmd;
+            writePos++;
+            if (writePos === s) {
+                writePos = 0;
+            }
+        }
+    };
 }
