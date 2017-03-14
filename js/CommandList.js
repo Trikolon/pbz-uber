@@ -4,8 +4,9 @@
 "use strict";
 
 function CommandList(console) {
+    //State //TODO: Find better way to store this
     let isInverted = false;
-
+    let isMonitor = true;
 
     this.getCommandHandler = getCommandHandler;
     this.getCommand = getCommand;
@@ -18,7 +19,7 @@ function CommandList(console) {
         else {
             //No matching command found
             return function () {
-                return "Unknown command.";
+                return "Unknown command";
             }
         }
     }
@@ -204,12 +205,35 @@ function CommandList(console) {
                     else {
                         invertStr = "0%";
                     }
-                    document.getElementById("monitor").style.filter = "invert(" + invertStr + ")";
+                    document.getElementById("content").style.filter = "invert(" + invertStr + ")";
                 }
 
                 isInverted = !isInverted;
                 invert(isInverted);
-                return "Page inverted!";
+                return "Page inverted";
+            }
+        },
+        {
+            name: "flicker",
+            description: "Toggle flicker monitor effect",
+            usage: "flicker",
+            visible: true,
+            handler: function () {
+                let contentDom = document.getElementById("content");
+
+                function flicker(state) {
+                    if (state) {
+                        contentDom.className += "monitor";
+                    }
+                    else {
+                        contentDom.className =
+                            contentDom.className.replace(/(?:^|\s)monitor(?!\S)/g, '')
+                    }
+                }
+
+                isMonitor = !isMonitor;
+                flicker(isMonitor);
+                return "Flicker effect " + (isMonitor ? "ON" : "OFF");
             }
         },
         {
