@@ -110,6 +110,12 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     function executeCMD(cmd) {
         let cmdName = cmd[0]; //Name
         cmd.shift(); //args
-        return cmdList.getCommandHandler(cmdName)(cmd);
+        try {
+            return cmdList.getCommandHandler(cmdName)(cmd);
+        }
+        catch (e) {
+            console.error(e);
+            return "Error in command execution. Check browser console for details.";
+        }
     }
 }
