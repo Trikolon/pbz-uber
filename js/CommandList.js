@@ -213,7 +213,7 @@ function CommandList(console) {
                     state = !state; //Toggle it
                 }
                 invert(state); //Apply state
-                Cookies.set("invert", state ? "true" : "false"); //Save new state
+                Cookies.set("invert", state ? "true" : "false", {expires: 7}); //Save new state
                 return "Page inverted";
             }
         },
@@ -243,7 +243,7 @@ function CommandList(console) {
                     state = !state; //Toggle it
                 }
                 flicker(state); //Apply state
-                Cookies.set("flicker", state ? "true" : "false"); //Save new state
+                Cookies.set("flicker", state ? "true" : "false", {expires: 7}); //Save new state
 
                 return "Flicker effect " + (state ? "ON" : "OFF");
             }

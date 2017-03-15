@@ -30,11 +30,26 @@ function JSUtil() {
     /**
      * Set initial state by cookie
      */
-    if (Cookies.get("invert") == "true") { //Is invert enabled?
-        lwConsole.executeCmd(["invert", "true"]);
+    let flickerCookie = Cookies.get("flicker");
+    let invertCookie = Cookies.get("invert");
+
+    if (typeof flickerCookie === "undefined") {
+        Cookies.set("flicker", "true", {expires: 7});
     }
-    if (Cookies.get("flicker") == "false") { //Is flicker disabled?
-        lwConsole.executeCmd(["flicker", "false"]);
+    else {
+        if (Cookies.get("flicker") == "false") { //Is flicker disabled?
+            lwConsole.executeCmd(["flicker", "false"]);
+        }
     }
+    if (typeof invertCookie === "undefined") {
+        Cookies.set("invert", "false", {expires: 7});
+    }
+    else {
+        if (Cookies.get("invert") == "true") { //Is invert enabled?
+            lwConsole.executeCmd(["invert", "true"]);
+        }
+    }
+
+
 }
 let util = new JSUtil();
