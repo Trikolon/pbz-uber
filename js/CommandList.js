@@ -4,10 +4,6 @@
 "use strict";
 
 function CommandList(console) {
-    //State //TODO: Find better way to store this
-    let isInverted = false;
-    let isMonitor = true;
-
     this.getCommandHandler = getCommandHandler;
     this.getCommand = getCommand;
 
@@ -196,7 +192,7 @@ function CommandList(console) {
             description: "Invert website colors",
             usage: "invert",
             visible: true,
-            handler: function () {
+            handler: function (args) {
                 function invert(state) {
                     let invertStr;
                     if (state) {
@@ -208,8 +204,16 @@ function CommandList(console) {
                     document.getElementById("content").style.filter = "invert(" + invertStr + ")";
                 }
 
-                isInverted = !isInverted;
-                invert(isInverted);
+                let state;
+                if (args && args.length === 1) { //arg overwrites
+                    state = args[0] == "true";
+                }
+                else { //No arg => toggle
+                    state = Cookies.get("invert") == "true"; //Get current state
+                    state = !state; //Toggle it
+                }
+                invert(state); //Apply state
+                Cookies.set("invert", state ? "true" : "false"); //Save new state
                 return "Page inverted";
             }
         },
@@ -218,10 +222,9 @@ function CommandList(console) {
             description: "Toggle flicker monitor effect",
             usage: "flicker",
             visible: true,
-            handler: function () {
-                let contentDom = document.getElementById("content");
-
+            handler: function (args) {
                 function flicker(state) {
+                    let contentDom = document.getElementById("content");
                     if (state) {
                         contentDom.className += "monitor";
                     }
@@ -231,9 +234,18 @@ function CommandList(console) {
                     }
                 }
 
-                isMonitor = !isMonitor;
-                flicker(isMonitor);
-                return "Flicker effect " + (isMonitor ? "ON" : "OFF");
+                let state;
+                if (args && args.length === 1) { //arg overwrites
+                    state = args[0] == "true";
+                }
+                else { //No arg => toggle
+                    state = Cookies.get("flicker") == "true"; //Get current state
+                    state = !state; //Toggle it
+                }
+                flicker(state); //Apply state
+                Cookies.set("flicker", state ? "true" : "false"); //Save new state
+
+                return "Flicker effect " + (state ? "ON" : "OFF");
             }
         },
         {

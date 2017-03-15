@@ -20,7 +20,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     //bind methods called in CommandList to console
     this.print = print;
     this.clear = clear;
-    // this.executeCmd = executeCMD; //Allow external cmd calls
+    this.executeCmd = executeCMD; //Allow external cmd calls
 
     //Get initial state depending on dom
     let visible = window.getComputedStyle(consoleDiv).getPropertyValue("display") === "flex";
