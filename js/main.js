@@ -16,11 +16,11 @@ function JSUtil() {
      * Handler for  console shortcuts 'C'=> open and 'ESC'=> close
      */
     document.addEventListener("keydown", function (e) {
-        if (!lwConsole.isVisible() && e.keyCode == 67) {
+        if (!lwConsole.isVisible() && e.keyCode === 67) {
             e.preventDefault();
             lwConsole.show(true);
         }
-        else if (lwConsole.isVisible() && e.keyCode == 27) {
+        else if (lwConsole.isVisible() && e.keyCode === 27) {
             e.preventDefault();
             lwConsole.show(false);
         }
@@ -37,7 +37,7 @@ function JSUtil() {
         Cookies.set("flicker", "true", {expires: 7});
     }
     else {
-        if (Cookies.get("flicker") == "false") { //Is flicker disabled?
+        if (Cookies.get("flicker") === "false") { //Is flicker disabled?
             lwConsole.executeCmd(["flicker", "false"]);
         }
     }
@@ -45,7 +45,7 @@ function JSUtil() {
         Cookies.set("invert", "false", {expires: 7});
     }
     else {
-        if (Cookies.get("invert") == "true") { //Is invert enabled?
+        if (Cookies.get("invert") === "true") { //Is invert enabled?
             lwConsole.executeCmd(["invert", "true"]);
         }
     }
