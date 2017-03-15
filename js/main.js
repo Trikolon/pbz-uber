@@ -26,5 +26,8 @@ function JSUtil() {
         }
 
     });
+
+    //TODO: Some kind of state object is needed that stores state for cmds + manages cookies using Cookies.get and Cookies.set
+
 }
 let util = new JSUtil();
