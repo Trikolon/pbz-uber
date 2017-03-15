@@ -27,7 +27,14 @@ function JSUtil() {
 
     });
 
-    //TODO: Some kind of state object is needed that stores state for cmds + manages cookies using Cookies.get and Cookies.set
-
+    /**
+     * Set initial state by cookie
+     */
+    if (Cookies.get("invert") == "true") { //Is invert enabled?
+        lwConsole.executeCmd(["invert", "true"]);
+    }
+    if (Cookies.get("flicker") == "false") { //Is flicker disabled?
+        lwConsole.executeCmd(["flicker", "false"]);
+    }
 }
 let util = new JSUtil();
