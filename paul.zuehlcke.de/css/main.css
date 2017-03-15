@@ -103,8 +103,6 @@ a:focus {
     height: 100%;
 }
 
-#lwConsole input {
-}
 
 #lwConsole textarea, input {
     color: white;
