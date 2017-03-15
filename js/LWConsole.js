@@ -131,47 +131,54 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
             return "Error in command execution. Check browser console for details.";
         }
     }
-}
 
-function CommandHistory(size) {
-    if (!size) {
-        size = 20; //default
-    }
-    let history = new Array(size);
-    let writePos = 0;
-    let readPos = 0;
-    let s = size;
-
-    this.get = get;
 
     /**
-     * Get command in cmd history, goes one back in history every call
-     * @returns{String} cmd
+     * Class CommandHistory
+     * Stores last <size> commands in buffer
+     * @param size amount of commands to store in buffer
+     * @constructor
      */
-    function get() {
-        let result = history[readPos];
-        readPos--;
-        if (readPos === -1) {
-            readPos = s - 1;
+    function CommandHistory(size) {
+        if (!size) {
+            size = 20; //default
         }
-        if (typeof history[readPos] === "undefined") { //if history-array is not completely filled yet
-            readPos = writePos === 0 ? s - 1 : writePos - 1
-        }
-        return result;
-    }
+        let history = new Array(size);
+        let writePos = 0;
+        let readPos = 0;
+        let s = size;
 
-    /**
-     * Add command to history array
-     * @param cmd
-     */
-    this.add = function (cmd) {
-        if (typeof cmd !== "undefined") {
-            readPos = writePos; //On cmd-add, reset readpos
-            history[writePos] = cmd;
-            writePos++;
-            if (writePos === s) {
-                writePos = 0;
+        this.get = get;
+
+        /**
+         * Get command in cmd history, goes one back in history every call
+         * @returns{String} cmd
+         */
+        function get() {
+            let result = history[readPos];
+            readPos--;
+            if (readPos === -1) {
+                readPos = s - 1;
             }
+            if (typeof history[readPos] === "undefined") { //if history-array is not completely filled yet
+                readPos = writePos === 0 ? s - 1 : writePos - 1
+            }
+            return result;
         }
-    };
+
+        /**
+         * Add command to history array
+         * @param cmd
+         */
+        this.add = function (cmd) {
+            if (typeof cmd !== "undefined") {
+                readPos = writePos; //On cmd-add, reset readpos
+                history[writePos] = cmd;
+                writePos++;
+                if (writePos === s) {
+                    writePos = 0;
+                }
+            }
+        };
+    }
 }
