@@ -23,7 +23,7 @@ function CommandList(console) {
     function getCommand(commandName) {
         commandName = commandName.toLowerCase();
         for (let i = 0; i < commands.length; i++) {
-            if (commands[i].name == commandName) {
+            if (commands[i].name === commandName) {
                 return commands[i]
             }
         }
@@ -80,7 +80,6 @@ function CommandList(console) {
                 switch (args[0]) {
                     default:
                         return "Sorry, I don't know this service";
-                        break;
                     case "keybase":
                         url = "//keybase.io/pbz";
                         break;
@@ -161,7 +160,7 @@ function CommandList(console) {
                 let date = new Date();
                 let found = true;
 
-                if (args && args.length == 1) {
+                if (args && args.length === 1) {
                     switch (args[0].toLowerCase()) {
                         case "utc":
                             date = date.toUTCString();
@@ -206,10 +205,10 @@ function CommandList(console) {
 
                 let state;
                 if (args && args.length === 1) { //arg overwrites
-                    state = args[0] == "true";
+                    state = args[0] === "true";
                 }
                 else { //No arg => toggle
-                    state = Cookies.get("invert") == "true"; //Get current state
+                    state = Cookies.get("invert") === "true"; //Get current state
                     state = !state; //Toggle it
                 }
                 invert(state); //Apply state
@@ -236,10 +235,10 @@ function CommandList(console) {
 
                 let state;
                 if (args && args.length === 1) { //arg overwrites
-                    state = args[0] == "true";
+                    state = args[0] === "true";
                 }
                 else { //No arg => toggle
-                    state = Cookies.get("flicker") == "true"; //Get current state
+                    state = Cookies.get("flicker") === "true"; //Get current state
                     state = !state; //Toggle it
                 }
                 flicker(state); //Apply state

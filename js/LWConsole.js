@@ -28,7 +28,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     //Attach key handler for cmd-send and cmd-history
     document.addEventListener("keydown", function (e) {
         if (consoleInDOM === document.activeElement) {
-            if (e.keyCode == 13) { // enter => send cmd
+            if (e.keyCode === 13) { // enter => send cmd
                 e.preventDefault();
                 let value = consoleInDOM.value;
                 if (value === "") { //Do not trigger cmd when input is empty
@@ -37,7 +37,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
                 sendCMD(value);
                 consoleInDOM.value = ""; //Empty after cmd sent
             }
-            else if (e.keyCode == 38) { //keyup => get last cmd
+            else if (e.keyCode === 38) { //keyup => get last cmd
                 e.preventDefault();
                 let lastCmd = cmdHistory.get();
                 if (lastCmd) {
@@ -50,7 +50,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
 
     // Focus the console-input whenever the console div is clicked.
     consoleDiv.onclick = function () {
-        if (window.getSelection().toString() == "") { //Do not steal focus if user is selecting text
+        if (window.getSelection().toString() === "") { //Do not steal focus if user is selecting text
             consoleInDOM.focus();
         }
     };
