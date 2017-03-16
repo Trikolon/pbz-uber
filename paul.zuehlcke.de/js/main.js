@@ -37,7 +37,7 @@ function JSUtil() {
     }
     else {
         if (Cookies.get("flicker") === "false") { //Is flicker disabled?
-            lwConsole.executeCmd(["flicker", "false"]);
+            lwConsole.executeCmd(["effect", "flicker", "false"]);
         }
     }
     if (typeof invertCookie === "undefined") {
@@ -45,7 +45,7 @@ function JSUtil() {
     }
     else {
         if (Cookies.get("invert") === "true") { //Is invert enabled?
-            lwConsole.executeCmd(["invert", "true"]);
+            lwConsole.executeCmd(["effect", "invert", "true"]);
         }
     }
 
