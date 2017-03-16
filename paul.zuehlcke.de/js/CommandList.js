@@ -1,11 +1,9 @@
 /**
  * Created by pbz on 12.03.17.
  */
-"use strict";
-
 function CommandList(console) {
+    "use strict";
     this.getCommandHandler = getCommandHandler;
-    this.getCommand = getCommand;
 
     function getCommandHandler(commandName) {
         let result = getCommand(commandName);
@@ -187,64 +185,83 @@ function CommandList(console) {
             }
         },
         {
-            name: "invert",
-            description: "Invert website colors",
-            usage: "invert",
+            name: "effect",
+            description: "Toggle effects, such as invert and flicker",
+            usage: "effect <flicker|invert> [true|false]",
             visible: true,
             handler: function (args) {
-                function invert(state) {
-                    let invertStr;
-                    if (state) {
-                        invertStr = "100%";
-                    }
-                    else {
-                        invertStr = "0%";
-                    }
-                    document.getElementById("content").style.filter = "invert(" + invertStr + ")";
+                let EFFECT_TYPE = {
+                    INVERT: 0,
+                    FLICKER: 1
+                };
+
+                function returnUsage() {
+                    return "Invalid arguments! Usage: " + getCommand("effect").usage;
                 }
 
-                let state;
-                if (args && args.length === 1) { //arg overwrites
-                    state = args[0] === "true";
-                }
-                else { //No arg => toggle
-                    state = Cookies.get("invert") === "true"; //Get current state
-                    state = !state; //Toggle it
-                }
-                invert(state); //Apply state
-                Cookies.set("invert", state ? "true" : "false", {expires: 7}); //Save new state
-                return "Page inverted";
-            }
-        },
-        {
-            name: "flicker",
-            description: "Toggle flicker monitor effect",
-            usage: "flicker",
-            visible: true,
-            handler: function (args) {
-                function flicker(state) {
-                    let contentDom = document.getElementById("content");
-                    if (state) {
-                        contentDom.className += "monitor";
-                    }
-                    else {
-                        contentDom.className =
-                            contentDom.className.replace(/(?:^|\s)monitor(?!\S)/g, '')
+                function setEffect(effect, state) {
+                    switch (effect) {
+                        case EFFECT_TYPE.INVERT:
+                            let invertStr;
+                            if (state) {
+                                invertStr = "100%";
+                            }
+                            else {
+                                invertStr = "0%";
+                            }
+                            document.getElementById("content").style.filter = "invert(" + invertStr + ")";
+                            break;
+                        case EFFECT_TYPE.FLICKER:
+                            let contentDom = document.getElementById("content");
+                            let containsClass = contentDom.className.indexOf("monitor") !== -1;
+                            if (state) {
+                                if (!containsClass) {
+                                    contentDom.className += "monitor";
+                                }
+                            }
+                            else {
+                                if (containsClass) {
+                                    contentDom.className =
+                                        contentDom.className.replace(/(?:^|\s)monitor(?!\S)/g, '');
+                                }
+                            }
+                            break;
+                        default:
+                            throw "Invalid effect";
                     }
                 }
 
-                let state;
-                if (args && args.length === 1) { //arg overwrites
-                    state = args[0] === "true";
+                let state; // boolean state to change effect to
+                if (!args || args.length === 0 || args.length > 2) {
+                    return returnUsage();
                 }
-                else { //No arg => toggle
-                    state = Cookies.get("flicker") === "true"; //Get current state
-                    state = !state; //Toggle it
+                let effectType;
+                switch (args[0].toLowerCase()) {
+                    case "invert":
+                        effectType = EFFECT_TYPE.INVERT;
+                        break;
+                    case "flicker":
+                        effectType = EFFECT_TYPE.FLICKER;
+                        break;
+                    default:
+                        return returnUsage();
                 }
-                flicker(state); //Apply state
-                Cookies.set("flicker", state ? "true" : "false", {expires: 7}); //Save new state
 
-                return "Flicker effect " + (state ? "ON" : "OFF");
+                if (args.length === 1) { //Toggle
+                    state = Cookies.get(args[0]) === "true";
+                    state = !state;
+                }
+                else { // State overwrite
+                    state = args[1] === "true";
+                }
+                try {
+                    setEffect(effectType, state);
+                }
+                catch (e) {
+                    return returnUsage();
+                }
+                Cookies.set(args[0], state ? "true" : "false", {expires: 7}); //Save new state
+                return "Effect " + args[0] + " turned " + (state ? "ON" : "OFF");
             }
         },
         {
