@@ -1,6 +1,5 @@
-"use strict";
-
 function JSUtil() {
+    "use strict";
     let lwConsole = new LWConsole(
         document.getElementById("lwConsole"),
         document.getElementById("consoleOut"),

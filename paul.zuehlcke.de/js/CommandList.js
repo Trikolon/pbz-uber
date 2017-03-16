@@ -1,9 +1,8 @@
 /**
  * Created by pbz on 12.03.17.
  */
-"use strict";
-
 function CommandList(console) {
+    "use strict";
     this.getCommandHandler = getCommandHandler;
     this.getCommand = getCommand;
 

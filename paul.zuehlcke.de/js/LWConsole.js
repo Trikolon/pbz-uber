@@ -1,7 +1,6 @@
 /**
  * Created by paul on 13.03.17.
  */
-"use strict";
 
 /**
  * Lightweight Console
@@ -13,6 +12,7 @@
  * @constructor
  */
 function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
+    "use strict";
     let consoleOut = "";
     this.motd = "Welcome to " + hostname + "!\nType 'help' for help.\n";
     let cmdList = new CommandList(this);
@@ -162,7 +162,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
                 readPos = s - 1;
             }
             if (typeof history[readPos] === "undefined") { //if history-array is not completely filled yet
-                readPos = writePos === 0 ? s - 1 : writePos - 1
+                readPos = writePos === 0 ? s - 1 : writePos - 1;
             }
             return result;
         }
