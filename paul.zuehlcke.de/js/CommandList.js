@@ -1,7 +1,7 @@
 /**
  * Created by pbz on 12.03.17.
  */
-function CommandList(console) {
+function CommandList(lwConsole) {
     "use strict";
     this.getCommandHandler = getCommandHandler;
 
@@ -62,7 +62,7 @@ function CommandList(console) {
             usage: "motd",
             visible: true,
             handler: function () {
-                return console.motd;
+                return lwConsole.motd;
             }
         },
         {
@@ -136,13 +136,13 @@ function CommandList(console) {
                 let request = new XMLHttpRequest();
                 request.onload = function () {
                     if (request.status !== 200) {
-                        console.print("\nError: ipinfo.io returned code " + request.status);
+                        lwConsole.print("\nError: ipinfo.io returned code " + request.status);
                     }
-                    console.print(request.responseText);
+                    lwConsole.print(request.responseText);
                 };
                 request.onerror = function (e) {
                     console.error(e);
-                    console.print("Error: Could not send request to ipinfo.io. Check your internet connection.");
+                    lwConsole.print("Error: Could not send request to ipinfo.io. Check your internet connection.");
                 };
                 request.open("GET", queryUrl, true);
                 request.send();
@@ -270,7 +270,7 @@ function CommandList(console) {
             usage: "clear",
             visible: true, //Visible in help page?
             handler: function () {
-                console.clear();
+                lwConsole.clear();
             }
         },
         {
