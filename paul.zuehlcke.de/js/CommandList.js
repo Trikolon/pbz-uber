@@ -221,7 +221,7 @@ function CommandList(lwConsole) {
             handler: function (args) {
                 function setEffect(effect, state) {
                     switch (effect) {
-                        case EFFECT.INVERT:
+                        case EFFECT.INVERT: {
                             let invertStr;
                             if (state) {
                                 invertStr = "100%";
@@ -231,7 +231,8 @@ function CommandList(lwConsole) {
                             }
                             document.getElementById("content").style.filter = "invert(" + invertStr + ")";
                             break;
-                        case EFFECT.FLICKER:
+                        }
+                        case EFFECT.FLICKER: {
                             let contentDom = document.getElementById("content");
                             let containsClass = contentDom.className.indexOf("monitor") !== -1;
                             if (state) {
@@ -246,8 +247,10 @@ function CommandList(lwConsole) {
                                 }
                             }
                             break;
-                        default:
+                        }
+                        default: {
                             throw "Invalid effect";
+                        }
                     }
                 }
 
