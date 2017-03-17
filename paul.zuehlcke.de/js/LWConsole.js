@@ -13,10 +13,13 @@
  */
 function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     "use strict";
-    let consoleOut = "";
+
+    let ERROR = CMDResult.prototype.ERROR_TYPE; //Shortcut for error type enum
+    let consoleOut = ""; //Content of console-out text-area
+    let cmdList = new CommandList(this); //Load commands
+    let cmdHistory = new CommandHistory(); //Initialise cmd history (for ARROW_UP support)
+
     this.motd = "Welcome to " + hostname + "!\nType 'help' for help.\n";
-    let cmdList = new CommandList(this);
-    let cmdHistory = new CommandHistory();
     //bind methods called in CommandList to console
     this.print = print;
     this.clear = clear;
@@ -90,7 +93,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
      * @param str message to print
      */
     function print(str) {
-        if (str) {
+        if (str && str !== "") {
             consoleOut += str + "\n"; //Append string to print and newline
             consoleOutDOM.value = consoleOut; //update textarea text
             consoleOutDOM.scrollTop = consoleOutDOM.scrollHeight; //scroll down in textarea for console-like behavior
@@ -118,18 +121,38 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
 
     /**
      * Takes command as array and calls corresponding cmd-handler on match
-     * @param cmd command-array. cmd[0] is command name, cmd[>1] is parameter
+     * @param cmdArr command-array. cmd[0] is command name, cmd[>1] is parameter
      * @returns {String} result of command
      */
-    function executeCMD(cmd) {
-        let cmdName = cmd[0]; //Name
-        cmd.shift(); //args
+    function executeCMD(cmdArr) {
+        let cmdName = cmdArr[0]; //Name
+        cmdArr.shift(); //args
         try {
-            return cmdList.getCommandHandler(cmdName)(cmd);
+            let cmd = cmdList.getCommand(cmdName); //Fetch command
+            let result = cmd.handler(cmdArr); //Execute handler with params (cmdArray)
+
+            if (result instanceof CMDResult) {
+                switch (result.error) {
+                    default:
+                        return result.value;
+                    case ERROR.USAGE:
+                        return "Usage: " + cmd.usage;
+                    case ERROR.RUNTIME:
+                        return "Runtime error: " + result.value;
+                }
+            }
+            else {
+                if (result instanceof String) {
+                    console.warn("Command '" + cmd.name + "' returned String-value. " +
+                        "This is deprecated will result in an error in future versions.", cmd, result);
+                }
+                return result;
+            }
+
         }
         catch (e) {
             console.error(e);
-            return "Error in command execution. Check browser console for details.";
+            return "Exception thrown in command execution. Check browser console for details.";
         }
     }
 
@@ -183,3 +206,25 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
         };
     }
 }
+//Enum for effect types (used in effect cmd)
+LWConsole.prototype.EFFECT_TYPE = {
+    INVERT: "INVERT",
+    FLICKER: "FLICKER"
+};
+
+/**
+ * Returned by commands, stores information on their results
+ * @param value return value of the command
+ * @param error error-type (if any) in execution. Can be undefined
+ * @constructor
+ */
+function CMDResult(value, error) {
+    this.value = value;
+    this.error = error;
+}
+//Enum for error types
+CMDResult.prototype.ERROR_TYPE = {
+    UNKNOWN: "UNKNOWN",
+    USAGE: "USAGE",
+    RUNTIME: "RUNTIME"
+};
