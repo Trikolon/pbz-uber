@@ -141,6 +141,9 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
         cmdArr.shift(); //args
         try {
             let cmd = cmdList.getCommand(cmdName); //Fetch command
+            if (!cmd) {
+                return "Unknown command.";
+            }
             let result = cmd.handler(cmdArr); //Execute handler with params (cmdArray)
 
             if (result instanceof CMDResult) {
