@@ -130,18 +130,7 @@ function CommandList(lwConsole, config) {
                 if (!args || args.length === 0) {
                     return new CMDResult(undefined, ERROR.USAGE);
                 }
-
-                let init = true;
-                let str = "";
-
-                for (let i = 0; i < args.length; i++) {
-                    if (!init) {
-                        str += " ";
-                    }
-                    init = false;
-                    str += args[i];
-                }
-                return new CMDResult(str);
+                return new CMDResult(args.join(" "));
             }
         },
         {
