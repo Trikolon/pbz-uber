@@ -17,18 +17,19 @@
 /**
  * Lightweight Console
  *
+ * @param config pulled from cookies, holds state of effects + console open state
  * @param consoleDiv dom of div holding the console
  * @param consoleOutDOM dom of text-area for console-output
  * @param consoleInDOM dom of text-input for console-input
  * @param hostname included in motd, may have further use in the future
  * @constructor
  */
-function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
+function LWConsole(config, consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     "use strict";
 
     let ERROR = CMDResult.prototype.ERROR_TYPE; //Shortcut for error type enum
     let consoleOut = ""; //Content of console-out text-area
-    let cmdList = new CommandList(this); //Load commands
+    let cmdList = new CommandList(this, config); //Load commands
     let cmdHistory = new CommandHistory(); //Initialise cmd history (for ARROW_UP support)
 
     this.motd = "Welcome to " + hostname + "!\nType 'help' for help.\n";
@@ -36,9 +37,6 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     this.print = print;
     this.clear = clear;
     this.executeCmd = executeCMD; //Allow external cmd calls
-
-    //Get initial state depending on dom
-    let visible = window.getComputedStyle(consoleDiv).getPropertyValue("display") === "flex";
 
     //Attach key handler for cmd-send and cmd-history
     document.addEventListener("keydown", function (e) {
@@ -80,22 +78,15 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
      * @param state boolean true = visible; false = hidden
      */
     this.show = function (state) {
-        let cookieStr;
-
         if (state) {
-            cookieStr = "true";
             consoleDiv.style.display = "flex";
-            visible = true;
             //Set focus to console
             consoleInDOM.focus();
         }
         else {
-            cookieStr = "false";
             consoleDiv.style.display = "none";
-            visible = false;
         }
-
-        Cookies.set("console", cookieStr, {expires: 7});
+        config.store("consoleOpen", state === true); // === to filter type
     };
 
     /**
@@ -103,7 +94,7 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
      * @returns {boolean}
      */
     this.isVisible = function () {
-        return visible;
+        return config.get("consoleOpen");
     };
 
     /**
@@ -175,56 +166,6 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
             console.error(e);
             return "Exception thrown in command execution. Check browser console for details.";
         }
-    }
-
-
-    /**
-     * Class CommandHistory
-     * Stores last <size> commands in buffer
-     * @param size amount of commands to store in buffer
-     * @constructor
-     */
-    function CommandHistory(size) {
-        if (!size) {
-            size = 20; //default
-        }
-        let history = new Array(size);
-        let writePos = 0;
-        let readPos = 0;
-        let s = size;
-
-        this.get = get;
-
-        /**
-         * Get command in cmd history, goes one back in history every call
-         * @returns{String} cmd
-         */
-        function get() {
-            let result = history[readPos];
-            readPos--;
-            if (readPos === -1) {
-                readPos = s - 1;
-            }
-            if (typeof history[readPos] === "undefined") { //if history-array is not completely filled yet
-                readPos = writePos === 0 ? s - 1 : writePos - 1;
-            }
-            return result;
-        }
-
-        /**
-         * Add command to history array
-         * @param cmd
-         */
-        this.add = function (cmd) {
-            if (typeof cmd !== "undefined") {
-                readPos = writePos; //On cmd-add, reset readpos
-                history[writePos] = cmd;
-                writePos++;
-                if (writePos === s) {
-                    writePos = 0;
-                }
-            }
-        };
     }
 }
 //Enum for effect types (used in effect cmd)

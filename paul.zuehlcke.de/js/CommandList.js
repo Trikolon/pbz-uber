@@ -18,9 +18,10 @@
 /**
  * Stores command properties + logic and provides method to query them
  * @param lwConsole reference to console-object, required by some commands
+ * @param config reference to configuration object used to store command-states
  * @constructor
  */
-function CommandList(lwConsole) {
+function CommandList(lwConsole, config) {
     "use strict";
     //this.getCommandHandler = getCommandHandler; //Currently unused
     this.getCommand = getCommand;
@@ -271,7 +272,7 @@ function CommandList(lwConsole) {
                 }
 
                 if (args.length === 1) { //Toggle
-                    state = Cookies.get(args[0]) === "true";
+                    state = config.get(args[0]);
                     state = !state;
                 }
                 else { // State overwrite
@@ -283,7 +284,7 @@ function CommandList(lwConsole) {
                 catch (e) {
                     return new CMDResult(undefined, ERROR.USAGE);
                 }
-                Cookies.set(args[0], state ? "true" : "false", {expires: 7}); //Save new state
+                config.store(args[0], state);
                 return new CMDResult("Effect " + args[0] + " turned " + (state ? "ON" : "OFF"));
             }
         },

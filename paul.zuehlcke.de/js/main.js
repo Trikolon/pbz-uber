@@ -16,7 +16,9 @@
 
 function JSUtil() {
     "use strict";
+    let config = new CookieConfig();
     let lwConsole = new LWConsole(
+        config,
         document.getElementById("lwConsole"),
         document.getElementById("consoleOut"),
         document.getElementById("consoleIn"),
@@ -39,42 +41,17 @@ function JSUtil() {
             e.preventDefault();
             lwConsole.show(false);
         }
-
     });
 
-    /**
-     * Set initial state by cookie
-     * TODO: config object stored as a whole
-     */
-    let flickerCookie = Cookies.get("flicker");
-    let invertCookie = Cookies.get("invert");
-    let consoleStatusCookie = Cookies.get("console");
-
-    if (typeof consoleStatusCookie === "undefined") {
-        Cookies.set("console", "false", {expires: 7});
+    //Query config and set initial state
+    if (config.get("consoleOpen")) {
+        lwConsole.show(true);
     }
-    else {
-        if (consoleStatusCookie === "true") {
-            lwConsole.show(true);
-        }
+    if (!config.get("flicker")) {
+        lwConsole.executeCmd(["effect", "flicker", "false"]);
     }
-    if (typeof flickerCookie === "undefined") {
-        Cookies.set("flicker", "true", {expires: 7});
+    if (config.get("invert")) {
+        lwConsole.executeCmd(["effect", "invert", "true"]);
     }
-    else {
-        if (flickerCookie === "false") { //Is flicker disabled?
-            lwConsole.executeCmd(["effect", "flicker", "false"]);
-        }
-    }
-    if (typeof invertCookie === "undefined") {
-        Cookies.set("invert", "false", {expires: 7});
-    }
-    else {
-        if (invertCookie === "true") { //Is invert enabled?
-            lwConsole.executeCmd(["effect", "invert", "true"]);
-        }
-    }
-
-
 }
 let util = new JSUtil();
