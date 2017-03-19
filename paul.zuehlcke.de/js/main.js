@@ -44,15 +44,25 @@ function JSUtil() {
 
     /**
      * Set initial state by cookie
+     * TODO: config object stored as a whole
      */
     let flickerCookie = Cookies.get("flicker");
     let invertCookie = Cookies.get("invert");
+    let consoleStatusCookie = Cookies.get("console");
 
+    if (typeof consoleStatusCookie === "undefined") {
+        Cookies.set("console", "false", {expires: 7});
+    }
+    else {
+        if (consoleStatusCookie === "true") {
+            lwConsole.show(true);
+        }
+    }
     if (typeof flickerCookie === "undefined") {
         Cookies.set("flicker", "true", {expires: 7});
     }
     else {
-        if (Cookies.get("flicker") === "false") { //Is flicker disabled?
+        if (flickerCookie === "false") { //Is flicker disabled?
             lwConsole.executeCmd(["effect", "flicker", "false"]);
         }
     }
@@ -60,7 +70,7 @@ function JSUtil() {
         Cookies.set("invert", "false", {expires: 7});
     }
     else {
-        if (Cookies.get("invert") === "true") { //Is invert enabled?
+        if (invertCookie === "true") { //Is invert enabled?
             lwConsole.executeCmd(["effect", "invert", "true"]);
         }
     }
