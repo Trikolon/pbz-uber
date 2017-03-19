@@ -55,7 +55,7 @@ function CookieConfig(name) {
                 resetConfig();
             }
         }
-        console.debug("CookieConfig: Loaded config", config);
+        // console.debug("CookieConfig: Loaded config", config);
     }
 
     /**
