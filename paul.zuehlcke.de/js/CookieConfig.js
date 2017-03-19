@@ -18,9 +18,10 @@
  * Stores state/config and manages cookies
  * Depends on cookie.js
  * @param name name of cookie stored in browser
+ * @param expiryTime time to store config-cookie in browser for (days)
  * @constructor
  */
-function CookieConfig(name) {
+function CookieConfig(name, expiryTime) {
     let config;
     const defaultConfig = {
         consoleOpen: false,
@@ -30,6 +31,9 @@ function CookieConfig(name) {
     if (!name) {
         name = "consoleConfig";
     }
+    if (!expiryTime) {
+        expiryTime = 7;
+    }
     getConfig();
 
     function resetConfig() {
@@ -38,7 +42,7 @@ function CookieConfig(name) {
     }
 
     function storeConfig() {
-        Cookies.set(name, config, {expires: 7});
+        Cookies.set(name, config, {expires: expiryTime});
     }
 
     function getConfig() {
