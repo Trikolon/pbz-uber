@@ -58,6 +58,12 @@ function CookieConfig(name) {
         console.debug("CookieConfig: Loaded config", config);
     }
 
+    /**
+     * Store a value in config by key
+     * This triggers a cookie-write
+     * @param key
+     * @param value
+     */
     this.store = function (key, value) {
         if (typeof key === "undefined" || typeof value === "undefined") {
             console.warn("config.store() called with invalid parameters");
@@ -68,14 +74,26 @@ function CookieConfig(name) {
         }
     };
 
+    /**
+     * Get a value from config by key
+     * @param key
+     * @returns {*}
+     */
     this.get = function (key) {
         if (config.hasOwnProperty(key)) {
             return config[key];
         }
     };
 
+    /**
+     * Reset config to default values
+     * @type {resetConfig}
+     */
     this.reset = resetConfig;
 
-    // external, manual cookie-load trigger
+    /**
+     * Trigger config refresh (reload from cookies)
+     * @type {getConfig}
+     */
     this.load = getConfig;
 }
