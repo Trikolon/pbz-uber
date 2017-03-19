@@ -80,16 +80,22 @@ function LWConsole(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
      * @param state boolean true = visible; false = hidden
      */
     this.show = function (state) {
+        let cookieStr;
+
         if (state) {
+            cookieStr = "true";
             consoleDiv.style.display = "flex";
             visible = true;
             //Set focus to console
             consoleInDOM.focus();
         }
         else {
+            cookieStr = "false";
             consoleDiv.style.display = "none";
             visible = false;
         }
+
+        Cookies.set("console", cookieStr, {expires: 7});
     };
 
     /**
