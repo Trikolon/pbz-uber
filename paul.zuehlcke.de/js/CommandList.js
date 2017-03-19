@@ -350,6 +350,21 @@ function CommandList(lwConsole, config) {
             handler: function () {
                 return new CMDResult("cia_secrets, cute_cat_gifs, videos, passwords.txt");
             }
+        },
+        {
+            name: "ridb",
+            description: "A simple command that confirms that Robert is the best.",
+            usage: "ridb [response]",
+            visible: false,
+            handler: function (args) {
+                let output = "Paul:\t'Robert ist der Beste!'";
+                if (args.length > 0)
+                    output += "\nRobert:\t'" + args.join(" ") + "'";
+                else {
+                    output += "\nThere was no response...";
+                }
+                return new CMDResult(output);
+            }
         }
     ];
 }
