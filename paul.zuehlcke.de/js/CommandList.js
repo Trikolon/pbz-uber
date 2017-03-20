@@ -117,30 +117,25 @@ function CommandList(lwConsole, config) {
         {
             name: "open",
             description: "Opens page from main navigation",
-            usage: "open [keybase/github/twitter/email]",
+            usage: "open [keybase/github/twitter/email/source]",
             visible: true, //Visible in help page?
             handler: function (args) {
                 if (args.length !== 1) {
                     throw new UsageError();
                 }
-                let url;
-                switch (args[0]) {
-                    default:
-                        return new UsageError("Sorry, I don't know this service");
-                    case "keybase":
-                        url = "//keybase.io/pbz";
-                        break;
-                    case "github":
-                        url = "//github.com/Trikolon";
-                        break;
-                    case "twitter":
-                        url = "//twitter.com/deppaws";
-                        break;
-                    case "email":
-                        url = "mailto:paul@zuehlcke.de";
-                        break;
+                let urls = {
+                    "keybase": "//keybase.io/pbz",
+                    "github": "//github.com/Trikolon",
+                    "twitter": "//twitter.com/deppaws",
+                    "email": "mailto:paul@zuehlcke.de",
+                    "source": "//github.com/Trikolon/pbz-uber"
+                };
+                args[0] = args[0].toLowerCase(); //Ignore case
+
+                if (!urls.hasOwnProperty(args[0])) {
+                    throw new UsageError("Sorry, I don't know this service");
                 }
-                window.open(url);
+                window.open(urls[args[0]]);
                 return args[0] + " opened.";
             }
         },
