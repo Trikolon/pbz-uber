@@ -50,6 +50,35 @@ function CommandList(lwConsole, config) {
     }
 
     let commands = [
+        // {
+        //     // ======= Example command to explain cmd implementation
+        //     //Identifier of cmd (first arg of user input)
+        //     name: "example",
+        //     //Description for help-cmd
+        //     description: "This is an example cmd to explain how commands are implemented",
+        //     //Usage description of command to be printed on UsageError// d
+        //     usage: "example <param1> <param2>",
+        //     //Should this cmd be visible in the help page? "help example" will always work.
+        //     visible: true,
+        //     /**
+        //      * Handler of command to be executed when cmd.name matches first keyword of user-input
+        //      * @param args string-array containing additional arguments provided by user. Example: ["apple", "potato"]
+        //      * @returns {string} result message of command to be printed to the console
+        //      */
+        //     handler: function (args) {
+        //         if (args.length !== 2) {
+        //             throw new UsageError("Invalid command usage! This message is optional");
+        //         }
+        //         if (args[0] === "bananas") {
+        //             //Commands can also throw other errors, which will be shown in the console
+        //             throw new Error("No bananas allowed!");
+        //         }
+        //         lwConsole.print("If you have an async cmd you can also print messages yourself like this.");
+        //
+        //         return "This is the result of the cmd, this message will be displayed in the console"
+        //             + "\nAlso, new lines are supported";
+        //     }
+        // },
         {
             name: "help",
             description: "Shows a list of commands",
