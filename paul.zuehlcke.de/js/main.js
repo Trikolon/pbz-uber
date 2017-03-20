@@ -16,7 +16,12 @@
 
 function JSUtil() {
     "use strict";
-    let config = new CookieConfig();
+    let config = new CookieConfig("consoleConfig", 14,
+        {
+            consoleOpen: false,
+            flicker: true,
+            invert: false
+        });
     let lwConsole = new LWConsole(
         config,
         document.getElementById("lwConsole"),
