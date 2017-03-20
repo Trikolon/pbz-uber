@@ -149,10 +149,11 @@ function LWConsole(config, consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
                     return (e.message ? e.message + "\n" : "") + "Usage: " + cmd.usage; //Could also return help cmd.name
                 }
                 else {
-                    return "Error: " + e.message;
+                    return e.name + ": " + e.message;
                 }
             }
             else { // This only happens when a command is not throwing an error-object (bad practise)
+                console.warn("Command returned invalid error-object", "cmd", cmd, "args", cmdArr);
                 console.error(e);
                 return "Unknown error in command execution, check console for details";
             }
