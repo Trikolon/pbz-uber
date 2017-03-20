@@ -160,11 +160,6 @@ function LWConsole(config, consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
         }
     }
 }
-//Enum for effect types (used in effect cmd)
-LWConsole.prototype.EFFECT_TYPE = {
-    INVERT: "INVERT",
-    FLICKER: "FLICKER"
-};
 
 /**
  * Custom error type which inherits from Error. To be thrown on invalid command usage.
