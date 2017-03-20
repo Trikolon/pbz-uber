@@ -23,7 +23,7 @@
  */
 function CookieConfig(name, expiryTime) {
     let config;
-    const defaultConfig = {
+    const defaultConfig = { //TODO: Add default config as parameter
         consoleOpen: false,
         flicker: true,
         invert: false
