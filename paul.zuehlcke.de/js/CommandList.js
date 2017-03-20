@@ -25,7 +25,6 @@ function CommandList(lwConsole, config) {
     "use strict";
     //this.getCommandHandler = getCommandHandler; //Currently unused
     this.getCommand = getCommand;
-    let ERROR = CMDResult.prototype.ERROR_TYPE;
     let EFFECT = LWConsole.prototype.EFFECT_TYPE;
 
     function getCommandHandler(commandName) {
@@ -36,7 +35,7 @@ function CommandList(lwConsole, config) {
         else {
             //No matching command found
             return function () {
-                return new CMDResult("Unknown command"); //No error, unknown-cmd is success. Feels weird, doesn't it?
+                return "Unknown command"; //No error, unknown-cmd is success. Feels weird, doesn't it?
             }
         }
     }
@@ -57,7 +56,7 @@ function CommandList(lwConsole, config) {
             usage: "help [command]",
             visible: true,
             handler: function (args) {
-                let result = new CMDResult();
+                // let result = new CMDResult();
                 if (args.length > 1) {
                     return getCommandHandler("help")(["help"]);
                 }
@@ -68,18 +67,14 @@ function CommandList(lwConsole, config) {
                             msg += "\n" + commands[i].name + ": " + commands[i].description;
                         }
                     }
-                    result.value = msg;
+                    return msg;
                 }
-                else { //Show usage for single cmd
-                    let cmd = getCommand(args[0]);
-                    if (!cmd) {
-                        result.value = "No help page available: Unknown command.";
-                    }
-                    else {
-                        result.value = cmd.name + ":\nDescription: " + cmd.description + "\nUsage: " + cmd.usage;
-                    }
+                //Show usage for single cmd
+                let cmd = getCommand(args[0]);
+                if (!cmd) {
+                    return "No help page available: Unknown command.";
                 }
-                return result;
+                return cmd.name + ":\nDescription: " + cmd.description + "\nUsage: " + cmd.usage;
             }
         },
         {
@@ -88,7 +83,7 @@ function CommandList(lwConsole, config) {
             usage: "motd",
             visible: true,
             handler: function () {
-                return new CMDResult(lwConsole.motd);
+                return lwConsole.motd;
             }
         },
         {
@@ -98,12 +93,12 @@ function CommandList(lwConsole, config) {
             visible: true, //Visible in help page?
             handler: function (args) {
                 if (args.length !== 1) {
-                    return new CMDResult(undefined, ERROR.USAGE);
+                    throw new UsageError();
                 }
                 let url;
                 switch (args[0]) {
                     default:
-                        return "Sorry, I don't know this service";
+                        return new UsageError("Sorry, I don't know this service");
                     case "keybase":
                         url = "//keybase.io/pbz";
                         break;
@@ -118,7 +113,7 @@ function CommandList(lwConsole, config) {
                         break;
                 }
                 window.open(url);
-                return new CMDResult(args[0] + " opened.");
+                return args[0] + " opened.";
             }
         },
         {
@@ -128,9 +123,9 @@ function CommandList(lwConsole, config) {
             visible: true,
             handler: function (args) {
                 if (!args || args.length === 0) {
-                    return new CMDResult(undefined, ERROR.USAGE);
+                    throw new UsageError();
                 }
-                return new CMDResult(args.join(" "));
+                return args.join(" ");
             }
         },
         {
@@ -140,14 +135,12 @@ function CommandList(lwConsole, config) {
             visible: true,
             handler: function (args) {
                 let queryUrl = "https://ipinfo.io/";
-
                 if (args.length > 1) {
-                    return new CMDResult(undefined, ERROR.USAGE);
+                    throw new UsageError();
                 }
-                else {
-                    if (args.length === 1) { //one arg => query arg ip
-                        queryUrl += args[0] + "/"
-                    }
+
+                if (args.length === 1) { //one arg => query arg ip
+                    queryUrl += args[0] + "/"
                 }
 
                 queryUrl += "json";
@@ -165,7 +158,7 @@ function CommandList(lwConsole, config) {
                 };
                 request.open("GET", queryUrl, true);
                 request.send();
-                return new CMDResult("Getting data ...");
+                return "Getting data ...";
             }
         },
         {
@@ -196,11 +189,9 @@ function CommandList(lwConsole, config) {
                     found = false;
                 }
                 if (!found) {
-                    return new CMDResult(undefined, ERROR.USAGE);
+                    throw new UsageError();
                 }
-                else {
-                    return new CMDResult(date);
-                }
+                return date;
             }
         },
         {
@@ -239,14 +230,14 @@ function CommandList(lwConsole, config) {
                             break;
                         }
                         default: {
-                            throw "Invalid effect";
+                            throw new UsageError();
                         }
                     }
                 }
 
                 let state; // boolean state to change effect to
                 if (!args || args.length === 0 || args.length > 2) {
-                    return new CMDResult(undefined, ERROR.USAGE);
+                    throw new UsageError();
                 }
                 let effectType;
                 switch (args[0].toLowerCase()) {
@@ -257,7 +248,7 @@ function CommandList(lwConsole, config) {
                         effectType = EFFECT.FLICKER;
                         break;
                     default:
-                        return new CMDResult(undefined, ERROR.USAGE);
+                        throw new UsageError();
                 }
 
                 if (args.length === 1) { //Toggle
@@ -267,14 +258,10 @@ function CommandList(lwConsole, config) {
                 else { // State overwrite
                     state = args[1] === "true";
                 }
-                try {
-                    setEffect(effectType, state);
-                }
-                catch (e) {
-                    return new CMDResult(undefined, ERROR.USAGE);
-                }
+                setEffect(effectType, state); //this can throw usage-error (caught by execution handler)
+
                 config.store(args[0], state);
-                return new CMDResult("Effect " + args[0] + " turned " + (state ? "ON" : "OFF"));
+                return "Effect " + args[0] + " turned " + (state ? "ON" : "OFF");
             }
         },
         {
@@ -301,7 +288,7 @@ function CommandList(lwConsole, config) {
             usage: "kleinhase",
             visible: false,
             handler: function () {
-                return new CMDResult("<3");
+                return "<3";
             }
         },
         {
@@ -310,7 +297,7 @@ function CommandList(lwConsole, config) {
             usage: "shutdown",
             visible: false,
             handler: function () {
-                return new CMDResult("You're not my master!");
+                return "You're not my master!";
             }
         },
         {
@@ -319,7 +306,7 @@ function CommandList(lwConsole, config) {
             usage: "make_me_a_sandwich",
             visible: false,
             handler: function () {
-                return new CMDResult("Make it yourself!");
+                return "Make it yourself!";
             }
         },
         {
@@ -328,7 +315,7 @@ function CommandList(lwConsole, config) {
             usage: "rm",
             visible: false,
             handler: function () {
-                return new CMDResult("Please don't delete anything. We don't have backups.");
+                return "Please don't delete anything. We don't have backups.";
             }
         },
         {
@@ -337,7 +324,7 @@ function CommandList(lwConsole, config) {
             usage: "ls",
             visible: false,
             handler: function () {
-                return new CMDResult("cia_secrets, cute_cat_gifs, videos, passwords.txt");
+                return "cia_secrets, cute_cat_gifs, videos, passwords.txt";
             }
         },
         {
@@ -352,7 +339,7 @@ function CommandList(lwConsole, config) {
                 else {
                     output += "\nThere was no response...";
                 }
-                return new CMDResult(output);
+                return output;
             }
         }
     ];

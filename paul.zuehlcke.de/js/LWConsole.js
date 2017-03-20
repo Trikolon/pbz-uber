@@ -27,7 +27,6 @@
 function LWConsole(config, consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     "use strict";
 
-    let ERROR = CMDResult.prototype.ERROR_TYPE; //Shortcut for error type enum
     let consoleOut = ""; //Content of console-out text-area
     let cmdList = new CommandList(this, config); //Load commands
     let cmdHistory = new CommandHistory(); //Initialise cmd history (for ARROW_UP support)
@@ -136,35 +135,27 @@ function LWConsole(config, consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
     function executeCMD(cmdArr) {
         let cmdName = cmdArr[0]; //Name
         cmdArr.shift(); //args
+
+        let cmd = cmdList.getCommand(cmdName); //Fetch command
+        if (!cmd) {
+            return "Unknown command.";
+        }
         try {
-            let cmd = cmdList.getCommand(cmdName); //Fetch command
-            if (!cmd) {
-                return "Unknown command.";
-            }
-            let result = cmd.handler(cmdArr); //Execute handler with params (cmdArray)
-
-            if (result instanceof CMDResult) {
-                switch (result.error) {
-                    default:
-                        return result.value;
-                    case ERROR.USAGE:
-                        return "Usage: " + cmd.usage;
-                    case ERROR.RUNTIME:
-                        return "Runtime error: " + result.value;
-                }
-            }
-            else {
-                if (result instanceof String) {
-                    console.warn("Command '" + cmd.name + "' returned String-value. " +
-                        "This is deprecated will result in an error in future versions.", cmd, result);
-                }
-                return result;
-            }
-
+            return cmd.handler(cmdArr); //Execute handler with params (cmdArray)
         }
         catch (e) {
-            console.error(e);
-            return "Exception thrown in command execution. Check browser console for details.";
+            if (e instanceof Error) {
+                if (e instanceof UsageError) {
+                    return (e.message ? e.message + "\n" : "") + "Usage: " + cmd.usage; //Could also return help cmd.name
+                }
+                else {
+                    return "Error: " + e.message;
+                }
+            }
+            else { // This only happens when a command is not throwing an error-object (bad practise)
+                console.error(e);
+                return "Unknown error in command execution, check console for details";
+            }
         }
     }
 }
@@ -175,18 +166,13 @@ LWConsole.prototype.EFFECT_TYPE = {
 };
 
 /**
- * Returned by commands, stores information on their results
- * @param value return value of the command
- * @param error error-type (if any) in execution. Can be undefined
+ * Custom error type which inherits from Error. To be thrown on invalid command usage.
+ * @param message optional
  * @constructor
  */
-function CMDResult(value, error) {
-    this.value = value;
-    this.error = error;
+function UsageError(message) {
+    this.name = "UsageError";
+    this.message = message;
+    this.stack = (new Error()).stack;
 }
-//Enum for error types
-CMDResult.prototype.ERROR_TYPE = {
-    UNKNOWN: "UNKNOWN",
-    USAGE: "USAGE",
-    RUNTIME: "RUNTIME"
-};
+UsageError.prototype = new Error;
