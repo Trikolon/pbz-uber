@@ -25,7 +25,6 @@ function CommandList(lwConsole, config) {
     "use strict";
     //this.getCommandHandler = getCommandHandler; //Currently unused
     this.getCommand = getCommand;
-    let EFFECT = LWConsole.prototype.EFFECT_TYPE;
 
     function getCommandHandler(commandName) {
         let result = getCommand(commandName);
@@ -231,7 +230,7 @@ function CommandList(lwConsole, config) {
             handler: function (args) {
                 function setEffect(effect, state) {
                     switch (effect) {
-                        case EFFECT.INVERT: {
+                        case "invert": {
                             let invertStr;
                             if (state) {
                                 invertStr = "100%";
@@ -242,7 +241,7 @@ function CommandList(lwConsole, config) {
                             document.getElementById("content").style.filter = "invert(" + invertStr + ")";
                             break;
                         }
-                        case EFFECT.FLICKER: {
+                        case "flicker": {
                             let contentDom = document.getElementById("content");
                             let containsClass = contentDom.className.indexOf("monitor") !== -1;
                             if (state) {
@@ -268,17 +267,7 @@ function CommandList(lwConsole, config) {
                 if (!args || args.length === 0 || args.length > 2) {
                     throw new UsageError();
                 }
-                let effectType;
-                switch (args[0].toLowerCase()) {
-                    case "invert":
-                        effectType = EFFECT.INVERT;
-                        break;
-                    case "flicker":
-                        effectType = EFFECT.FLICKER;
-                        break;
-                    default:
-                        throw new UsageError();
-                }
+                args[0] = args[0].toLowerCase();
 
                 if (args.length === 1) { //Toggle
                     state = config.get(args[0]);
@@ -287,7 +276,7 @@ function CommandList(lwConsole, config) {
                 else { // State overwrite
                     state = args[1] === "true";
                 }
-                setEffect(effectType, state); //this can throw usage-error (caught by execution handler)
+                setEffect(args[0], state); //this can throw usage-error (caught by execution handler)
 
                 config.store(args[0], state);
                 return "Effect " + args[0] + " turned " + (state ? "ON" : "OFF");
