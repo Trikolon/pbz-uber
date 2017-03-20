@@ -19,15 +19,11 @@
  * Depends on cookie.js
  * @param name name of cookie stored in browser
  * @param expiryTime time to store config-cookie in browser for (days)
+ * @param defaultConfig initial config options
  * @constructor
  */
-function CookieConfig(name, expiryTime) {
+function CookieConfig(name, expiryTime, defaultConfig) {
     let config;
-    const defaultConfig = {
-        consoleOpen: false,
-        flicker: true,
-        invert: false
-    };
     if (!name) {
         name = "consoleConfig";
     }
@@ -37,7 +33,13 @@ function CookieConfig(name, expiryTime) {
     getConfig();
 
     function resetConfig() {
-        config = defaultConfig;
+        config = {};
+        //copy defaultConfig to config. Beware: Nested objects are still copied as reference
+        for (let p in defaultConfig) {
+            if (defaultConfig.hasOwnProperty(p)) {
+                config[p] = defaultConfig[p];
+            }
+        }
         storeConfig();
     }
 
