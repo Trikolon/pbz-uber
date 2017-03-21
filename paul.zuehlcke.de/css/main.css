@@ -66,12 +66,13 @@ a:focus {
     margin: 1.5em;
 }
 
-#navigation > div {
+#navigation > a {
     opacity: 0.8;
     padding: 1em;
+
 }
 
-#navigation > div:hover {
+#navigation > a:hover {
     opacity: 1;
 }
 
