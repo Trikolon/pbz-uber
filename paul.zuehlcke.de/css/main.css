@@ -27,20 +27,10 @@ a:focus {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    text-align: center;
     justify-content: center;
     align-content: center;
     align-items: center;
-}
-
-.flex-row {
-    flex-direction: row;
-}
-
-.flex-item {
-    opacity: 0.8;
-    padding: 1em;
-    animation: fadein 1s;
+    height: 100%;
 }
 
 .icon {
@@ -48,20 +38,11 @@ a:focus {
     width: 2em;
 }
 
-.highlight:hover {
-    opacity: 1;
-}
-
 .navLabel {
     padding-top: 8px;
-}
-
-#heading {
-    margin: 1.5em;
-}
-
-#heading:hover:after, #heading:hover:before {
-    content: " - ";
+    animation: fadein 2s forwards;
+    animation-delay: 0.5s;
+    opacity: 0;
 }
 
 #content {
@@ -79,6 +60,20 @@ a:focus {
     align-items: center;
     flex-wrap: nowrap;
     justify-content: space-between;
+}
+
+#heading {
+    margin: 1.5em;
+}
+
+#navigation > a {
+    opacity: 0.8;
+    padding: 1em;
+
+}
+
+#navigation > a:hover {
+    opacity: 1;
 }
 
 /* Initial state for console */
@@ -102,7 +97,6 @@ a:focus {
     resize: none;
     height: 100%;
 }
-
 
 #lwConsole textarea, input {
     color: white;

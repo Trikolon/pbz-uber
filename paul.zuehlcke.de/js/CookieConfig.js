@@ -30,6 +30,9 @@ function CookieConfig(name, expiryTime, defaultConfig) {
     if (!expiryTime) {
         expiryTime = 7;
     }
+    if (!defaultConfig) {
+        defaultConfig = {};
+    }
     getConfig();
 
     function resetConfig() {
@@ -48,20 +51,19 @@ function CookieConfig(name, expiryTime, defaultConfig) {
     }
 
     function getConfig() {
-        let result = Cookies.get(name);
-        if (typeof result === "undefined") {
-            resetConfig();
-        }
-        else {
-            try {
-                config = JSON.parse(result);
-            }
-            catch (e) {
-                console.error("CookieConfig: Error while parsing config from cookies");
+        try {
+            let result = Cookies.getJSON(name);
+            if (typeof result === "undefined") {
                 resetConfig();
             }
+            else {
+                config = result;
+            }
         }
-        // console.debug("CookieConfig: Loaded config", config);
+        catch (e) {
+            console.error("CookieConfig: Error while getting config from cookies");
+            resetConfig();
+        }
     }
 
     /**
