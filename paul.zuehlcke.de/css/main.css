@@ -27,20 +27,10 @@ a:focus {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    text-align: center;
     justify-content: center;
     align-content: center;
     align-items: center;
-}
-
-.flex-row {
-    flex-direction: row;
-}
-
-.flex-item {
-    opacity: 0.8;
-    padding: 1em;
-    animation: fadein 1s;
+    height: 100%;
 }
 
 .icon {
@@ -48,20 +38,8 @@ a:focus {
     width: 2em;
 }
 
-.highlight:hover {
-    opacity: 1;
-}
-
 .navLabel {
     padding-top: 8px;
-}
-
-#heading {
-    margin: 1.5em;
-}
-
-#heading:hover:after, #heading:hover:before {
-    content: " - ";
 }
 
 #content {
@@ -80,6 +58,21 @@ a:focus {
     flex-wrap: nowrap;
     justify-content: space-between;
 }
+
+#heading {
+    margin: 1.5em;
+}
+
+#navigation > div {
+    opacity: 0.8;
+    padding: 1em;
+    animation: fadein 1s;
+}
+
+#navigation > div:hover {
+    opacity: 1;
+}
+
 
 /* Initial state for console */
 #lwConsole {
