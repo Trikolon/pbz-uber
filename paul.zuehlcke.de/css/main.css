@@ -106,6 +106,7 @@ a:focus {
 
 #lwConsole textarea, input {
     color: white;
+    background: black;
     background: rgba(0, 0, 0, 0.3);
     border: 0;
 }
