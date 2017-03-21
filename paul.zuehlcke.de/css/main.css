@@ -40,6 +40,9 @@ a:focus {
 
 .navLabel {
     padding-top: 8px;
+    animation: fadein 2s forwards;
+    animation-delay: 0.5s;
+    opacity: 0;
 }
 
 #content {
@@ -66,13 +69,11 @@ a:focus {
 #navigation > div {
     opacity: 0.8;
     padding: 1em;
-    animation: fadein 1s;
 }
 
 #navigation > div:hover {
     opacity: 1;
 }
-
 
 /* Initial state for console */
 #lwConsole {
@@ -95,7 +96,6 @@ a:focus {
     resize: none;
     height: 100%;
 }
-
 
 #lwConsole textarea, input {
     color: white;
