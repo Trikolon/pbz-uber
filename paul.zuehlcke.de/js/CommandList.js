@@ -368,6 +368,84 @@ function CommandList(lwConsole, config) {
                 }
                 return output;
             }
+        },
+        {
+            name: "calc",
+            description: "Calculates a the result of a simple math expression",
+            usage: "calc <expression>",
+            visible: true,
+            handler: function (args) {
+                let iter = 0;
+                let expression = args.join("");
+
+                if (args.length > 0) {
+                    let expResult = this.parseExpression(expression);
+                    if(expResult === undefined || isNaN(expResult))
+                        return "This is not a valid expression!";
+                    return expression + " = " + expResult;
+                }
+                else
+                    return this.usage;
+            },
+            parseExpression: function (expression) {
+                let firstNumber = parseFloat(expression);
+                let iter = 0;
+
+                //If the expression starts with a legit number -123...
+                if(!isNaN(firstNumber)) {
+                    iter++;
+                    while(iter < expression.length) {
+
+                        //check until there is an operand -123+...
+                        if(this.isOperand(expression[iter])) {
+                            let secondNumber = this.parseExpression(expression.substring(iter+1, expression.length));
+                            return this.operate(firstNumber, secondNumber, expression[iter]);
+
+                        }
+                        iter++;
+                    }
+                    return firstNumber;
+                }
+
+                //if the expression starts with (...
+                if(isNaN(firstNumber) && expression[iter] === "(") {
+                    let level = 0;
+                    iter++;
+                    while(iter < expression.length) {
+                        //if it finds another ( -> (123+(...
+                        if(expression[iter] === "(") {
+                            level++;
+                        }
+                        if(expression[iter] === ")") {
+                            if(level === 0 ) {
+                                return this.parseExpression(expression.substring(1, iter));
+                            }
+                            level--
+                        }
+                        iter++;
+                    }
+                    return undefined;
+                }
+
+                return undefined;
+
+            },
+            isOperand: function (character) {
+                return  character === "+" ||
+                        character === "-" ||
+                        character === "*" ||
+                        character === "/" ||
+                        character === "^";
+            },
+            operate: function(firstNumber, secondNumber, operator) {
+                switch(operator) {
+                    case "+": return firstNumber + secondNumber;
+                    case "-": return firstNumber - secondNumber;
+                    case "*": return firstNumber * secondNumber;
+                    case "/": return firstNumber / secondNumber;
+                    case "^": return Math.pow(firstNumber, secondNumber);
+                }
+            }
         }
     ];
 }
