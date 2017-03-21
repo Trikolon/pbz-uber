@@ -72,6 +72,20 @@ function CommandList(lwConsole, config) {
         //             //Commands can also throw other errors, which will be shown in the console
         //             throw new Error("No bananas allowed!");
         //         }
+        //
+        //         //Commands can store options in the config object. They are preserved across calls.
+        //         // If the user has cookies enabled they are also preserved across sessions
+        //         // In the future cmds will have their own config-scope so you won't have to mind key-conflicts with
+        //         // other cmds anymore.
+        //         if (config.get("cakeSetting")) {
+        //             lwConsole.print("Cake for you!");
+        //         }
+        //         else {
+        //             lwConsole.print("Maybe next time");
+        //             config.store("cakeSetting", true);
+        //         }
+        //
+        //
         //         lwConsole.print("If you have an async cmd you can also print messages yourself like this.");
         //
         //         return "This is the result of the cmd, this message will be displayed in the console"
