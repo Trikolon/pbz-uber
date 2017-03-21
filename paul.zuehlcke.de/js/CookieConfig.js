@@ -30,6 +30,9 @@ function CookieConfig(name, expiryTime, defaultConfig) {
     if (!expiryTime) {
         expiryTime = 7;
     }
+    if (!defaultConfig) {
+        defaultConfig = {};
+    }
     getConfig();
 
     function resetConfig() {
