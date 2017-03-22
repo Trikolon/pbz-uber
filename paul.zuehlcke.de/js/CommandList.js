@@ -202,6 +202,88 @@ function CommandList(lwConsole, config) {
             }
         },
         {
+            name: "calc",
+            description: "Calculates a the result of a simple math expression",
+            usage: "calc <expression>",
+            author: "TheBiochemic",
+            visible: true,
+            handler: function (args) {
+                let expression = args.join("");
+
+                if (args.length > 0) {
+                    let expResult = parseExpression(expression);
+                    if (expResult === undefined || isNaN(expResult))
+                        throw new UsageError("This is not a valid expression!");
+                    return expResult.toString();
+                }
+                else
+                    throw new UsageError();
+
+                function parseExpression(expression) {
+                    let firstNumber = parseFloat(expression);
+                    let iter = 0;
+
+                    //If the expression starts with a legit number -123...
+                    if (!isNaN(firstNumber)) {
+                        iter++;
+                        while (iter < expression.length) {
+
+                            //check until there is an operand -123+...
+                            if (isOperand(expression[iter])) {
+                                let secondNumber = parseExpression(expression.substring(iter + 1, expression.length));
+                                return operate(firstNumber, secondNumber, expression[iter]);
+
+                            }
+                            iter++;
+                        }
+                        return firstNumber;
+                    }
+
+                    //if the expression starts with (...
+                    if (isNaN(firstNumber) && expression[iter] === "(") {
+                        let level = 0;
+                        iter++;
+                        while (iter < expression.length) {
+                            //if it finds another ( -> (123+(...
+                            if (expression[iter] === "(") {
+                                level++;
+                            }
+                            if (expression[iter] === ")") {
+                                if (level === 0) {
+                                    return parseExpression(expression.substring(1, iter));
+                                }
+                                level--
+                            }
+                            iter++;
+                        }
+                    }
+                }
+
+                function isOperand(character) {
+                    return character === "+" ||
+                        character === "-" ||
+                        character === "*" ||
+                        character === "/" ||
+                        character === "^";
+                }
+
+                function operate(firstNumber, secondNumber, operator) {
+                    switch (operator) {
+                        case "+":
+                            return firstNumber + secondNumber;
+                        case "-":
+                            return firstNumber - secondNumber;
+                        case "*":
+                            return firstNumber * secondNumber;
+                        case "/":
+                            return firstNumber / secondNumber;
+                        case "^":
+                            return Math.pow(firstNumber, secondNumber);
+                    }
+                }
+            }
+        },
+        {
             name: "time",
             description: "Show time in different formats",
             usage: "time <utc/local/unix>",
@@ -371,88 +453,6 @@ function CommandList(lwConsole, config) {
                     output += "\nThere was no response...";
                 }
                 return output;
-            }
-        },
-        {
-            name: "calc",
-            description: "Calculates a the result of a simple math expression",
-            usage: "calc <expression>",
-            author: "TheBiochemic",
-            visible: true,
-            handler: function (args) {
-                let expression = args.join("");
-
-                if (args.length > 0) {
-                    let expResult = parseExpression(expression);
-                    if (expResult === undefined || isNaN(expResult))
-                        throw new UsageError("This is not a valid expression!");
-                    return expResult.toString();
-                }
-                else
-                    throw new UsageError();
-
-                function parseExpression(expression) {
-                    let firstNumber = parseFloat(expression);
-                    let iter = 0;
-
-                    //If the expression starts with a legit number -123...
-                    if (!isNaN(firstNumber)) {
-                        iter++;
-                        while (iter < expression.length) {
-
-                            //check until there is an operand -123+...
-                            if (isOperand(expression[iter])) {
-                                let secondNumber = parseExpression(expression.substring(iter + 1, expression.length));
-                                return operate(firstNumber, secondNumber, expression[iter]);
-
-                            }
-                            iter++;
-                        }
-                        return firstNumber;
-                    }
-
-                    //if the expression starts with (...
-                    if (isNaN(firstNumber) && expression[iter] === "(") {
-                        let level = 0;
-                        iter++;
-                        while (iter < expression.length) {
-                            //if it finds another ( -> (123+(...
-                            if (expression[iter] === "(") {
-                                level++;
-                            }
-                            if (expression[iter] === ")") {
-                                if (level === 0) {
-                                    return parseExpression(expression.substring(1, iter));
-                                }
-                                level--
-                            }
-                            iter++;
-                        }
-                    }
-                }
-
-                function isOperand(character) {
-                    return character === "+" ||
-                        character === "-" ||
-                        character === "*" ||
-                        character === "/" ||
-                        character === "^";
-                }
-
-                function operate(firstNumber, secondNumber, operator) {
-                    switch (operator) {
-                        case "+":
-                            return firstNumber + secondNumber;
-                        case "-":
-                            return firstNumber - secondNumber;
-                        case "*":
-                            return firstNumber * secondNumber;
-                        case "/":
-                            return firstNumber / secondNumber;
-                        case "^":
-                            return Math.pow(firstNumber, secondNumber);
-                    }
-                }
             }
         }
     ];
