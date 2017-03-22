@@ -146,7 +146,8 @@ function LWConsole(config, consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
         catch (e) {
             if (e instanceof Error) {
                 if (e instanceof UsageError) {
-                    return (e.message ? e.message + "\n" : "") + "Usage: " + cmd.usage; //Could also return help cmd.name
+                    return (e.message ? e.message + "\n" : "") +
+                        (cmd.usage && cmd.usage !== "" ? "Usage: " + cmd.usage : "Invalid usage.");
                 }
                 else {
                     return e.name + ": " + e.message;
