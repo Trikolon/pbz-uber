@@ -55,7 +55,7 @@ rules:
   block-scoped-var: off
   class-methods-use-this: off
   complexity:
-    - error
+    - warn
     - 6
   consistent-return: off
   curly: off
