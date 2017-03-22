@@ -116,7 +116,10 @@ function CommandList(lwConsole, config) {
                 if (!cmd) {
                     return "No help page available: Unknown command.";
                 }
-                return cmd.name + ":\nDescription: " + cmd.description + "\nUsage: " + cmd.usage;
+                return cmd.name +
+                    (cmd.description && cmd.description !== "" ? ":\nDescription: " + cmd.description : "") +
+                    (cmd.usage && cmd.description !== "" ? "\nUsage: " + cmd.usage : "") +
+                    (cmd.author && cmd.author !== "" ? "\nAuthor: " + cmd.author : "");
             }
         },
         {
@@ -358,6 +361,7 @@ function CommandList(lwConsole, config) {
             name: "ridb",
             description: "A simple command that confirms that Robert is the best.",
             usage: "ridb [response]",
+            author: "Endebert",
             visible: false,
             handler: function (args) {
                 let output = "Paul:\t'Robert ist der Beste!'";
@@ -373,6 +377,7 @@ function CommandList(lwConsole, config) {
             name: "calc",
             description: "Calculates a the result of a simple math expression",
             usage: "calc <expression>",
+            author: "TheBiochemic",
             visible: true,
             handler: function (args) {
                 let expression = args.join("");
