@@ -116,8 +116,8 @@ function CommandList(lwConsole, config) {
                 if (!cmd) {
                     return "No help page available: Unknown command.";
                 }
-                return cmd.name +
-                    (cmd.description && cmd.description !== "" ? ":\nDescription: " + cmd.description : "") +
+                return cmd.name + ":" +
+                    (cmd.description && cmd.description !== "" ? "\nDescription: " + cmd.description : "") +
                     (cmd.usage && cmd.description !== "" ? "\nUsage: " + cmd.usage : "") +
                     (cmd.author && cmd.author !== "" ? "\nAuthor: " + cmd.author : "");
             }
