@@ -14,6 +14,7 @@
  limitations under the License.
  */
 
+import UsageError from "./UsageError";
 
 /**
  * Stores command properties + logic and provides method to query them
@@ -21,13 +22,20 @@
  * @param config reference to configuration object used to store command-states
  * @constructor
  */
-function CommandList(lwConsole, config) {
-    "use strict";
-    //this.getCommandHandler = getCommandHandler; //Currently unused
-    this.getCommand = getCommand;
+export default class CommandList {
 
-    function getCommandHandler(commandName) {
-        let result = getCommand(commandName);
+    constructor(lwConsole, config) {
+        this._lwConsole = lwConsole;
+        this._config = config;
+        this._commands = [];
+        this._initCommands();
+    }
+
+    //this.getCommandHandler = getCommandHandler; //Currently unused
+    // this.getCommand = getCommand;
+
+    getCommandHandler(commandName) {
+        let result = this.getCommand(commandName);
         if (result) {
             return result.handler;
         }
@@ -39,170 +47,172 @@ function CommandList(lwConsole, config) {
         }
     }
 
-    function getCommand(commandName) {
+    getCommand(commandName) {
         commandName = commandName.toLowerCase();
-        for (let i = 0; i < commands.length; i++) {
-            if (commands[i].name === commandName) {
-                return commands[i]
+        for (let i = 0; i < this._commands.length; i++) {
+            if (this._commands[i].name === commandName) {
+                return this._commands[i]
             }
         }
     }
 
-    let commands = [
-        // {
-        //     // ======= Example command to explain cmd implementation
-        //     //Identifier of cmd (first arg of user input)
-        //     name: "example",
-        //     //Description for help-cmd
-        //     description: "This is an example cmd to explain how commands are implemented",
-        //     //Usage description of command to be printed on UsageError// d
-        //     usage: "example <param1> <param2>",
-        //     //Should this cmd be visible in the help page? "help example" will always work.
-        //     visible: true,
-        //     /**
-        //      * Handler of command to be executed when cmd.name matches first keyword of user-input
-        //      * @param args string-array containing additional arguments provided by user. Example: ["apple", "potato"]
-        //      * @returns {string} result message of command to be printed to the console
-        //      */
-        //     handler: function (args) {
-        //         if (args.length !== 2) {
-        //             throw new UsageError("Invalid command usage! This message is optional");
-        //         }
-        //         if (args[0] === "bananas") {
-        //             //Commands can also throw other errors, which will be shown in the console
-        //             throw new Error("No bananas allowed!");
-        //         }
-        //
-        //         //Commands can store options in the config object. They are preserved across calls.
-        //         // If the user has cookies enabled they are also preserved across sessions
-        //         // In the future cmds will have their own config-scope so you won't have to mind key-conflicts with
-        //         // other cmds anymore.
-        //         if (config.get("cakeSetting")) {
-        //             lwConsole.print("Cake for you!");
-        //         }
-        //         else {
-        //             lwConsole.print("Maybe next time");
-        //             config.store("cakeSetting", true);
-        //         }
-        //
-        //
-        //         lwConsole.print("If you have an async cmd you can also print messages yourself like this.");
-        //
-        //         return "This is the result of the cmd, this message will be displayed in the console"
-        //             + "\nAlso, new lines are supported";
-        //     }
-        // },
-        {
-            name: "help",
-            description: "Shows a list of commands",
-            usage: "help [command]",
-            visible: true,
-            handler: function (args) {
-                // let result = new CMDResult();
-                if (args.length > 1) {
-                    return getCommandHandler("help")(["help"]);
-                }
-                if (args.length === 0) { //Show list of commands without usage
-                    let msg = "Available commands:";
-                    for (let i = 0; i < commands.length; i++) {
-                        if (commands[i].visible) {
-                            msg += "\n" + commands[i].name + ": " + commands[i].description;
-                        }
+    _initCommands() {
+        let cmdList = this;
+        this._commands = [
+            // {
+            //     // ======= Example command to explain cmd implementation
+            //     //Identifier of cmd (first arg of user input)
+            //     name: "example",
+            //     //Description for help-cmd
+            //     description: "This is an example cmd to explain how commands are implemented",
+            //     //Usage description of command to be printed on UsageError// d
+            //     usage: "example <param1> <param2>",
+            //     //Should this cmd be visible in the help page? "help example" will always work.
+            //     visible: true,
+            //     /**
+            //      * Handler of command to be executed when cmd.name matches first keyword of user-input
+            //      * @param args string-array containing additional arguments provided by user. Example: ["apple", "potato"]
+            //      * @returns {string} result message of command to be printed to the console
+            //      */
+            //     handler: function (args) {
+            //         if (args.length !== 2) {
+            //             throw new UsageError("Invalid command usage! This message is optional");
+            //         }
+            //         if (args[0] === "bananas") {
+            //             //Commands can also throw other errors, which will be shown in the console
+            //             throw new Error("No bananas allowed!");
+            //         }
+            //
+            //         //Commands can store options in the config object. They are preserved across calls.
+            //         // If the user has cookies enabled they are also preserved across sessions
+            //         // In the future cmds will have their own config-scope so you won't have to mind key-conflicts with
+            //         // other cmds anymore.
+            //         if (config.get("cakeSetting")) {
+            //             lwConsole.print("Cake for you!");
+            //         }
+            //         else {
+            //             lwConsole.print("Maybe next time");
+            //             config.store("cakeSetting", true);
+            //         }
+            //
+            //
+            //         lwConsole.print("If you have an async cmd you can also print messages yourself like this.");
+            //
+            //         return "This is the result of the cmd, this message will be displayed in the console"
+            //             + "\nAlso, new lines are supported";
+            //     }
+            // },
+            {
+                name: "help",
+                description: "Shows a list of commands",
+                usage: "help [command]",
+                visible: true,
+                handler: function (args) {
+                    // let result = new CMDResult();
+                    if (args.length > 1) {
+                        return cmdList.getCommandHandler("help")(["help"]);
                     }
-                    return msg;
-                }
-                //Show usage for single cmd
-                let cmd = getCommand(args[0]);
-                if (!cmd) {
-                    return "No help page available: Unknown command.";
-                }
-                return cmd.name + ":" +
+                    if (args.length === 0) { //Show list of commands without usage
+                        let msg = "Available commands:";
+                        for (let i = 0; i < cmdList._commands.length; i++) {
+                            if (cmdList._commands[i].visible) {
+                                msg += "\n" + cmdList._commands[i].name + ": " + cmdList._commands[i].description;
+                            }
+                        }
+                        return msg;
+                    }
+                    //Show usage for single cmd
+                    let cmd = cmdList.getCommand(args[0]);
+                    if (!cmd) {
+                        return "No help page available: Unknown command.";
+                    }
+                    return cmd.name + ":" +
                     (cmd.description && cmd.description !== "" ? "\nDescription: " + cmd.description : "") +
                     (cmd.usage && cmd.description !== "" ? "\nUsage: " + cmd.usage : "") +
                     (cmd.author && cmd.author !== "" ? "\nAuthor: " + cmd.author : "");
-            }
-        },
-        {
-            name: "motd",
-            description: "Shows the message of the day",
-            usage: "motd",
-            visible: true,
-            handler: function () {
-                return lwConsole.motd;
-            }
-        },
-        {
-            name: "open",
-            description: "Opens page from main navigation",
-            usage: "open [keybase/github/twitter/email/source]",
-            visible: true, //Visible in help page?
-            handler: function (args) {
-                if (args.length !== 1) {
-                    throw new UsageError();
                 }
-                let urls = {
-                    "keybase": "//keybase.io/pbz",
-                    "github": "//github.com/Trikolon",
-                    "twitter": "//twitter.com/deppaws",
-                    "email": "mailto:paul@zuehlcke.de",
-                    "source": "//github.com/Trikolon/pbz-uber"
-                };
-                args[0] = args[0].toLowerCase(); //Ignore case
-
-                if (!urls.hasOwnProperty(args[0])) {
-                    throw new UsageError("Sorry, I don't know this service");
+            },
+            {
+                name: "motd",
+                description: "Shows the message of the day",
+                usage: "motd",
+                visible: true,
+                handler: function () {
+                    return cmdList._lwConsole.motd;
                 }
-                window.open(urls[args[0]]);
-                return args[0] + " opened.";
-            }
-        },
-        {
-            name: "echo",
-            description: "Displays message on console - no pipes yet :-(",
-            usage: "echo <message>",
-            visible: true,
-            handler: function (args) {
-                if (!args || args.length === 0) {
-                    throw new UsageError();
-                }
-                return args.join(" ");
-            }
-        },
-        {
-            name: "ip",
-            description: "Lookup an IP (queries your IP if no argument is provided)",
-            usage: "ip [ip]",
-            visible: true,
-            handler: function (args) {
-                let queryUrl = "https://ipinfo.io/";
-                if (args.length > 1) {
-                    throw new UsageError();
-                }
-
-                if (args.length === 1) { //one arg => query arg ip
-                    queryUrl += args[0] + "/"
-                }
-
-                queryUrl += "json";
-
-                let request = new XMLHttpRequest();
-                request.onload = function () {
-                    if (request.status !== 200) {
-                        lwConsole.print("\nError: ipinfo.io returned code " + request.status);
+            },
+            {
+                name: "open",
+                description: "Opens page from main navigation",
+                usage: "open [keybase/github/twitter/email/source]",
+                visible: true, //Visible in help page?
+                handler: function (args) {
+                    if (args.length !== 1) {
+                        throw new UsageError();
                     }
-                    lwConsole.print(request.responseText);
-                };
-                request.onerror = function (e) {
-                    console.error(e);
-                    lwConsole.print("Error: Could not send request to ipinfo.io. Check your internet connection.");
-                };
-                request.open("GET", queryUrl, true);
-                request.send();
-                return "Getting data ...";
-            }
-        },
-        {
-            name: "calc",
+                    let urls = {
+                        "keybase": "//keybase.io/pbz",
+                        "github": "//github.com/Trikolon",
+                        "twitter": "//twitter.com/deppaws",
+                        "email": "mailto:paul@zuehlcke.de",
+                        "source": "//github.com/Trikolon/pbz-uber"
+                    };
+                    args[0] = args[0].toLowerCase(); //Ignore case
+
+                    if (!urls.hasOwnProperty(args[0])) {
+                        throw new UsageError("Sorry, I don't know this service");
+                    }
+                    window.open(urls[args[0]]);
+                    return args[0] + " opened.";
+                }
+            },
+            {
+                name: "echo",
+                description: "Displays message on console - no pipes yet :-(",
+                usage: "echo <message>",
+                visible: true,
+                handler: function (args) {
+                    if (!args || args.length === 0) {
+                        throw new UsageError();
+                    }
+                    return args.join(" ");
+                }
+            },
+            {
+                name: "ip",
+                description: "Lookup an IP (queries your IP if no argument is provided)",
+                usage: "ip [ip]",
+                visible: true,
+                handler: function (args) {
+                    let queryUrl = "https://ipinfo.io/";
+                    if (args.length > 1) {
+                        throw new UsageError();
+                    }
+
+                    if (args.length === 1) { //one arg => query arg ip
+                        queryUrl += args[0] + "/"
+                    }
+
+                    queryUrl += "json";
+
+                    let request = new XMLHttpRequest();
+                    request.onload = function () {
+                        if (request.status !== 200) {
+                            cmdList._lwConsole.print("\nError: ipinfo.io returned code " + request.status);
+                        }
+                        cmdList._lwConsole.print(request.responseText);
+                    };
+                    request.onerror = function (e) {
+                        console.error(e);
+                        cmdList._lwConsole.print("Error: Could not send request to ipinfo.io. Check your internet connection.");
+                    };
+                    request.open("GET", queryUrl, true);
+                    request.send();
+                    return "Getting data ...";
+                }
+            },
+            {
+                name: "calc",
             description: "Calculates a simple math expression",
             usage: "calc <expression>",
             author: "TheBiochemic",
@@ -231,94 +241,94 @@ function CommandList(lwConsole, config) {
         },
         {
             name: "time",
-            description: "Show time in different formats",
-            usage: "time <utc/local/unix>",
-            visible: true,
-            handler: function (args) {
-                let date = new Date();
-                let found = true;
+                description: "Show time in different formats",
+                usage: "time <utc/local/unix>",
+                visible: true,
+                handler: function (args) {
+                    let date = new Date();
+                    let found = true;
 
-                if (args && args.length === 1) {
-                    switch (args[0].toLowerCase()) {
-                        case "utc":
-                            date = date.toUTCString();
-                            break;
-                        case "local":
-                            date = date.toLocaleString();
-                            break;
-                        case "unix":
-                            date = Math.floor(date / 1000);
-                            break;
-                        default:
-                            found = false;
-                    }
-                }
-                else {
-                    found = false;
-                }
-                if (!found) {
-                    throw new UsageError();
-                }
-                return date;
-            }
-        },
-        {
-            name: "effect",
-            description: "Toggle effects, such as invert and flicker",
-            usage: "effect <flicker|invert> [true|false]",
-            visible: true,
-            handler: function (args) {
-                function setEffect(effect, state) {
-                    switch (effect) {
-                        case "invert": {
-                            let invertStr;
-                            if (state) {
-                                invertStr = "100%";
-                            }
-                            else {
-                                invertStr = "0%";
-                            }
-                            document.getElementById("content").style.filter = "invert(" + invertStr + ")";
-                            break;
-                        }
-                        case "flicker": {
-                            let contentDom = document.getElementById("content");
-                            let containsClass = contentDom.className.indexOf("monitor") !== -1;
-                            if (state) {
-                                if (!containsClass) {
-                                    contentDom.className += "monitor";
-                                }
-                            }
-                            else {
-                                if (containsClass) {
-                                    contentDom.className =
-                                        contentDom.className.replace(/(?:^|\s)monitor(?!\S)/g, '');
-                                }
-                            }
-                            break;
-                        }
-                        default: {
-                            throw new UsageError();
+                    if (args && args.length === 1) {
+                        switch (args[0].toLowerCase()) {
+                            case "utc":
+                                date = date.toUTCString();
+                                break;
+                            case "local":
+                                date = date.toLocaleString();
+                                break;
+                            case "unix":
+                                date = Math.floor(date / 1000);
+                                break;
+                            default:
+                                found = false;
                         }
                     }
+                    else {
+                        found = false;
+                    }
+                    if (!found) {
+                        throw new UsageError();
+                    }
+                    return date;
                 }
+            },
+            {
+                name: "effect",
+                description: "Toggle effects, such as invert and flicker",
+                usage: "effect <flicker|invert> [true|false]",
+                visible: true,
+                handler: function (args) {
+                    function setEffect(effect, state) {
+                        switch (effect) {
+                            case "invert": {
+                                let invertStr;
+                                if (state) {
+                                    invertStr = "100%";
+                                }
+                                else {
+                                    invertStr = "0%";
+                                }
+                                document.getElementById("content").style.filter = "invert(" + invertStr + ")";
+                                break;
+                            }
+                            case "flicker": {
+                                let contentDom = document.getElementById("content");
+                                let containsClass = contentDom.className.indexOf("monitor") !== -1;
+                                if (state) {
+                                    if (!containsClass) {
+                                        contentDom.className += "monitor";
+                                    }
+                                }
+                                else {
+                                    if (containsClass) {
+                                        contentDom.className =
+                                            contentDom.className.replace(/(?:^|\s)monitor(?!\S)/g, '');
+                                    }
+                                }
+                                break;
+                            }
+                            default: {
+                                throw new UsageError();
+                            }
+                        }
+                    }
 
-                let state; // boolean state to change effect to
-                if (!args || args.length === 0 || args.length > 2) {
-                    throw new UsageError();
-                }
-                args[0] = args[0].toLowerCase();
+                    let state; // boolean state to change effect to
+                    if (!args || args.length === 0 || args.length > 2) {
+                        throw new UsageError();
+                    }
+                    args[0] = args[0].toLowerCase();
 
-                if (args.length === 1) { //Toggle
-                    state = config.get(args[0]);
-                    state = !state;
-                }
-                else { // State overwrite
-                    state = args[1] === "true";
-                }
-                setEffect(args[0], state); //this can throw usage-error (caught by execution handler)
+                    if (args.length === 1) { //Toggle
+                        state = cmdList._config.get(args[0]);
+                        state = !state;
+                    }
+                    else { // State overwrite
+                        state = args[1] === "true";
+                    }
+                    setEffect(args[0], state); //this can throw usage-error (caught by execution handler)
 
-                config.store(args[0], state);
+                cmdList._config.store(args[0], state);
                 return "Effect " + args[0] + " turned " + (state ? "ON" : "OFF");
             }
         },
@@ -328,7 +338,7 @@ function CommandList(lwConsole, config) {
             usage: "clear",
             visible: true, //Visible in help page?
             handler: function () {
-                lwConsole.clear();
+                cmdList._lwConsole.clear();
             }
         },
         {
@@ -389,8 +399,8 @@ function CommandList(lwConsole, config) {
             name: "ridb",
             description: "A simple command that confirms that Robert is the best.",
             usage: "ridb [response]",
-            author: "Endebert",
             visible: false,
+            author: "Endebert",
             handler: function (args) {
                 let output = "Paul:\t'Robert ist der Beste!'";
                 if (args.length > 0)
@@ -401,5 +411,8 @@ function CommandList(lwConsole, config) {
                 return output;
             }
         }
-    ];
+        ];
+
+}
+
 }

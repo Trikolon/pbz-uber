@@ -14,6 +14,8 @@
  limitations under the License.
  */
 
+import Cookies from "js-cookie";
+
 /**
  * Stores state/config and manages cookies
  * Depends on cookie.js
@@ -22,48 +24,14 @@
  * @param defaultConfig initial config options
  * @constructor
  */
-function CookieConfig(name, expiryTime, defaultConfig) {
-    let config;
-    if (!name) {
-        name = "consoleConfig";
-    }
-    if (!expiryTime) {
-        expiryTime = 7;
-    }
-    if (!defaultConfig) {
-        defaultConfig = {};
-    }
-    getConfig();
 
-    function resetConfig() {
-        config = {};
-        //copy defaultConfig to config. Beware: Nested objects are still copied as reference
-        for (let p in defaultConfig) {
-            if (defaultConfig.hasOwnProperty(p)) {
-                config[p] = defaultConfig[p];
-            }
-        }
-        storeConfig();
-    }
-
-    function storeConfig() {
-        Cookies.set(name, config, {expires: expiryTime});
-    }
-
-    function getConfig() {
-        try {
-            let result = Cookies.getJSON(name);
-            if (typeof result === "undefined") {
-                resetConfig();
-            }
-            else {
-                config = result;
-            }
-        }
-        catch (e) {
-            console.error("CookieConfig: Error while getting config from cookies");
-            resetConfig();
-        }
+export default class CookieConfig {
+    constructor(name = "consoleConfig", expiryTime = 14, defaultConfig = {}) {
+        this.name = name;
+        this.expiryTime = expiryTime;
+        this.defaultConfig = defaultConfig;
+        this._config = defaultConfig;
+        this._loadConfig();
     }
 
     /**
@@ -72,36 +40,64 @@ function CookieConfig(name, expiryTime, defaultConfig) {
      * @param key
      * @param value
      */
-    this.store = function (key, value) {
+    store(key, value) {
         if (typeof key === "undefined" || typeof value === "undefined") {
             console.warn("config.store() called with invalid parameters");
         }
         else {
-            config[key] = value;
-            storeConfig();
+            this._config[key] = value;
+            this._saveConfig();
         }
-    };
+    }
 
     /**
      * Get a value from config by key
      * @param key
      * @returns {*}
      */
-    this.get = function (key) {
-        if (config.hasOwnProperty(key)) {
-            return config[key];
+    get(key) {
+        if (this._config.hasOwnProperty(key)) {
+            return this._config[key];
         }
-    };
+    }
+
 
     /**
      * Reset config to default values
-     * @type {resetConfig}
+     * @type {_resetConfig}
      */
-    this.reset = resetConfig;
+    _resetConfig() {
+        this._config = {};
+        //copy defaultConfig to config. Beware: Nested objects are still copied as reference
+        for (let p in this.defaultConfig) {
+            if (this.defaultConfig.hasOwnProperty(p)) {
+                this._config[p] = this.defaultConfig[p];
+            }
+        }
+        this._saveConfig();
+    }
 
     /**
      * Trigger config refresh (reload from cookies)
      * @type {getConfig}
      */
-    this.load = getConfig;
+    _loadConfig() {
+        try {
+            let result = Cookies.getJSON(name);
+            if (typeof result === "undefined") {
+                this._resetConfig();
+            }
+            else {
+                this._config = result;
+            }
+        }
+        catch (e) {
+            console.error("CookieConfig: Error while getting config from cookies");
+            this._resetConfig();
+        }
+    }
+
+    _saveConfig() {
+        Cookies.set(name, this._config, {expires: this.expiryTime});
+    }
 }
