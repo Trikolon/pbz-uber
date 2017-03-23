@@ -14,7 +14,10 @@
  limitations under the License.
  */
 
-function JSUtil() {
+import CookieConfig from "./CookieConfig";
+import LWConsole from "./LWConsole";
+
+(function () {
     "use strict";
     let config = new CookieConfig("consoleConfig", 14,
         {
@@ -30,7 +33,7 @@ function JSUtil() {
         window.location.hostname
     );
 
-    this.toggleConsole = function () {
+    window.toggleConsole = function () {
         lwConsole.show(!lwConsole.isVisible());
     };
 
@@ -53,10 +56,9 @@ function JSUtil() {
         lwConsole.show(true);
     }
     if (!config.get("flicker")) {
-        lwConsole.executeCmd(["effect", "flicker", "false"]);
+        lwConsole.executeCMD(["effect", "flicker", "false"]);
     }
     if (config.get("invert")) {
-        lwConsole.executeCmd(["effect", "invert", "true"]);
+        lwConsole.executeCMD(["effect", "invert", "true"]);
     }
-}
-let util = new JSUtil();
+}());
