@@ -19,7 +19,7 @@
     "webpack": "^2.3.1"
   },
   "scripts": {
-    "build": "webpack --config webpack.config.js"
+    "start": "webpack --progress --colors --config webpack.config.js"
   },
   "repository": {
     "type": "git",
