@@ -220,77 +220,11 @@ function CommandList(lwConsole, config) {
                     throw new UsageError();
 
                 function parseExpression(expression) {
-                    let firstNumber = parseFloat(expression);
-                    let iter = 0;
-
-                    //If the expression starts with a legit number -123...
-                    if (!isNaN(firstNumber)) {
-                        iter++;
-                        while (iter < expression.length) {
-
-                            //check until there is an operand -123+...
-                            if (isOperand(expression[iter])) {
-                                let secondNumber = parseExpression(expression.substring(iter + 1, expression.length));
-                                return operate(firstNumber, secondNumber, expression[iter]);
-
-                            }
-                            iter++;
-                        }
-                        return firstNumber;
-                    }
-
-                    //if the expression starts with (...
-                    if (isNaN(firstNumber) && expression[iter] === "(") {
-                        let level = 0;
-                        iter++;
-                        while (iter < expression.length) {
-                            //if it finds another ( -> (123+(...
-                            if (expression[iter] === "(") {
-                                level++;
-                            }
-                            if (expression[iter] === ")") {
-                                if (level === 0) {
-                                    let tempResult = parseExpression(expression.substring(1, iter));
-                                    iter++;
-                                    //if after the parentheses is something else -> (123+456)*...
-                                    if(iter < expression.length-1) {
-                                        if (isOperand(expression[iter])) {
-                                            let secondNumber = parseExpression(expression.substring(iter + 1, expression.length));
-                                            return operate(tempResult, secondNumber, expression[iter]);
-                                        }
-                                    }
-                                    return tempResult;
-                                }
-                                level--
-                            }
-                            iter++;
-                        }
-                    }
-                }
-
-                function isOperand(character) {
-                    return character === "+" ||
-                        character === "-" ||
-                        character === "*" ||
-                        character === "/" ||
-                        character === "^" ||
-                        character === "%";
-                }
-
-                function operate(firstNumber, secondNumber, operator) {
-                    switch (operator) {
-                        case "+":
-                            return firstNumber + secondNumber;
-                        case "-":
-                            return firstNumber - secondNumber;
-                        case "*":
-                            return firstNumber * secondNumber;
-                        case "/":
-                            return firstNumber / secondNumber;
-                        case "^":
-                            return Math.pow(firstNumber, secondNumber);
-                        case "%":
-                            return firstNumber % secondNumber;
+                    let regex = /(\d|[.()]|[+\-*\/]|[\^|&%]|(==|!=))/;
+                    let exclude = /([a-z]|[A-Z])/;
+                    if(regex.test(expression) && !exclude.test(expression)) {
+                        let result = eval(expression);
+                        return result;
                     }
                 }
             }
