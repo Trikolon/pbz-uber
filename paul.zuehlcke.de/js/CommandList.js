@@ -203,7 +203,7 @@ function CommandList(lwConsole, config) {
         },
         {
             name: "calc",
-            description: "Calculates a the result of a simple math expression",
+            description: "Calculates a simple math expression",
             usage: "calc <expression>",
             author: "TheBiochemic",
             visible: true,
@@ -250,7 +250,16 @@ function CommandList(lwConsole, config) {
                             }
                             if (expression[iter] === ")") {
                                 if (level === 0) {
-                                    return parseExpression(expression.substring(1, iter));
+                                    let tempResult = parseExpression(expression.substring(1, iter));
+                                    iter++;
+                                    //if after the parentheses is something else -> (123+456)*...
+                                    if(iter < expression.length-1) {
+                                        if (isOperand(expression[iter])) {
+                                            let secondNumber = parseExpression(expression.substring(iter + 1, expression.length));
+                                            return operate(tempResult, secondNumber, expression[iter]);
+                                        }
+                                    }
+                                    return tempResult;
                                 }
                                 level--
                             }
@@ -264,7 +273,8 @@ function CommandList(lwConsole, config) {
                         character === "-" ||
                         character === "*" ||
                         character === "/" ||
-                        character === "^";
+                        character === "^" ||
+                        character === "%";
                 }
 
                 function operate(firstNumber, secondNumber, operator) {
@@ -279,6 +289,8 @@ function CommandList(lwConsole, config) {
                             return firstNumber / secondNumber;
                         case "^":
                             return Math.pow(firstNumber, secondNumber);
+                        case "%":
+                            return firstNumber % secondNumber;
                     }
                 }
             }
