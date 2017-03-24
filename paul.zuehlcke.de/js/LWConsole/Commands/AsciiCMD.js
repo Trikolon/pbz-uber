@@ -18,7 +18,7 @@ import LWCommand from "../LWCommand";
 
 export default class AsciiCMD extends LWCommand {
     constructor() {
-        super("ascii", "Prints the ASCII Table, or a some Characters, if codes are specified.", "ascii [code, [code, [...]]]", "TheBiochemic", true);
+        super("ascii", "Prints the ASCII Table, or some Characters/Code, if their corresponding mappings are specified.", "ascii [code, [code, [...]]]", "TheBiochemic", true);
     }
 
     run(args) {
@@ -27,15 +27,22 @@ export default class AsciiCMD extends LWCommand {
             let output = "";
             let iter = 0;
             while (iter < args.length) {
-                let expression = parseInt(args[iter], 10) + "=" + AsciiCMD.getChar(parseInt(args[iter], 10)) + ",";
-                if (expression.length < 8) output += expression + "\t\t";
-                else output += expression + "\t";
-                if (iter % 8 === 7) output += "\n";
+                let number = parseInt(args[iter], 10);
+                if(!isNaN(number)){
+                    let expression = number + "=" + AsciiCMD.getChar(number) + ",";
+                    output += expression + "\n";
+                    
+                } else {
+                    let expression = args[iter] + "=" + AsciiCMD.getDesc(args[iter]) + ",";
+                    output += expression + "\n";
+                }
+                
                 iter++;
             }
             return output;
         }
         else {
+            //If the full table needs to be printed
             let output = "";
             let iter = 0;
             while (iter < 256) {
@@ -86,13 +93,58 @@ export default class AsciiCMD extends LWCommand {
             30: "[RS]",
             31: "[US]",
             32: "[SP]",
-            255: "[DEL]"
+            127: "[DEL]"
         };
         if (codes.hasOwnProperty(code)) {
             return codes[code];
         }
         else {
             return String.fromCharCode(code);
+        }
+    }
+
+    static getDesc(char) {
+        let descriptions = {
+            "[NUL]":"0 (Null Character)",
+            "[SOH]":"1 (Start of Header)",
+            "[STX]":"2 (Start of Text)",
+            "[ETX]":"3 (End of Text)",
+            "[EOT]":"4 (End of Transmission)",
+            "[ENQ]":"5 (Enquiry)",
+            "[ACK]":"6 (Acknowledgment)",
+            "[BEL]":"7 (Bell)",
+            "[BS]":"8 (Backspace)",
+            "[HT]":"9 (Horizontal Tab)",
+            "[LF]":"10 (Line Feed)",
+            "[VT]":"11 (Vertical Tab)",
+            "[FF]":"12 (Form Feed)",
+            "[CR]":"13 (Carriage Return)",
+            "[SO]":"14 (Shift Out)",
+            "[SI]":"15 (Shift In)",
+            "[DLE]":"16 (Data Link Escape)",
+            "[DC1]":"17 (Device Control 1)",
+            "[DC2]":"18 (Device Control 2)",
+            "[DC3]":"19 (Device Control 3)",
+            "[DC4]":"20 (Device Control 4)",
+            "[NAK]":"21 (Negative Acknowledgment)",
+            "[SYN]":"22 (Synchronous Idle)",
+            "[ETB]":"23 (End of Transmission Block)",
+            "[CAN]":"24 (Cancel)",
+            "[EM]":"25 (End of Medium)",
+            "[SUB]":"26 (Substitute)",
+            "[ESC]":"27 (Escape)",
+            "[FS]":"28 (File Separator)",
+            "[GS]":"29 (Group Separator)",
+            "[RS]":"30 (Record Separator)",
+            "[US]":"31 (Unit Separator)",
+            "[SP]":"32 (Space)",
+            "[DEL]":"127 (Delete)"
+        }
+        if (descriptions.hasOwnProperty(char)) {
+            return descriptions[char];
+        }
+        else {
+            return char.charCodeAt(0);
         }
     }
 }
