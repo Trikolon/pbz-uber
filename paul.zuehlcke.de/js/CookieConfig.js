@@ -83,7 +83,7 @@ export default class CookieConfig {
      */
     _loadConfig() {
         try {
-            let result = Cookies.getJSON(name);
+            let result = Cookies.getJSON(this.name);
             if (typeof result === "undefined") {
                 this._resetConfig();
             }
@@ -98,6 +98,6 @@ export default class CookieConfig {
     }
 
     _saveConfig() {
-        Cookies.set(name, this._config, {expires: this.expiryTime});
+        Cookies.set(this.name, this._config, {expires: this.expiryTime});
     }
 }
