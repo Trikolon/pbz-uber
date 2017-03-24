@@ -35,9 +35,8 @@ export default class CalcCMD extends LWCommand {
     }
 
     static parseExpression(expression) {
-        let regex = /(\d|[.()]|[+\-*\/]|[\^|&%]|(==|!=))/;
-        let exclude = /([a-z]|[A-Z])/;
-        if (regex.test(expression) && !exclude.test(expression)) {
+        let regex = /([^\d\.\(\)\+\-\*\/\^\|\&\%\=\!]|([^=!]=[^=]))/;
+        if (!regex.test(expression)) {
             return eval(expression);
         }
     }
