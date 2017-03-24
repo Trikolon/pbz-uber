@@ -89,7 +89,7 @@ export default class AsciiCMD extends LWCommand {
             255: "[DEL]"
         };
         if (codes.hasOwnProperty(code)) {
-            return code[code];
+            return codes[code];
         }
         else {
             return String.fromCharCode(code);
