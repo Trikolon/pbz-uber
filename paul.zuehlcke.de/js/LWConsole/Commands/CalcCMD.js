@@ -23,10 +23,9 @@ export default class CalcCMD extends LWCommand {
     }
 
     run(args) {
-        let expression = args.join("");
-
+        args = args.join("");
         if (args.length > 0) {
-            let expResult = this.parseExpression(expression);
+            let expResult = CalcCMD.parseExpression(args);
             if (expResult === undefined || isNaN(expResult))
                 throw new UsageError("This is not a valid expression!");
             return expResult.toString();
@@ -35,12 +34,11 @@ export default class CalcCMD extends LWCommand {
             throw new UsageError();
     }
 
-    parseExpression(expression) {
+    static parseExpression(expression) {
         let regex = /(\d|[.()]|[+\-*\/]|[\^|&%]|(==|!=))/;
         let exclude = /([a-z]|[A-Z])/;
         if (regex.test(expression) && !exclude.test(expression)) {
-            let result = eval(expression);
-            return result;
+            return eval(expression);
         }
     }
 }
