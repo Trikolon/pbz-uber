@@ -16,7 +16,9 @@
 
 import ConfigStorage from "./ConfigStorage";
 
-
+/**
+ * Implements methods save and load from ConfigStorage to manage config-object in the local storage of the browser
+ */
 export default class LocalStorageConfig extends ConfigStorage {
     constructor() {
         super(...arguments);

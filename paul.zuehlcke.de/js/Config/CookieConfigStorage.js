@@ -17,7 +17,9 @@
 import ConfigStorage from "./ConfigStorage";
 import Cookies from "js-cookie";
 
-
+/**
+ * Implements methods save and load from ConfigStorage to manage config-object in the cookies
+ */
 export default class CookieConfigStorage extends ConfigStorage {
     constructor() {
         super(...arguments);
@@ -25,7 +27,7 @@ export default class CookieConfigStorage extends ConfigStorage {
 
     /**
      * Trigger config refresh (reload from cookies)
-     * @type {getConfig}
+     * @private
      */
     _loadConfig() {
         try {
@@ -43,6 +45,10 @@ export default class CookieConfigStorage extends ConfigStorage {
         }
     }
 
+    /**
+     * Store in cookies
+     * @private
+     */
     _saveConfig() {
         Cookies.set(this.name, this._config, {expires: this.expiryTime});
     }

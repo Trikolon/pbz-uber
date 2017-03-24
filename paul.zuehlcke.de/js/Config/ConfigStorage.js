@@ -15,9 +15,16 @@
  */
 
 /**
- * Stores state/config
+ * Abstract class which implements methods to manage state/config object
+ * Save and load must be overwritten in oder to store config
  */
 export default class ConfigStorage {
+
+    /**
+     * @param name parent key of config object
+     * @param expiryTime how long should the data be kept in storage
+     * @param defaultConfig initial state for config object, also used for reset
+     */
     constructor(name = "consoleConfig", expiryTime = 14, defaultConfig = {}) {
         if (new.target === ConfigStorage) {
             throw new TypeError("Can't construct instance of abstract class " + new.target);
