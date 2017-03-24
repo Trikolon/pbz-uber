@@ -36,7 +36,7 @@ export default class LWConsole {
         this.consoleInDOM = consoleInDOM;
         this.hostname = hostname;
         this.motd = "Welcome to " + hostname + "!\nType 'help' for help.\n";
-        config().store("motd", this.motd);
+        config().set("motd", this.motd);
 
         this._consoleOut = ""; //Content of console-out text-area
         this._cmdList = new CommandList(this); //Load commands
@@ -90,7 +90,7 @@ export default class LWConsole {
         else {
             this.consoleDiv.style.display = "none";
         }
-        config().store("consoleOpen", state === true); // === to filter type
+        config().set("consoleOpen", state === true); // === to filter type
     }
 
     /**

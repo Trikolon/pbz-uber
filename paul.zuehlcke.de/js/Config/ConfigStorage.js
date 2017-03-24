@@ -35,7 +35,7 @@ export default class ConfigStorage {
      * @param key
      * @param value
      */
-    store(key, value) {
+    set(key, value) {
         if (typeof key === "undefined" || typeof value === "undefined") {
             console.warn("config.store() called with invalid parameters");
         }

@@ -48,7 +48,7 @@ export default class ExampleCMD extends LWCommand {
         }
         else {
             output += "Maybe next time!\n";
-            config().store("cakeSetting", true);
+            config().set("cakeSetting", true);
         }
 
 
