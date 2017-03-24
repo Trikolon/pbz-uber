@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import ConfigStorage from "../Config/CookieConfigStorage";
+import ConfigStorage from "../Config/LocalStorageConfig";
 
 /**
  * Singleton. TODO: doc

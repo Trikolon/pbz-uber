@@ -15,14 +15,8 @@
  */
 
 /**
- * Stores state/config and manages cookies
- * Depends on cookie.js
- * @param name name of cookie stored in browser
- * @param expiryTime time to store config-cookie in browser for (days)
- * @param defaultConfig initial config options
- * @constructor
+ * Stores state/config
  */
-
 export default class ConfigStorage {
     constructor(name = "consoleConfig", expiryTime = 14, defaultConfig = {}) {
         if (new.target === ConfigStorage) {
