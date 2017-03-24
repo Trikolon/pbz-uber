@@ -83,10 +83,10 @@ export default class ConfigStorage {
      * @type {getConfig}
      */
     _loadConfig() {
-        console.log("wrong method bitch");
+        throw new Error("Abstract method call");
     }
 
     _saveConfig() {
-        console.log("wrong method bitch");
+        throw new Error("Abstract method call");
     }
 }
