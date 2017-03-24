@@ -25,6 +25,7 @@ import TimeCMD from "./Commands/TimeCMD";
 import EffectCMD from "./Commands/EffectCMD";
 import ClearCMD from "./Commands/ClearCMD";
 import ExitCMD from "./Commands/ExitCMD";
+import AsciiCMD from "./Commands/AsciiCMD";
 
 /**
  * Stores command properties + logic and provides method to query them
@@ -49,6 +50,7 @@ export default class CommandList {
             }),
             new TimeCMD(),
             new CalcCMD(),
+            new AsciiCMD(),
             new EffectCMD(),
             new ClearCMD(() => {
                 this._lwConsole.clear()
