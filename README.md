@@ -2,12 +2,12 @@
 [![Code Climate](https://codeclimate.com/github/Trikolon/pbz-uber/badges/gpa.svg)](https://codeclimate.com/github/Trikolon/pbz-uber)
 
 ## Setup
-To set up the dependencies run
+To set up the dependencies switch to the directory you cloned and run:
 ``` bash
 npm install
 ```
 
-Then provision the files:
+Once the installation has completed provision the files:
 ``` bash
 npm start
 ```
