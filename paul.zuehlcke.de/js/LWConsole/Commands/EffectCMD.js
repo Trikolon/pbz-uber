@@ -39,7 +39,7 @@ export default class EffectCMD extends LWCommand {
         }
         this.setEffect(args[0], state); //this can throw usage-error (caught by execution handler)
 
-        config().store(args[0], state);
+        config().set(args[0], state);
         return "Effect " + args[0] + " turned " + (state ? "ON" : "OFF");
     }
 
