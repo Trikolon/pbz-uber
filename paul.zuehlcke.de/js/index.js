@@ -14,19 +14,12 @@
  limitations under the License.
  */
 
-import CookieConfig from "./CookieConfig";
-import LWConsole from "./LWConsole";
+import LWConsole from "./LWConsole/LWConsole";
+import config from "./LWConsole/ConsoleConfig";
 
 (function () {
     "use strict";
-    let config = new CookieConfig("consoleConfig", 14,
-        {
-            consoleOpen: false,
-            flicker: true,
-            invert: false
-        });
     let lwConsole = new LWConsole(
-        config,
         document.getElementById("lwConsole"),
         document.getElementById("consoleOut"),
         document.getElementById("consoleIn"),
@@ -52,13 +45,13 @@ import LWConsole from "./LWConsole";
     });
 
     //Query config and set initial state
-    if (config.get("consoleOpen")) {
+    if (config().get("consoleOpen")) {
         lwConsole.show(true);
     }
-    if (!config.get("flicker")) {
+    if (!config().get("flicker")) {
         lwConsole.executeCMD(["effect", "flicker", "false"]);
     }
-    if (config.get("invert")) {
+    if (config().get("invert")) {
         lwConsole.executeCMD(["effect", "invert", "true"]);
     }
 }());
