@@ -29,7 +29,6 @@ export default class CommandHistory {
         this._readPos = 0;
     }
 
-
     /**
      * Get command in cmd history, goes one back in history every call
      * @returns{String} cmd
@@ -40,7 +39,7 @@ export default class CommandHistory {
         if (this._readPos === -1) {
             this._readPos = this.size - 1;
         }
-        if (typeof history[this._readPos] === "undefined") { //if history-array is not completely filled yet
+        if (typeof this._history[this._readPos] === "undefined") { //if history-array is not completely filled yet
             this._readPos = this._writePos === 0 ? this.size - 1 : this._writePos - 1;
         }
         return result;
@@ -53,7 +52,7 @@ export default class CommandHistory {
     add(cmd) {
         if (typeof cmd !== "undefined") {
             this._readPos = this._writePos; //On cmd-add, reset readpos
-            history[this._writePos] = cmd;
+            this._history[this._writePos] = cmd;
             this._writePos++;
             if (this._writePos === this.size) {
                 this._writePos = 0;
