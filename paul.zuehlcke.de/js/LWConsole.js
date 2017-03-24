@@ -14,6 +14,10 @@
  limitations under the License.
  */
 
+import CommandList from "./CommandList";
+import CommandHistory from "./CommandHistory";
+import UsageError from "./UsageError";
+
 /**
  * Lightweight Console
  *
@@ -24,107 +28,108 @@
  * @param hostname included in motd, may have further use in the future
  * @constructor
  */
-function LWConsole(config, consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
-    "use strict";
+export default class LWConsole {
 
-    let consoleOut = ""; //Content of console-out text-area
-    let cmdList = new CommandList(this, config); //Load commands
-    let cmdHistory = new CommandHistory(); //Initialise cmd history (for ARROW_UP support)
+    constructor(config, consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
+        this.config = config;
+        this.consoleDiv = consoleDiv;
+        this.consoleOutDOM = consoleOutDOM;
+        this.consoleInDOM = consoleInDOM;
+        this.hostname = hostname;
+        this.motd = "Welcome to " + hostname + "!\nType 'help' for help.\n";
 
-    this.motd = "Welcome to " + hostname + "!\nType 'help' for help.\n";
-    //bind methods called in CommandList to console
-    this.print = print;
-    this.clear = clear;
-    this.executeCmd = executeCMD; //Allow external cmd calls
+        this._consoleOut = ""; //Content of console-out text-area
+        this._cmdList = new CommandList(this, config); //Load commands
+        this._cmdHistory = new CommandHistory(); //Initialise cmd history (for ARROW_UP support)
 
-    //Attach key handler for cmd-send and cmd-history
-    document.addEventListener("keydown", function (e) {
-        if (consoleInDOM === document.activeElement) {
-            if (e.keyCode === 13) { // enter => send cmd
-                e.preventDefault();
-                let value = consoleInDOM.value;
-                if (value === "") { //Do not trigger cmd when input is empty
-                    return;
+        //Attach key handler for cmd-send and cmd-history
+        document.addEventListener("keydown", (e) => {
+            if (consoleInDOM === document.activeElement) {
+                if (e.keyCode === 13) { // enter => send cmd
+                    e.preventDefault();
+                    let value = consoleInDOM.value;
+                    if (value === "") { //Do not trigger cmd when input is empty
+                        return;
+                    }
+                    this.sendCMD(value);
+                    consoleInDOM.value = ""; //Empty after cmd sent
                 }
-                sendCMD(value);
-                consoleInDOM.value = ""; //Empty after cmd sent
-            }
-            else if (e.keyCode === 38) { //keyup => get last cmd
-                e.preventDefault();
-                let lastCmd = cmdHistory.get();
-                if (lastCmd) {
-                    consoleInDOM.value = lastCmd;
+                else if (e.keyCode === 38) { //keyup => get last cmd
+                    e.preventDefault();
+                    let lastCmd = this._cmdHistory.get();
+                    if (lastCmd) {
+                        consoleInDOM.value = lastCmd;
+                    }
                 }
+
             }
+        });
 
-        }
-    });
+        // Focus the console-input whenever the console div is clicked.
+        consoleDiv.onclick = function () {
+            if (window.getSelection().toString() === "") { //Do not steal focus if user is selecting text
+                consoleInDOM.focus();
+            }
+        };
 
-    // Focus the console-input whenever the console div is clicked.
-    consoleDiv.onclick = function () {
-        if (window.getSelection().toString() === "") { //Do not steal focus if user is selecting text
-            consoleInDOM.focus();
-        }
-    };
-
-    //Set initial content of textarea
-    print(this.motd);
+        //Set initial content of textarea
+        this.print(this.motd);
+    }
 
 
-    //Methods ======================================
     /**
      * Changes visibility of console-div depending on parameter
      * @param state boolean true = visible; false = hidden
      */
-    this.show = function (state) {
+    show(state) {
         if (state) {
-            consoleDiv.style.display = "flex";
+            this.consoleDiv.style.display = "flex";
             //Set focus to console
-            consoleInDOM.focus();
+            this.consoleInDOM.focus();
         }
         else {
-            consoleDiv.style.display = "none";
+            this.consoleDiv.style.display = "none";
         }
-        config.store("consoleOpen", state === true); // === to filter type
+        this.config.store("consoleOpen", state === true); // === to filter type
     };
 
     /**
      * Getter for visibility state
      * @returns {boolean}
      */
-    this.isVisible = function () {
-        return config.get("consoleOpen");
+    isVisible() {
+        return this.config.get("consoleOpen");
     };
 
     /**
      * Prints message to console and updates cursor position (scroll)
      * @param str message to print
      */
-    function print(str) {
+    print(str) {
         if (str && str !== "") {
-            consoleOut += str + "\n"; //Append string to print and newline
-            consoleOutDOM.value = consoleOut; //update textarea text
-            consoleOutDOM.scrollTop = consoleOutDOM.scrollHeight; //scroll down in textarea for console-like behavior
+            this._consoleOut += str + "\n"; //Append string to print and newline
+            this.consoleOutDOM.value = this._consoleOut; //update textarea text
+            this.consoleOutDOM.scrollTop = this.consoleOutDOM.scrollHeight; //scroll down in textarea for console-like behavior
         }
     }
 
     /**
      * Clears console content
      */
-    function clear() {
-        consoleOut = "";
-        consoleOutDOM.value = consoleOut;
+    clear() {
+        this._consoleOut = "";
+        this.consoleOutDOM.value = this._consoleOut;
     }
 
     /**
      * Executes user cmd and updates output accordingly
      * @param cmd raw cmd by user
      */
-    function sendCMD(cmd) {
+    sendCMD(cmd) {
         let splitCMD = cmd.split(" "); //split cmd by space (cmd name, args)
-        print("> " + cmd); //Print cmd from user
-        cmdHistory.add(cmd); //Save cmd
-        print(executeCMD(splitCMD)); //Print result of cmd-execution
+        this.print("> " + cmd); //Print cmd from user
+        this._cmdHistory.add(cmd); //Save cmd
+        this.print(this.executeCMD(splitCMD)); //Print result of cmd-execution
     }
 
     /**
@@ -132,11 +137,11 @@ function LWConsole(config, consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
      * @param cmdArr command-array. cmd[0] is command name, cmd[>1] is parameter
      * @returns {String} result of command
      */
-    function executeCMD(cmdArr) {
+    executeCMD(cmdArr) {
         let cmdName = cmdArr[0]; //Name
         cmdArr.shift(); //args
 
-        let cmd = cmdList.getCommand(cmdName); //Fetch command
+        let cmd = this._cmdList.getCommand(cmdName); //Fetch command
         if (!cmd) {
             return "Unknown command.";
         }
@@ -146,7 +151,8 @@ function LWConsole(config, consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
         catch (e) {
             if (e instanceof Error) {
                 if (e instanceof UsageError) {
-                    return (e.message ? e.message + "\n" : "") + "Usage: " + cmd.usage; //Could also return help cmd.name
+                    return (e.message ? e.message + "\n" : "") +
+                        (cmd.usage && cmd.usage !== "" ? "Usage: " + cmd.usage : "Invalid usage.");
                 }
                 else {
                     return e.name + ": " + e.message;
@@ -160,15 +166,3 @@ function LWConsole(config, consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
         }
     }
 }
-
-/**
- * Custom error type which inherits from Error. To be thrown on invalid command usage.
- * @param message optional
- * @constructor
- */
-function UsageError(message) {
-    this.name = "UsageError";
-    this.message = message;
-    this.stack = (new Error()).stack;
-}
-UsageError.prototype = new Error;
