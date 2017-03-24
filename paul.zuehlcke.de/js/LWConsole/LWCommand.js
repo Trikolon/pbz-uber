@@ -17,7 +17,7 @@
 
      constructor(name, description, usage, author, visible = true) {
          if (new.target === LWCommand) {
-             throw new TypeError("Can't construct instance of abstract class LWCommand");
+             throw new TypeError("Can't construct instance of abstract class " + new.target);
          }
          this.name = name;
          this.description = description;

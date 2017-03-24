@@ -14,8 +14,6 @@
  limitations under the License.
  */
 
-import Cookies from "js-cookie";
-
 /**
  * Stores state/config and manages cookies
  * Depends on cookie.js
@@ -25,8 +23,11 @@ import Cookies from "js-cookie";
  * @constructor
  */
 
-export default class CookieConfig {
+export default class ConfigStorage {
     constructor(name = "consoleConfig", expiryTime = 14, defaultConfig = {}) {
+        if (new.target === ConfigStorage) {
+            throw new TypeError("Can't construct instance of abstract class " + new.target);
+        }
         this.name = name;
         this.expiryTime = expiryTime;
         this.defaultConfig = defaultConfig;
@@ -82,22 +83,10 @@ export default class CookieConfig {
      * @type {getConfig}
      */
     _loadConfig() {
-        try {
-            let result = Cookies.getJSON(this.name);
-            if (typeof result === "undefined") {
-                this._resetConfig();
-            }
-            else {
-                this._config = result;
-            }
-        }
-        catch (e) {
-            console.error("CookieConfig: Error while getting config from cookies");
-            this._resetConfig();
-        }
+        console.log("wrong method bitch");
     }
 
     _saveConfig() {
-        Cookies.set(this.name, this._config, {expires: this.expiryTime});
+        console.log("wrong method bitch");
     }
 }

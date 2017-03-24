@@ -14,12 +14,12 @@
  limitations under the License.
  */
 
-import CookieConfig from "./../CookieConfig";
+import ConfigStorage from "../Config/CookieConfigStorage";
 
 /**
  * Singleton. TODO: doc
  */
-class ConsoleConfig extends CookieConfig {
+class ConsoleConfig extends ConfigStorage {
     constructor() {
         super("consoleConfig", 14, {
             consoleOpen: false,
@@ -27,6 +27,8 @@ class ConsoleConfig extends CookieConfig {
             invert: false
         });
     }
+
+    //TODO: Overwrite store and get to support cmd-scopes
 }
 
 let instance;
