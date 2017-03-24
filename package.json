@@ -1,0 +1,36 @@
+{
+  "name": "pbz-uber",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "dependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-core": "^6.24.0",
+    "babel-plugin-transform-builtin-extend": "^1.1.2",
+    "eslint": "^3.18.0",
+    "js-cookie": "^2.1.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-core": "^6.24.0",
+    "babel-loader": "^6.4.1",
+    "babel-preset-es2015": "^6.24.0",
+    "eslint": "^3.18.0",
+    "webpack": "^2.3.1"
+  },
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "build-dev": "webpack --watch  --devtool source-map --progress --colors --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Trikolon/pbz-uber.git"
+  },
+  "author": "Paul Zuehlcke",
+  "private": true,
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Trikolon/pbz-uber/issues"
+  },
+  "homepage": "https://github.com/Trikolon/pbz-uber#readme"
+}

@@ -20,29 +20,27 @@
  * @param size amount of commands to store in buffer
  * @constructor
  */
-function CommandHistory(size) {
-    if (!size) {
-        size = 20; //default
-    }
-    let history = new Array(size);
-    let writePos = 0;
-    let readPos = 0;
-    let s = size;
+export default class CommandHistory {
 
-    this.get = get;
+    constructor(size = 20) {
+        this.size = size;
+        this._history = new Array(size);
+        this._writePos = 0;
+        this._readPos = 0;
+    }
 
     /**
      * Get command in cmd history, goes one back in history every call
      * @returns{String} cmd
      */
-    function get() {
-        let result = history[readPos];
-        readPos--;
-        if (readPos === -1) {
-            readPos = s - 1;
+    get() {
+        let result = this._history[this._readPos];
+        this._readPos--;
+        if (this._readPos === -1) {
+            this._readPos = this.size - 1;
         }
-        if (typeof history[readPos] === "undefined") { //if history-array is not completely filled yet
-            readPos = writePos === 0 ? s - 1 : writePos - 1;
+        if (typeof this._history[this._readPos] === "undefined") { //if history-array is not completely filled yet
+            this._readPos = this._writePos === 0 ? this.size - 1 : this._writePos - 1;
         }
         return result;
     }
@@ -51,14 +49,14 @@ function CommandHistory(size) {
      * Add command to history array
      * @param cmd
      */
-    this.add = function (cmd) {
+    add(cmd) {
         if (typeof cmd !== "undefined") {
-            readPos = writePos; //On cmd-add, reset readpos
-            history[writePos] = cmd;
-            writePos++;
-            if (writePos === s) {
-                writePos = 0;
+            this._readPos = this._writePos; //On cmd-add, reset readpos
+            this._history[this._writePos] = cmd;
+            this._writePos++;
+            if (this._writePos === this.size) {
+                this._writePos = 0;
             }
         }
-    };
+    }
 }
