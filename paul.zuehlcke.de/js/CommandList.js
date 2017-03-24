@@ -347,7 +347,7 @@ export default class CommandList {
             usage: "exit",
             visible: true,
             handler: function () {
-                util.toggleConsole();
+                window.toggleConsole();
             }
         },
         {
