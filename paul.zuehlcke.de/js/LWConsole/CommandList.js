@@ -14,8 +14,9 @@
  limitations under the License.
  */
 
-import UsageError from "./UsageError";
-import LWCommand from "./LWCommand";
+import MotdCMD from "./Commands/MotdCMD";
+import ExampleCMD from "./Commands/ExampleCMD";
+import HelpCMD from "./Commands/HelpCMD";
 
 /**
  * Stores command properties + logic and provides method to query them
@@ -29,11 +30,19 @@ export default class CommandList {
         this._lwConsole = lwConsole;
         this._config = config;
         this._commands = [];
-        this._initCommands();
 
-        LWCommand.lwConsole = lwConsole;
-        LWCommand.cmdList = this;
-        LWCommand.config = config;
+        //Init cmds
+        this._commands.push(new ExampleCMD());
+        this._commands.push(new MotdCMD());
+        this._commands.push(new HelpCMD(this));
+    }
+
+    get lwConsole() {
+        return this._lwConsole;
+    }
+
+    get config() {
+        return this._config;
     }
 
     //this.getCommandHandler = getCommandHandler; //Currently unused
@@ -61,40 +70,9 @@ export default class CommandList {
         }
     }
 
-    _initCommands() {
-        let cmdList = this;
+    // _initCommands() {
 
-        this._commands = [
-            new LWCommand("help", "Shows a list of commands", "help [command]", undefined, true)
-                .handler = (args) => {
-                            // let result = new CMDResult();
-                            if (args.length > 1) {
-                                return LWCommand.cmdList.getCommandHandler("help")(["help"]);
-                            }
-                            if (args.length === 0) { //Show list of commands without usage
-                                let msg = "Available commands:";
-                                for (let i = 0; i < cmdList._commands.length; i++) {
-                                    if (cmdList._commands[i].visible) {
-                                        msg += "\n" + cmdList._commands[i].name + ": " + cmdList._commands[i].description;
-                                    }
-                                }
-                                return msg;
-                            }
-                            //Show usage for single cmd
-                            let cmd = cmdList.getCommand(args[0]);
-                            if (!cmd) {
-                                return "No help page available: Unknown command.";
-                            }
-                            return cmd.name + ":" +
-                            (cmd.description && cmd.description !== "" ? "\nDescription: " + cmd.description : "") +
-                            (cmd.usage && cmd.description !== "" ? "\nUsage: " + cmd.usage : "") +
-                            (cmd.author && cmd.author !== "" ? "\nAuthor: " + cmd.author : "");
-                        },
-            new LWCommand("motd", "Shows the message of the day", "motd", undefined, true)
-                .handler = (args) => {
-                return LWCommand.lwConsole.motd;
-            }
-        ];
+
 
         // this._commands = [
         //     // {
@@ -451,6 +429,6 @@ export default class CommandList {
         // }
         // ];
 
-}
+// }
 
 }

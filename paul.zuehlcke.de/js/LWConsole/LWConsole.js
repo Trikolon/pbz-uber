@@ -17,11 +17,11 @@
 import CommandList from "./CommandList";
 import CommandHistory from "./CommandHistory";
 import UsageError from "./UsageError";
+import config from "./ConsoleConfig";
 
 /**
  * Lightweight Console
  *
- * @param config pulled from cookies, holds state of effects + console open state
  * @param consoleDiv dom of div holding the console
  * @param consoleOutDOM dom of text-area for console-output
  * @param consoleInDOM dom of text-input for console-input
@@ -30,16 +30,16 @@ import UsageError from "./UsageError";
  */
 export default class LWConsole {
 
-    constructor(config, consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
-        this.config = config;
+    constructor(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
         this.consoleDiv = consoleDiv;
         this.consoleOutDOM = consoleOutDOM;
         this.consoleInDOM = consoleInDOM;
         this.hostname = hostname;
         this.motd = "Welcome to " + hostname + "!\nType 'help' for help.\n";
+        config().store("motd", this.motd);
 
         this._consoleOut = ""; //Content of console-out text-area
-        this._cmdList = new CommandList(this, config); //Load commands
+        this._cmdList = new CommandList(this); //Load commands
         this._cmdHistory = new CommandHistory(); //Initialise cmd history (for ARROW_UP support)
 
         //Attach key handler for cmd-send and cmd-history
@@ -90,16 +90,16 @@ export default class LWConsole {
         else {
             this.consoleDiv.style.display = "none";
         }
-        this.config.store("consoleOpen", state === true); // === to filter type
-    };
+        config().store("consoleOpen", state === true); // === to filter type
+    }
 
     /**
      * Getter for visibility state
      * @returns {boolean}
      */
     isVisible() {
-        return this.config.get("consoleOpen");
-    };
+        return config().get("consoleOpen");
+    }
 
     /**
      * Prints message to console and updates cursor position (scroll)
@@ -146,7 +146,7 @@ export default class LWConsole {
             return "Unknown command.";
         }
         try {
-            return cmd.handler(cmdArr); //Execute handler with params (cmdArray)
+            return cmd.run(cmdArr); //Execute handler with params (cmdArray)
         }
         catch (e) {
             if (e instanceof Error) {
