@@ -1,0 +1,46 @@
+/*
+ Copyright 2017 Paul Zuehlcke - paul.zuehlcke.de
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+
+import LWCommand from "../LWCommand";
+import UsageError from "../UsageError";
+
+export default class CalcCMD extends LWCommand {
+    constructor() {
+        super("calc", "Calculates a simple math expression", "calc <expression>", "TheBiochemic", true);
+    }
+
+    run(args) {
+        let expression = args.join("");
+
+        if (args.length > 0) {
+            let expResult = this.parseExpression(expression);
+            if (expResult === undefined || isNaN(expResult))
+                throw new UsageError("This is not a valid expression!");
+            return expResult.toString();
+        }
+        else
+            throw new UsageError();
+    }
+
+    parseExpression(expression) {
+        let regex = /(\d|[.()]|[+\-*\/]|[\^|&%]|(==|!=))/;
+        let exclude = /([a-z]|[A-Z])/;
+        if (regex.test(expression) && !exclude.test(expression)) {
+            let result = eval(expression);
+            return result;
+        }
+    }
+}
