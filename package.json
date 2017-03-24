@@ -19,7 +19,8 @@
     "webpack": "^2.3.1"
   },
   "scripts": {
-    "start": "webpack --progress --colors --config webpack.config.js"
+    "build": "webpack --config webpack.config.js",
+    "build-dev": "webpack --watch  --devtool source-map --progress --colors --config webpack.config.js"
   },
   "repository": {
     "type": "git",
