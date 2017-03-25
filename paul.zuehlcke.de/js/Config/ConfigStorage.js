@@ -14,19 +14,21 @@
  limitations under the License.
  */
 
-import Cookies from "js-cookie";
-
 /**
- * Stores state/config and manages cookies
- * Depends on cookie.js
- * @param name name of cookie stored in browser
- * @param expiryTime time to store config-cookie in browser for (days)
- * @param defaultConfig initial config options
- * @constructor
+ * Abstract class which implements methods to manage state/config object
+ * Save and load must be overwritten in oder to store config
  */
+export default class ConfigStorage {
 
-export default class CookieConfig {
+    /**
+     * @param name parent key of config object
+     * @param expiryTime how long should the data be kept in storage
+     * @param defaultConfig initial state for config object, also used for reset
+     */
     constructor(name = "consoleConfig", expiryTime = 14, defaultConfig = {}) {
+        if (new.target === ConfigStorage) {
+            throw new TypeError("Can't construct instance of abstract class " + new.target);
+        }
         this.name = name;
         this.expiryTime = expiryTime;
         this.defaultConfig = defaultConfig;
@@ -40,7 +42,7 @@ export default class CookieConfig {
      * @param key
      * @param value
      */
-    store(key, value) {
+    set(key, value) {
         if (typeof key === "undefined" || typeof value === "undefined") {
             console.warn("config.store() called with invalid parameters");
         }
@@ -82,22 +84,10 @@ export default class CookieConfig {
      * @type {getConfig}
      */
     _loadConfig() {
-        try {
-            let result = Cookies.getJSON(this.name);
-            if (typeof result === "undefined") {
-                this._resetConfig();
-            }
-            else {
-                this._config = result;
-            }
-        }
-        catch (e) {
-            console.error("CookieConfig: Error while getting config from cookies");
-            this._resetConfig();
-        }
+        throw new Error("Abstract method call");
     }
 
     _saveConfig() {
-        Cookies.set(this.name, this._config, {expires: this.expiryTime});
+        throw new Error("Abstract method call");
     }
 }
