@@ -35,8 +35,9 @@ export default class CalcCMD extends LWCommand {
     }
 
     static parseExpression(expression) {
-        let regex = /([^\d\.\(\)\+\-\*\/\^\|\&\%\=\!]|([^=!]=[^=]))/;
+        let regex = /([^\d.()+\-*\/^|&%=!]|([^=!]=[^=]))/;
         if (!regex.test(expression)) {
+// eslint-disable-next-line no-eval
             return eval(expression);
         }
     }

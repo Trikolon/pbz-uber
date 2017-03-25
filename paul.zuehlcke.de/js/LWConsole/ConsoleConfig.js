@@ -17,7 +17,8 @@
 import ConfigStorage from "../Config/LocalStorageConfig";
 
 /**
- * Singleton. TODO: doc
+ * Singleton, holds populated config for console.
+ * Could be extended in the future to support cmd-scopes
  */
 class ConsoleConfig extends ConfigStorage {
     constructor() {
@@ -27,8 +28,6 @@ class ConsoleConfig extends ConfigStorage {
             invert: false
         });
     }
-
-    //TODO: Overwrite store and get to support cmd-scopes
 }
 
 let instance;
