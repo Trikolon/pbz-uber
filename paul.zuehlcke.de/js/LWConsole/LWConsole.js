@@ -21,15 +21,16 @@ import config from "./ConsoleConfig";
 
 /**
  * Lightweight Console
- *
- * @param consoleDiv dom of div holding the console
- * @param consoleOutDOM dom of text-area for console-output
- * @param consoleInDOM dom of text-input for console-input
- * @param hostname included in motd, may have further use in the future
- * @constructor
  */
 export default class LWConsole {
 
+    /**
+     *
+     * @param consoleDiv dom of div holding the console
+     * @param consoleOutDOM dom of text-area for console-output
+     * @param consoleInDOM dom of text-input for console-input
+     * @param hostname included in motd, may have further use in the future
+     */
     constructor(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
         this.consoleDiv = consoleDiv;
         this.consoleOutDOM = consoleOutDOM;
