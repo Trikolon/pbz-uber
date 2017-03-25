@@ -139,7 +139,7 @@ export default class AsciiCMD extends LWCommand {
             "[US]":"31 (Unit Separator)",
             "[SP]":"32 (Space)",
             "[DEL]":"127 (Delete)"
-        }
+        };
         if (descriptions.hasOwnProperty(char)) {
             return descriptions[char];
         }
