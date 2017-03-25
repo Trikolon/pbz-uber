@@ -23,9 +23,7 @@ import IpCMD from "./Commands/IpCMD";
 import CalcCMD from "./Commands/CalcCMD";
 import TimeCMD from "./Commands/TimeCMD";
 import EffectCMD from "./Commands/EffectCMD";
-import ClearCMD from "./Commands/ClearCMD";
-import ExitCMD from "./Commands/ExitCMD";
-import AsciiCMD from "./Commands/AsciiCMD";
+import ConvertCMD from "./Commands/ConvertCMD";
 
 /**
  * Stores command properties + logic and provides method to query them
@@ -50,17 +48,16 @@ export default class CommandList {
             }),
             new TimeCMD(),
             new CalcCMD(),
-            new AsciiCMD(),
+            new ConvertCMD(),
             new EffectCMD(),
-            new ClearCMD(() => {
-                this._lwConsole.clear()
+            new LWCommandSimple("clear", "Clears the console", "clear", "Trikolon", true, () => {
+                lwConsole.clear();
             }),
-            new ExitCMD(() => {
-                this._lwConsole.show(false)
+            new LWCommandSimple("exit", "Exit console", "exit", "Trikolon", true, () => {
+                lwConsole.show(false);
             }),
-
-            //Some simple commands
-            new LWCommandSimple("ridb", "A simple command that confirms that Robert is the best.", "Endebert", false,
+            new LWCommandSimple("ridb", "A simple command that confirms that Robert is the best.", "ridb [reply]",
+                "Endebert", false,
                 (args) => {
                     let output = "Paul:\t'Robert ist der Beste!'";
                     if (args.length > 0)
@@ -70,11 +67,13 @@ export default class CommandList {
                     }
                     return output;
                 }),
-            new LWCommandSimple("kleinhase", "Secret message", "Trikolon", false, "<3"),
-            new LWCommandSimple("shutdown", "Halt, power-off or reboot the machine", "Trikolon", false, "You're not my master!"),
-            new LWCommandSimple("rm", "remove files or directories", "Trikolon", false, "Please don't delete anything. We don't have backups."),
-            new LWCommandSimple("ls", "list directory contents", "Trikolon", false, "cia_secrets, cute_cat_gifs, videos, passwords.txt")
-
+            new LWCommandSimple("kleinhase", "Secret message", undefined, "Trikolon", false, "<3"),
+            new LWCommandSimple("shutdown", "Halt, power-off or reboot the machine", undefined, "Trikolon", false,
+                "You're not my master!"),
+            new LWCommandSimple("rm", "remove files or directories", undefined, "Trikolon", false,
+                "Please don't delete anything. We don't have backups."),
+            new LWCommandSimple("ls", "list directory contents", undefined, "Trikolon", false,
+                "cia_secrets, cute_cat_gifs, videos, passwords.txt")
         ];
     }
 
@@ -85,9 +84,6 @@ export default class CommandList {
     get config() {
         return this._config;
     }
-
-    //this.getCommandHandler = getCommandHandler; //Currently unused
-    // this.getCommand = getCommand;
 
     getCommandHandler(commandName) {
         let result = this.getCommand(commandName);

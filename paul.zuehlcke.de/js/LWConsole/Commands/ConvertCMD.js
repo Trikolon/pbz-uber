@@ -15,13 +15,39 @@
  */
 
 import LWCommand from "../LWCommand";
+import UsageError from "../UsageError";
 
-export default class AsciiCMD extends LWCommand {
+export default class ConvertCMD extends LWCommand {
     constructor() {
-        super("ascii", "Prints the ASCII Table, or some Characters/Code, if their corresponding mappings are specified.", "ascii [code, [code, [...]]]", "TheBiochemic", true);
+        super("convert", "Converts from/to different units/bases. Currently supported: base, ascii",
+            "convert <base> <fromBase> <toBase> <number>; convert <ascii> [code/symbol [code/symbol [...]]]", "Trikolon, TheBiochemic", true);
     }
 
     run(args) {
+        if (args.length < 1) {
+            throw new UsageError();
+        }
+
+        let mode = args[0];
+        args.shift();
+        switch (mode) {
+            case "base":
+                return this.convertBase(args);
+            case "ascii":
+                return this.convertAscii(args);
+        }
+    }
+
+    convertBase(args) {
+        if (args.length !== 3) {
+            throw new UsageError();
+        }
+        let fromBase = parseInt(args[0], 10);
+        let toBase = parseInt(args[1], 10);
+        return parseInt(args[2], fromBase).toString(toBase);
+    }
+
+    convertAscii(args) {
         //if there are any codes specified
         if (args.length > 0) {
             let output = "";
@@ -29,11 +55,16 @@ export default class AsciiCMD extends LWCommand {
             while (iter < args.length) {
                 let number = parseInt(args[iter], 10);
                 if(!isNaN(number)){
-                    let expression = number + "=" + AsciiCMD.getChar(number) + ",";
+                    let expression = number + "=" + this.getChar(number) + ",";
                     output += expression + "\n";
                     
                 } else {
-                    let expression = args[iter] + "=" + AsciiCMD.getDesc(args[iter]) + ",";
+                    let description = this.getDesc(args[iter]);
+                    if(isNaN(description)) {
+                        iter++;
+                        continue;
+                    }
+                    let expression = args[iter] + "=" + description + ",";
                     output += expression + "\n";
                 }
                 
@@ -46,7 +77,7 @@ export default class AsciiCMD extends LWCommand {
             let output = "";
             let iter = 0;
             while (iter < 256) {
-                let expression = iter + "=" + AsciiCMD.getChar(iter) + ",";
+                let expression = iter + "=" + this.getChar(iter) + ",";
                 if (expression.length < 8) output += expression + "\t\t";
                 else output += expression + "\t";
                 if (iter % 8 === 7) output += "\n";
@@ -57,8 +88,7 @@ export default class AsciiCMD extends LWCommand {
         }
     }
 
-
-    static getChar(code) {
+    getChar(code) {
         let codes = {
             0: "[NUL]",
             1: "[SOH]",
@@ -103,7 +133,7 @@ export default class AsciiCMD extends LWCommand {
         }
     }
 
-    static getDesc(char) {
+    getDesc(char) {
         let descriptions = {
             "[NUL]":"0 (Null Character)",
             "[SOH]":"1 (Start of Header)",
@@ -147,4 +177,6 @@ export default class AsciiCMD extends LWCommand {
             return char.charCodeAt(0);
         }
     }
+
+
 }
