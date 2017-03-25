@@ -20,7 +20,7 @@ import UsageError from "../UsageError";
 export default class ConvertCMD extends LWCommand {
     constructor() {
         super("convert", "Converts from/to different units/bases. Currently supported: base, ascii",
-            "convert <base> <fromBase> <toBase> <number>; convert <ascii> [code/symbol [code/symbol [...]]]", "Trikolon, TheBiochemic", true);
+            "convert base <fromBase> <toBase> <number>; convert ascii [code/symbol [code/symbol [...]]]", "Trikolon, TheBiochemic", true);
     }
 
     run(args) {
