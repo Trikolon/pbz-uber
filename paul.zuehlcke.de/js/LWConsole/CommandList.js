@@ -23,7 +23,6 @@ import IpCMD from "./Commands/IpCMD";
 import CalcCMD from "./Commands/CalcCMD";
 import TimeCMD from "./Commands/TimeCMD";
 import EffectCMD from "./Commands/EffectCMD";
-import AsciiCMD from "./Commands/AsciiCMD";
 import ConvertCMD from "./Commands/ConvertCMD";
 
 /**
@@ -49,7 +48,6 @@ export default class CommandList {
             }),
             new TimeCMD(),
             new CalcCMD(),
-            new AsciiCMD(),
             new ConvertCMD(),
             new EffectCMD(),
             new LWCommandSimple("clear", "Clears the console", "clear", "Trikolon", true, () => {
