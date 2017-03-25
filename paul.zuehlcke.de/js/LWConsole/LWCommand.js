@@ -13,8 +13,20 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
+
+/**
+ * Abstract class for LWConsole commands
+ * Implemented commands inherit from this
+ */
  export default class LWCommand {
 
+    /**
+     * @param name identifier of the command, shown in help
+     * @param description shown in help
+     * @param usage usage shown in help
+     * @param author name of the author, preferably nickname
+     * @param visible boolean flag, should the command be shown in the command list?
+     */
      constructor(name, description, usage, author, visible = true) {
          if (new.target === LWCommand) {
              throw new TypeError("Can't construct instance of abstract class " + new.target);
@@ -26,6 +38,11 @@
          this.visible = visible;
      }
 
+    /**
+     * Method called when the user executes a matching command
+     * @param args string-array, arguments provided by user excluding command name
+     * @returns {Error}
+     */
      run(args) {
          return new Error("No handler set");
      }

@@ -16,13 +16,19 @@
 
 import LWCommand from "./LWCommand";
 
-/**
- * Simple command type that only returns string
- */
 export default class LWCommandSimple extends LWCommand {
 
-    constructor(name, description, author, visible, handler) {
-        super(name, description, undefined, author, visible);
+    /**
+     * LWConsole Simple Command class for less complex commands
+     * @param name See @link{LWCommand}
+     * @param description
+     * @param usage
+     * @param author
+     * @param visible
+     * @param handler "run"-handler or static return string handler
+     */
+    constructor(name, description, usage, author, visible, handler) {
+        super(name, description, usage, author, visible);
         if (typeof handler === "string") {
             this.run = function () {
                 return handler

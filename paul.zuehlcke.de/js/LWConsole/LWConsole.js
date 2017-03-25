@@ -21,21 +21,22 @@ import config from "./ConsoleConfig";
 
 /**
  * Lightweight Console
- *
- * @param consoleDiv dom of div holding the console
- * @param consoleOutDOM dom of text-area for console-output
- * @param consoleInDOM dom of text-input for console-input
- * @param hostname included in motd, may have further use in the future
- * @constructor
  */
 export default class LWConsole {
 
+    /**
+     *
+     * @param consoleDiv dom of div holding the console
+     * @param consoleOutDOM dom of text-area for console-output
+     * @param consoleInDOM dom of text-input for console-input
+     * @param hostname included in motd, may have further use in the future
+     */
     constructor(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
         this.consoleDiv = consoleDiv;
         this.consoleOutDOM = consoleOutDOM;
         this.consoleInDOM = consoleInDOM;
         this.hostname = hostname;
-        this.motd = "Welcome to " + hostname + "!\nType 'help' for help.\n";
+        this.motd = "Welcome to " + hostname + "!\nType 'help' for a list of commands.\n";
         config().set("motd", this.motd);
 
         this._consoleOut = ""; //Content of console-out text-area
