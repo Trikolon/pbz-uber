@@ -55,11 +55,11 @@ export default class ConvertCMD extends LWCommand {
             while (iter < args.length) {
                 let number = parseInt(args[iter], 10);
                 if(!isNaN(number)){
-                    let expression = number + "=" + this.getChar(number) + ",";
+                    let expression = number + "=" + this.getAsciiChar(number) + ",";
                     output += expression + "\n";
                     
                 } else {
-                    let description = this.getDesc(args[iter]);
+                    let description = this.getAsciiDesc(args[iter]);
                     if(isNaN(description)) {
                         iter++;
                         continue;
@@ -77,7 +77,7 @@ export default class ConvertCMD extends LWCommand {
             let output = "";
             let iter = 0;
             while (iter < 256) {
-                let expression = iter + "=" + this.getChar(iter) + ",";
+                let expression = iter + "=" + this.getAsciiChar(iter) + ",";
                 if (expression.length < 8) output += expression + "\t\t";
                 else output += expression + "\t";
                 if (iter % 8 === 7) output += "\n";
@@ -88,7 +88,7 @@ export default class ConvertCMD extends LWCommand {
         }
     }
 
-    getChar(code) {
+    getAsciiChar(code) {
         let codes = {
             0: "[NUL]",
             1: "[SOH]",
@@ -133,7 +133,7 @@ export default class ConvertCMD extends LWCommand {
         }
     }
 
-    getDesc(char) {
+    getAsciiDesc(char) {
         let descriptions = {
             "[NUL]":"0 (Null Character)",
             "[SOH]":"1 (Start of Header)",
