@@ -24,6 +24,7 @@ import CalcCMD from "./Commands/CalcCMD";
 import TimeCMD from "./Commands/TimeCMD";
 import EffectCMD from "./Commands/EffectCMD";
 import ConvertCMD from "./Commands/ConvertCMD";
+import WikiCMD from "./Commands/WikiCMD";
 
 /**
  * Stores command properties + logic and provides method to query them
@@ -49,6 +50,9 @@ export default class CommandList {
             new TimeCMD(),
             new CalcCMD(),
             new ConvertCMD((str) => { //do the same like at IPCmd
+                this._lwConsole.print(str)
+            }),
+            new WikiCMD((str) => { //do the same like at IPCmd
                 this._lwConsole.print(str)
             }),
             new EffectCMD(),
