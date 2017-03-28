@@ -48,7 +48,9 @@ export default class CommandList {
             }),
             new TimeCMD(),
             new CalcCMD(),
-            new ConvertCMD(),
+            new ConvertCMD((str) => { //do the same like at IPCmd
+                this._lwConsole.print(str)
+            }),
             new EffectCMD(),
             new LWCommandSimple("clear", "Clears the console", "clear", "Trikolon", true, () => {
                 lwConsole.clear();
