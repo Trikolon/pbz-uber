@@ -25,7 +25,7 @@ export default class WikiCMD extends LWCommand {
 
     run(args) {
         let keyword = args.join(" ");
-        let queryUrl = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&origin=*&titles="+keyword;
+        let queryUrl = "https://en.wikipedia.org/w/api.php?format=json&action=query&redirects=1&prop=extracts&exintro=&explaintext=&origin=*&titles="+keyword;
         if (args.length < 1) {
             throw new UsageError();
         } else {
