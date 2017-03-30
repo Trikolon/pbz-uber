@@ -19,7 +19,7 @@ import UsageError from "../UsageError";
 
 export default class WikiCMD extends LWCommand {
     constructor(print) {
-        super("wiki", "Provides a Wikipedia summary of the requested topic, if possible", "wiki <topic>", "TheBiochemic", true);
+        super("wiki", "Provides a Wikipedia summary of the requested topic, if possible", "<topic>", "TheBiochemic", true);
         this.print = print;
     }
 

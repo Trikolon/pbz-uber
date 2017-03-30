@@ -193,7 +193,7 @@ export default class LWConsole {
             if (e instanceof Error) {
                 if (e instanceof UsageError) {
                     return (e.message ? e.message + "\n" : "") +
-                        (cmd.usage && cmd.usage !== "" ? "Usage: " + cmd.usage : "Invalid usage.");
+                        (cmd.usage && cmd.usage !== "" ? "Usage: " + cmd.name + " " + cmd.usage : "Invalid usage.");
                 }
                 else {
                     return e.name + ": " + e.message;

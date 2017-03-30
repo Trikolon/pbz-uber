@@ -19,7 +19,7 @@ import UsageError from "../UsageError";
 
 export default class TimeCMD extends LWCommand {
     constructor() {
-        super("time", "Show time in different formats", "time <utc/local/unix>", "Trikolon", true);
+        super("time", "Show time in different formats", "<utc/local/unix>", "Trikolon", true);
     }
 
     run(args) {

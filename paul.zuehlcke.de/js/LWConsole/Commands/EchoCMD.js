@@ -19,7 +19,7 @@ import UsageError from "../UsageError";
 
 export default class EchoCMD extends LWCommand {
     constructor() {
-        super("echo", "Displays message on console - no pipes yet :-(", "echo <message>", "Trikolon", true);
+        super("echo", "Displays message on console - no pipes yet :-(", "<message>", "Trikolon", true);
     }
 
     run(args) {

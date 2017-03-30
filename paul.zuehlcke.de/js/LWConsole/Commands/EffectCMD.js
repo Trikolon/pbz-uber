@@ -20,7 +20,7 @@ import config from "../ConsoleConfig";
 
 export default class EffectCMD extends LWCommand {
     constructor() {
-        super("effect", "Toggle effects, such as invert and flicker", "effect <flicker|invert> [true|false]", "Trikolon", true);
+        super("effect", "Toggle effects, such as invert and flicker", "<flicker|invert> [true|false]", "Trikolon", true);
     }
 
     run(args) {
