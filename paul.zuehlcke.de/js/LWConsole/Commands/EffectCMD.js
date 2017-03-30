@@ -20,7 +20,7 @@ import config from "../ConsoleConfig";
 
 export default class EffectCMD extends LWCommand {
     constructor() {
-        super("effect", "Toggle effects, such as invert and flicker", "<flicker|invert> [true|false]", "Trikolon", true);
+        super("effect", "Toggle effects, such as invert and flicker", "<flicker|invert|fullscreen> [true|false]", "Trikolon", true);
     }
 
     run(args) {
@@ -69,6 +69,16 @@ export default class EffectCMD extends LWCommand {
                         contentDom.className =
                             contentDom.className.replace(/(?:^|\s)monitor(?!\S)/g, '');
                     }
+                }
+                break;
+            }
+            case "fullscreen": {
+                let navigationDom = document.getElementById("navigation");
+                if (state) {
+                    navigationDom.style.display = "none";
+                }
+                else {
+                    navigationDom.style.display = "flex";
                 }
                 break;
             }

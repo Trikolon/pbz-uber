@@ -58,4 +58,7 @@ import config from "./LWConsole/ConsoleConfig";
     if (config().get("invert")) {
         lwConsole.executeCMD(["effect", "invert", "true"]);
     }
+    if (config().get("fullscreen")) {
+        document.getElementById("navigation").style.display = "none";
+    }
 }());
