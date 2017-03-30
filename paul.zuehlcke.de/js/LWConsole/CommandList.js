@@ -112,4 +112,15 @@ export default class CommandList {
             }
         }
     }
+
+    getMatchingCommands(str) {
+        str = str.toLowerCase();
+        let cmdList = [];
+        for (let i = 0; i < this._commands.length; i++) {
+            if (this._commands[i].name.startsWith(str)) {
+                cmdList.push(this._commands[i]);
+            }
+        }
+        return cmdList;
+    }
 }
