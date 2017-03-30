@@ -96,7 +96,7 @@ export default class LWConsole {
                         if (cmdList.length > 0) { //Single command match
                             if (cmdList.length === 1) {
                                 if (consoleInDOM.value === cmdList[0].name) { //If input fully matches cmd
-                                    consoleInDOM.value = cmdList[0].usage; // Show usage
+                                    consoleInDOM.value = cmdList[0].name + (cmdList[0].usage ? " " + cmdList[0].usage : ""); // Show usage
                                 }
                                 else {
                                     consoleInDOM.value = cmdList[0].name; // Else complete cmd
