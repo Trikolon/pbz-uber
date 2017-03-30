@@ -76,11 +76,14 @@ a:focus {
     opacity: 1;
 }
 
+#navigation {
+    flex: 2;
+}
+
 /* Initial state for console */
 #lwConsole {
-    min-height: 30%;
+    flex: 1;
     font-size: small;
-    height: 30%;
     width: 100%;
     opacity: 0.8;
     display: none;
