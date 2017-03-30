@@ -56,13 +56,13 @@ export default class CommandList {
                 this._lwConsole.print(str)
             }),
             new EffectCMD(),
-            new LWCommandSimple("clear", "Clears the console", "clear", "Trikolon", true, () => {
+            new LWCommandSimple("clear", "Clears the console", undefined, "Trikolon", true, () => {
                 lwConsole.clear();
             }),
-            new LWCommandSimple("exit", "Exit console", "exit", "Trikolon", true, () => {
+            new LWCommandSimple("exit", "Exit console", undefined, "Trikolon", true, () => {
                 lwConsole.show(false);
             }),
-            new LWCommandSimple("ridb", "A simple command that confirms that Robert is the best.", "ridb [reply]",
+            new LWCommandSimple("ridb", "A simple command that confirms that Robert is the best.", "[reply]",
                 "Endebert", false,
                 (args) => {
                     let output = "Paul:\t'Robert ist der Beste!'";

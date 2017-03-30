@@ -19,7 +19,7 @@ import UsageError from "../UsageError";
 
 export default class OpenCMD extends LWCommand {
     constructor() {
-        super("open", "Opens page from main navigation", "open [keybase/github/twitter/email/source]", "Trikolon", true);
+        super("open", "Opens page from main navigation", "[keybase/github/twitter/email/source]", "Trikolon", true);
     }
 
     run(args) {

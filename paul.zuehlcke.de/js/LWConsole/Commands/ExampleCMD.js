@@ -23,7 +23,7 @@ export default class ExampleCMD extends LWCommand {
         super(
             "example",
             "This is an example cmd to explain how commands are implemented",
-            "example <param1> <param2>",
+            "<param1> <param2>",
             "Trikolon",
             true);
     }

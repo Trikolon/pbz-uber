@@ -18,7 +18,7 @@ import LWCommand from "../LWCommand";
 
 export default class HelpCMD extends LWCommand {
     constructor(cmdList) {
-        super("help", "Shows a list of commands", "help [command]", "Trikolon", true);
+        super("help", "Shows a list of commands", "[command]", "Trikolon", true);
         this.cmdList = cmdList;
     }
 
@@ -42,7 +42,7 @@ export default class HelpCMD extends LWCommand {
         }
         return cmd.name + ":" +
             (cmd.description && cmd.description !== "" ? "\nDescription: " + cmd.description : "") +
-            (cmd.usage && cmd.description !== "" ? "\nUsage: " + cmd.usage : "") +
+            (cmd.usage && cmd.description !== "" ? "\nUsage: " + cmd.name + " " + cmd.usage : "") +
             (cmd.author && cmd.author !== "" ? "\nAuthor: " + cmd.author : "");
     }
 }
