@@ -91,27 +91,36 @@ export default class LWConsole {
                 //tab => auto complete
                 case 9: {
                     event.preventDefault();
-                    if (consoleInDOM.value !== "") { //Require at least one character for auto-complete
-                        let cmdList = this._cmdList.getMatchingCommands(consoleInDOM.value); //Get commands matching input
-                        if (cmdList.length > 0) { //Single command match
-                            if (cmdList.length === 1) {
-                                if (consoleInDOM.value === cmdList[0].name) { //If input fully matches cmd
-                                    consoleInDOM.value = cmdList[0].name + (cmdList[0].usage ? " " + cmdList[0].usage : ""); // Show usage
-                                }
-                                else {
-                                    consoleInDOM.value = cmdList[0].name; // Else complete cmd
-                                }
-                            }
-                            else { //Multiple commands match, print a list of them to consoleOUT
-                                let cmdListStr = "";
-                                cmdList.forEach((cmd) => {
-                                    cmdListStr += cmd.name + " "
-                                });
-                                this.print(cmdListStr);
-                            }
-                        }
-                    }
+                    this._autoComplete();
                     break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Auto-complete console input by querying command list
+     * @private
+     */
+    _autoComplete() {
+        let consoleInDOM = this.consoleInDOM;
+        if (consoleInDOM.value !== "") { //Require at least one character for auto-complete
+            let cmdList = this._cmdList.getMatchingCommands(consoleInDOM.value); //Get commands matching input
+            if (cmdList.length > 0) {
+                if (cmdList.length === 1) { //Single command match
+                    if (consoleInDOM.value === cmdList[0].name) { //If input fully matches cmd
+                        consoleInDOM.value = cmdList[0].name + (cmdList[0].usage ? " " + cmdList[0].usage : ""); // Show usage
+                    }
+                    else {
+                        consoleInDOM.value = cmdList[0].name; // Else complete cmd
+                    }
+                }
+                else { //Multiple commands match, print a list of them to consoleOUT
+                    let cmdListStr = "";
+                    cmdList.forEach((cmd) => {
+                        cmdListStr += cmd.name + " "
+                    });
+                    this.print(cmdListStr);
                 }
             }
         }
