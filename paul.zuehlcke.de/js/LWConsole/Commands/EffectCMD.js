@@ -20,7 +20,18 @@ import config from "../ConsoleConfig";
 
 export default class EffectCMD extends LWCommand {
     constructor() {
-        super("effect", "Toggle effects, such as invert and flicker", "effect <flicker|invert> [true|false]", "Trikolon", true);
+        super("effect", "Toggle effects, such as invert and flicker", "<flicker|invert|maximize> [true|false]", "Trikolon", true);
+
+        //Get initial state from config and toggle effects if needed
+        if (config().get("maximize")) {
+            this.run(["maximize", "true"]);
+        }
+        if (!config().get("flicker")) {
+            this.run(["flicker", "false"]);
+        }
+        if (config().get("invert")) {
+            this.run(["invert", "true"]);
+        }
     }
 
     run(args) {
@@ -69,6 +80,16 @@ export default class EffectCMD extends LWCommand {
                         contentDom.className =
                             contentDom.className.replace(/(?:^|\s)monitor(?!\S)/g, '');
                     }
+                }
+                break;
+            }
+            case "maximize": {
+                let navigationDom = document.getElementById("navigation");
+                if (state) {
+                    navigationDom.style.display = "none";
+                }
+                else {
+                    navigationDom.style.display = "flex";
                 }
                 break;
             }

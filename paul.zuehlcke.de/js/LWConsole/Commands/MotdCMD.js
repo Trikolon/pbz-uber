@@ -19,7 +19,7 @@ import config from "./../ConsoleConfig";
 
 export default class MotdCMD extends LWCommand {
     constructor() {
-        super("motd", "Shows the message of the day", "motd", "Trikolon", true);
+        super("motd", "Shows the message of the day", undefined, "Trikolon", true);
     }
 
     run(args) {

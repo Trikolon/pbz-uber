@@ -19,7 +19,7 @@ import UsageError from "../UsageError";
 
 export default class CalcCMD extends LWCommand {
     constructor() {
-        super("calc", "Calculates a simple math expression", "calc <expression>", "TheBiochemic", true);
+        super("calc", "Calculates a simple math expression", "<expression>", "TheBiochemic", true);
     }
 
     run(args) {

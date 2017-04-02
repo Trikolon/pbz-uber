@@ -19,7 +19,7 @@ import UsageError from "../UsageError";
 
 export default class IpCMD extends LWCommand {
     constructor(print) {
-        super("ip", "Lookup an IP (queries your IP if no argument is provided)", "ip [ip]", "Trikolon", true);
+        super("ip", "Lookup an IP (queries your IP if no argument is provided)", "[ip]", "Trikolon", true);
         this.print = print;
     }
 
