@@ -15,7 +15,6 @@
  */
 
 import LWConsole from "./LWConsole/LWConsole";
-import config from "./LWConsole/ConsoleConfig";
 
 (function () {
     "use strict";
@@ -47,18 +46,4 @@ import config from "./LWConsole/ConsoleConfig";
             lwConsole.show(false);
         }
     });
-
-    //Query config and set initial state
-    if (config().get("consoleOpen")) {
-        lwConsole.show(true);
-    }
-    if (!config().get("flicker")) {
-        lwConsole.executeCMD(["effect", "flicker", "false"]);
-    }
-    if (config().get("invert")) {
-        lwConsole.executeCMD(["effect", "invert", "true"]);
-    }
-    if (config().get("fullscreen")) {
-        document.getElementById("navigation").style.display = "none";
-    }
 }());
