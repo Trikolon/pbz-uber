@@ -86,16 +86,13 @@ a:focus {
     flex: 1;
     font-size: small;
     width: 100%;
-    opacity: 0.8;
+    opacity: 1;
     display: none;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: space-around;
 }
 
-#lwConsole:hover {
-    opacity: 1.0;
-}
 
 #lwConsole textarea {
     resize: none;
