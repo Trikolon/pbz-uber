@@ -44,7 +44,9 @@ export default class LWConsole {
         this._cmdHistory = new CommandHistory(); //Initialise cmd history (for ARROW_UP support)
 
         //Attach key handler for cmd-send, cmd-history and auto-complete
-        document.addEventListener("keydown", this._keyHandler);
+        document.addEventListener("keydown", (e) => {
+            this._keyHandler(e);
+        });
 
         // Focus the console-input whenever the console div is clicked.
         consoleDiv.onclick = function () {
