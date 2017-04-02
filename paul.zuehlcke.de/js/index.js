@@ -29,8 +29,13 @@ import LWConsole from "./LWConsole/LWConsole";
         window.location.hostname
     );
 
+    //Methods used by onclick handlers
     window.toggleConsole = function () {
         lwConsole.show(!lwConsole.isVisible());
+    };
+
+    window.maxConsole = function () {
+        lwConsole.executeCMD(["effect", "maximize"]);
     };
 
     /**
