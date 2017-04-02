@@ -24,6 +24,7 @@ import CalcCMD from "./Commands/CalcCMD";
 import TimeCMD from "./Commands/TimeCMD";
 import EffectCMD from "./Commands/EffectCMD";
 import ConvertCMD from "./Commands/ConvertCMD";
+import WikiCMD from "./Commands/WikiCMD";
 
 /**
  * Stores command properties + logic and provides method to query them
@@ -48,15 +49,20 @@ export default class CommandList {
             }),
             new TimeCMD(),
             new CalcCMD(),
-            new ConvertCMD(),
+            new ConvertCMD((str) => { //do the same like at IPCmd
+                this._lwConsole.print(str)
+            }),
+            new WikiCMD((str) => { //do the same like at IPCmd
+                this._lwConsole.print(str)
+            }),
             new EffectCMD(),
-            new LWCommandSimple("clear", "Clears the console", "clear", "Trikolon", true, () => {
+            new LWCommandSimple("clear", "Clears the console", undefined, "Trikolon", true, () => {
                 lwConsole.clear();
             }),
-            new LWCommandSimple("exit", "Exit console", "exit", "Trikolon", true, () => {
+            new LWCommandSimple("exit", "Exit console", undefined, "Trikolon", true, () => {
                 lwConsole.show(false);
             }),
-            new LWCommandSimple("ridb", "A simple command that confirms that Robert is the best.", "ridb [reply]",
+            new LWCommandSimple("ridb", "A simple command that confirms that Robert is the best.", "[reply]",
                 "Endebert", false,
                 (args) => {
                     let output = "Paul:\t'Robert ist der Beste!'";
@@ -105,5 +111,16 @@ export default class CommandList {
                 return this._commands[i]
             }
         }
+    }
+
+    getMatchingCommands(str) {
+        str = str.toLowerCase();
+        let cmdList = [];
+        for (let i = 0; i < this._commands.length; i++) {
+            if (this._commands[i].name.startsWith(str)) {
+                cmdList.push(this._commands[i]);
+            }
+        }
+        return cmdList;
     }
 }

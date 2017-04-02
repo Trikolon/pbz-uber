@@ -25,11 +25,11 @@ import config from "./ConsoleConfig";
 export default class LWConsole {
 
     /**
-     *
      * @param consoleDiv dom of div holding the console
      * @param consoleOutDOM dom of text-area for console-output
      * @param consoleInDOM dom of text-input for console-input
      * @param hostname included in motd, may have further use in the future
+     * @constructor
      */
     constructor(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
         this.consoleDiv = consoleDiv;
@@ -43,27 +43,9 @@ export default class LWConsole {
         this._cmdList = new CommandList(this); //Load commands
         this._cmdHistory = new CommandHistory(); //Initialise cmd history (for ARROW_UP support)
 
-        //Attach key handler for cmd-send and cmd-history
+        //Attach key handler for cmd-send, cmd-history and auto-complete
         document.addEventListener("keydown", (e) => {
-            if (consoleInDOM === document.activeElement) {
-                if (e.keyCode === 13) { // enter => send cmd
-                    e.preventDefault();
-                    let value = consoleInDOM.value;
-                    if (value === "") { //Do not trigger cmd when input is empty
-                        return;
-                    }
-                    this.sendCMD(value);
-                    consoleInDOM.value = ""; //Empty after cmd sent
-                }
-                else if (e.keyCode === 38) { //keyup => get last cmd
-                    e.preventDefault();
-                    let lastCmd = this._cmdHistory.get();
-                    if (lastCmd) {
-                        consoleInDOM.value = lastCmd;
-                    }
-                }
-
-            }
+            this._keyHandler(e);
         });
 
         // Focus the console-input whenever the console div is clicked.
@@ -75,6 +57,78 @@ export default class LWConsole {
 
         //Set initial content of textarea
         this.print(this.motd);
+
+        //Get initial state from config
+        if (config().get("consoleOpen")) {
+            this.show(true);
+        }
+    }
+
+    /**
+     * Handles key-press events for console
+     * @param event event including key-code being evaluated
+     * @private
+     */
+    _keyHandler(event) {
+        let consoleInDOM = this.consoleInDOM;
+        if (consoleInDOM === document.activeElement) {
+            switch (event.keyCode) {
+                //enter => send cmd
+                case 13: {
+                    event.preventDefault();
+                    let value = consoleInDOM.value;
+                    if (value === "") { //Do not trigger cmd when input is empty
+                        return;
+                    }
+                    this.sendCMD(value);
+                    consoleInDOM.value = ""; //Empty after cmd sent
+                    break;
+                }
+                //keyup => get last cmd
+                case 38: {
+                    event.preventDefault();
+                    let lastCmd = this._cmdHistory.get();
+                    if (lastCmd) {
+                        consoleInDOM.value = lastCmd;
+                    }
+                    break;
+                }
+                //tab => auto complete
+                case 9: {
+                    event.preventDefault();
+                    this._autoComplete();
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Auto-complete console input by querying command list
+     * @private
+     */
+    _autoComplete() {
+        let consoleInDOM = this.consoleInDOM;
+        if (consoleInDOM.value !== "") { //Require at least one character for auto-complete
+            let cmdList = this._cmdList.getMatchingCommands(consoleInDOM.value); //Get commands matching input
+            if (cmdList.length > 0) {
+                if (cmdList.length === 1) { //Single command match
+                    if (consoleInDOM.value === cmdList[0].name) { //If input fully matches cmd
+                        consoleInDOM.value = cmdList[0].name + (cmdList[0].usage ? " " + cmdList[0].usage : ""); // Show usage
+                    }
+                    else {
+                        consoleInDOM.value = cmdList[0].name; // Else complete cmd
+                    }
+                }
+                else { //Multiple commands match, print a list of them to consoleOUT
+                    let cmdListStr = "";
+                    cmdList.forEach((cmd) => {
+                        cmdListStr += cmd.name + " "
+                    });
+                    this.print(cmdListStr);
+                }
+            }
+        }
     }
 
 
@@ -153,7 +207,7 @@ export default class LWConsole {
             if (e instanceof Error) {
                 if (e instanceof UsageError) {
                     return (e.message ? e.message + "\n" : "") +
-                        (cmd.usage && cmd.usage !== "" ? "Usage: " + cmd.usage : "Invalid usage.");
+                        (cmd.usage && cmd.usage !== "" ? "Usage: " + cmd.name + " " + cmd.usage : "Invalid usage.");
                 }
                 else {
                     return e.name + ": " + e.message;

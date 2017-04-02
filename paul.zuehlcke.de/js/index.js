@@ -15,10 +15,13 @@
  */
 
 import LWConsole from "./LWConsole/LWConsole";
-import config from "./LWConsole/ConsoleConfig";
 
 (function () {
     "use strict";
+
+    console.log("%cWELCOME FELLOW DEV ~", "background: #0088ff; color: #ffffff; font-size: 24px");
+    console.log("%cFeel free to contribute!\nSource: https://github.com/Trikolon/pbz-uber", "background: #0088ff; color: #ffffff");
+
     let lwConsole = new LWConsole(
         document.getElementById("lwConsole"),
         document.getElementById("consoleOut"),
@@ -26,8 +29,13 @@ import config from "./LWConsole/ConsoleConfig";
         window.location.hostname
     );
 
+    //Methods used by onclick handlers
     window.toggleConsole = function () {
         lwConsole.show(!lwConsole.isVisible());
+    };
+
+    window.maxConsole = function () {
+        lwConsole.executeCMD(["effect", "maximize"]);
     };
 
     /**
@@ -43,15 +51,4 @@ import config from "./LWConsole/ConsoleConfig";
             lwConsole.show(false);
         }
     });
-
-    //Query config and set initial state
-    if (config().get("consoleOpen")) {
-        lwConsole.show(true);
-    }
-    if (!config().get("flicker")) {
-        lwConsole.executeCMD(["effect", "flicker", "false"]);
-    }
-    if (config().get("invert")) {
-        lwConsole.executeCMD(["effect", "invert", "true"]);
-    }
 }());

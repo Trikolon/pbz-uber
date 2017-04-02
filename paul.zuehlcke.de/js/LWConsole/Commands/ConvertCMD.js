@@ -18,9 +18,10 @@ import LWCommand from "../LWCommand";
 import UsageError from "../UsageError";
 
 export default class ConvertCMD extends LWCommand {
-    constructor() {
-        super("convert", "Converts from/to different units/bases. Currently supported: base, ascii",
-            "convert <base> <fromBase> <toBase> <number>; convert <ascii> [code/symbol [code/symbol [...]]]", "Trikolon, TheBiochemic", true);
+    constructor(print) {
+        super("convert", "Converts from/to different units/bases. Currently supported: base, ascii, currency",
+            "<base|ascii|curr> <Parameters>", "Trikolon, TheBiochemic", true);
+        this.print = print;
     }
 
     run(args) {
@@ -35,16 +36,19 @@ export default class ConvertCMD extends LWCommand {
                 return this.convertBase(args);
             case "ascii":
                 return this.convertAscii(args);
+            case "curr":
+                return this.convertCurrency(args);
         }
     }
 
     convertBase(args) {
         if (args.length !== 3) {
-            throw new UsageError();
+            throw new UsageError("Parameters: <FromBase> <ToBase> <Number>");
         }
+        //if fromBase, toBase and a Number is specified
         let fromBase = parseInt(args[0], 10);
         let toBase = parseInt(args[1], 10);
-        return parseInt(args[2], fromBase).toString(toBase);
+        return parseInt(args[2], fromBase).toString(toBase).toUpperCase();
     }
 
     convertAscii(args) {
@@ -55,32 +59,42 @@ export default class ConvertCMD extends LWCommand {
             while (iter < args.length) {
                 let number = parseInt(args[iter], 10);
                 if(!isNaN(number)){
-                    let expression = number + "=" + this.getChar(number) + ",";
-                    output += expression + "\n";
+                    if(number>=128) {
+                        throw new UsageError("Number is too large (not included in ASCII range)");
+                    }
+                    output += this.getAsciiChar(number);
                     
                 } else {
-                    let description = this.getDesc(args[iter]);
-                    if(isNaN(description)) {
+                    let description = this.getAsciiDesc(args[iter]).toString();
+                    if(description === "NaN") {
                         iter++;
                         continue;
                     }
-                    let expression = args[iter] + "=" + description + ",";
-                    output += expression + "\n";
+                    output += description;
                 }
-                
+                if(iter < args.length-1) output += "\n";
                 iter++;
             }
             return output;
         }
         else {
-            //If the full table needs to be printed
-            let output = "";
+            //If the full table needs to be printed (ascii contains only 128 chars, extended ascii differs from unicode)
+
+            let output = "\t";
             let iter = 0;
-            while (iter < 256) {
-                let expression = iter + "=" + this.getChar(iter) + ",";
-                if (expression.length < 8) output += expression + "\t\t";
+            while(iter<16) {
+                output += "..." + parseInt(iter++, 10).toString(16).toUpperCase() + "\t";
+            }
+
+            output += "\n0...\t";
+            iter = 0;
+            let row = 1;
+
+            while (iter < 128) {
+                let expression = this.getAsciiChar(iter);
+                if (expression.length < 8) output += expression + "\t";
                 else output += expression + "\t";
-                if (iter % 8 === 7) output += "\n";
+                if (iter % 16 === 15 && iter < 128-1) output += "\n" + (row++) + "...\t";
                 iter++;
             }
             return output;
@@ -88,7 +102,29 @@ export default class ConvertCMD extends LWCommand {
         }
     }
 
-    getChar(code) {
+    convertCurrency(args) {
+        if (args.length !== 3) {
+            throw new UsageError("Parameters: <BaseCurrency> <ForeignCurrency> <Amount>");
+        }
+        let queryUrl = "https://api.fixer.io/latest?base="+args[0]+";symbols="+args[1];
+        let request = new XMLHttpRequest();
+        request.onload = () => {
+            if (request.status !== 200) {
+                this.print("\nError: fixer.io returned code " + request.status);
+            }
+            let json = JSON.parse(request.responseText);
+            this.print((json.rates[args[1]] * parseFloat(args[2])) + " " + args[1]);
+        };
+        request.onerror = function (e) {
+            console.error(e);
+            this.print("Error: Could not send request to fixer.io. Check your internet connection.");
+        };
+        request.open("GET", queryUrl, true);
+        request.send();
+        return "Getting data ...";
+    }
+
+    getAsciiChar(code) {
         let codes = {
             0: "[NUL]",
             1: "[SOH]",
@@ -133,7 +169,7 @@ export default class ConvertCMD extends LWCommand {
         }
     }
 
-    getDesc(char) {
+    getAsciiDesc(char) {
         let descriptions = {
             "[NUL]":"0 (Null Character)",
             "[SOH]":"1 (Start of Header)",
@@ -170,8 +206,8 @@ export default class ConvertCMD extends LWCommand {
             "[SP]":"32 (Space)",
             "[DEL]":"127 (Delete)"
         };
-        if (descriptions.hasOwnProperty(char)) {
-            return descriptions[char];
+        if (descriptions.hasOwnProperty(char.toUpperCase())) {
+            return descriptions[char.toUpperCase()];
         }
         else {
             return char.charCodeAt(0);
