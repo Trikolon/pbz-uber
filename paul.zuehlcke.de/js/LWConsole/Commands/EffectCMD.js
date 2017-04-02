@@ -21,6 +21,20 @@ import config from "../ConsoleConfig";
 export default class EffectCMD extends LWCommand {
     constructor() {
         super("effect", "Toggle effects, such as invert and flicker", "<flicker|invert|fullscreen> [true|false]", "Trikolon", true);
+        document.getElementById("consoleMax").addEventListener("click", () => {
+            this.run(["fullscreen"])
+        });
+
+        //Get initial state from config and toggle fullscreen mode if needed
+        if (config().get("fullscreen")) {
+            this.run(["fullscreen", "true"]);
+        }
+        if (!config().get("flicker")) {
+            this.run(["flicker", "false"]);
+        }
+        if (config().get("invert")) {
+            this.run(["invert", "true"]);
+        }
     }
 
     run(args) {

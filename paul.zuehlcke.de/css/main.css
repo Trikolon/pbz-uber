@@ -116,3 +116,9 @@ a:focus {
     text-transform: capitalize;
     font-size: x-small;
 }
+
+#consoleMax {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}

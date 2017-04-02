@@ -57,6 +57,11 @@ export default class LWConsole {
 
         //Set initial content of textarea
         this.print(this.motd);
+
+        //Get initial state from config
+        if (config().get("consoleOpen")) {
+            this.show(true);
+        }
     }
 
     /**
