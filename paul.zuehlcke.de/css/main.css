@@ -33,10 +33,6 @@ a:focus {
     height: 100%;
 }
 
-.icon {
-    height: 2em;
-    width: 2em;
-}
 
 .navLabel {
     padding-top: 8px;
@@ -123,6 +119,10 @@ a:focus {
     display: flex;
     max-width: 10vw;
     flex-wrap: wrap;
+}
+
+#consoleMenu * {
+    margin: 1px;
 }
 
 #lwConsole:hover > #consoleMenu {

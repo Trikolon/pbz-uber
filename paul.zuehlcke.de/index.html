@@ -23,6 +23,7 @@
     <link rel="shortcut icon" href="icon/favicon/favicon.ico">
     <meta name="msapplication-config" content="/icon/favicon/browserconfig.xml">
 
+    <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="css/crt.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
@@ -34,31 +35,31 @@
         </div>
         <a href="//keybase.io/pbz">
             <div class="flex-container">
-                <img class="icon" src="icon/key-128.png" alt="">
+                <i class="fa fa-key fa-2x" aria-hidden="true"></i>
                 <div class="navLabel">keybase</div>
             </div>
         </a>
         <a href="//github.com/trikolon">
             <div class="flex-container">
-                <img class="icon" src="icon/github-128.png" alt="">
+                <i class="fa fa-github fa-2x" aria-hidden="true"></i>
                 <div class="navLabel">github</div>
             </div>
         </a>
         <a href="//twitter.com/deppaws">
             <div class="flex-container">
-                <img class="icon" src="icon/twitter-128.png" alt="">
+                <i class="fa fa-twitter fa-2x" aria-hidden="true"></i>
                 <div class="navLabel">twitter</div>
             </div>
         </a>
         <a href="mailto:paul@zuehlcke.de">
             <div class="flex-container">
-                <img class="icon" src="icon/envelope-128.png" alt="">
+                <i class="fa fa-envelope-o fa-2x" aria-hidden="true"></i>
                 <div class="navLabel">e-mail</div>
             </div>
         </a>
         <a href="#" onclick="toggleConsole()">
             <div class="flex-container">
-                <img class="icon" src="icon/console-128.png" alt="">
+                <i class="fa fa-terminal fa-2x" aria-hidden="true"></i>
                 <div class="navLabel">console</div>
                 <div id="consoleButtonJSWarning">[javascript
                     disabled]
@@ -68,10 +69,9 @@
     </div>
     <div id="lwConsole">
         <div id="consoleMenu">
-            <a id="consoleMax" href="#" onclick="maxConsole()">[■]</a>
-            <a id="consoleClose" href="#" onclick="toggleConsole()">[x]</a>
+            <i id="consoleMax" onclick="maxConsole()" class="fa fa-window-maximize fa-lg"></i>
+            <i id="consoleClose" onclick="toggleConsole()" class="fa fa-window-close-o fa-lg"></i>
         </div>
-
         <textarea id="consoleOut" title="console" readonly>Javascript disabled. Please enable it in order to use the console.</textarea>
         <input id="consoleIn" title="console" type="text" autofocus>
     </div>
