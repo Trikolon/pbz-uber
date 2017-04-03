@@ -36,7 +36,16 @@ export default class LWConsole {
         this.consoleOutDOM = consoleOutDOM;
         this.consoleInDOM = consoleInDOM;
         this.hostname = hostname;
-        this.motd = "Welcome to " + hostname + "!\nType 'help' for a list of commands.\n";
+
+        let visitCount = config().get("visitCount");
+        if (visitCount) {
+            visitCount++;
+        }
+        else {
+            visitCount = 1;
+        }
+        config().set("visitCount", visitCount);
+        this.motd = "Welcome to " + hostname + "! [Visit " + visitCount + "]\nType 'help' for a list of commands.\n";
         config().set("motd", this.motd);
 
         this._consoleOut = ""; //Content of console-out text-area
