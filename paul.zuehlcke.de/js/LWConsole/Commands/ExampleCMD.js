@@ -43,16 +43,13 @@ export default class ExampleCMD extends LWCommand {
         // If the user has cookies enabled they are also preserved across sessions
         // In the future cmds will have their own config-scope so you won't have to mind key-conflicts with
         // other cmds anymore.
-        if (config().get("cakeSetting")) {
+        if (config(this.name).get("cakeSetting")) {
             output += "Cake for you!\n";
         }
         else {
             output += "Maybe next time!\n";
-            config().set("cakeSetting", true);
+            config(this.name).set("cakeSetting", true);
         }
-
-
-        // lwConsole.print("If you have an async cmd you can also print messages yourself like this.");
 
         output += "The return value is the result of the cmd, this message will be displayed in the console"
             + "\nAlso, new lines are supported";
