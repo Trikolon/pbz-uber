@@ -51,6 +51,7 @@ export default class LWConsole {
         this._consoleOut = ""; //Content of console-out text-area
         this._cmdList = new CommandList(this); //Load commands
         this._cmdHistory = new CommandHistory(); //Initialise cmd history (for ARROW_UP support)
+        this._cmdHistoryIterator = this._cmdHistory.iterator(); //get iterator of history for easy traversal
 
         //Attach key handler for cmd-send, cmd-history and auto-complete
         document.addEventListener("keydown", (e) => {
@@ -93,13 +94,20 @@ export default class LWConsole {
                     consoleInDOM.value = ""; //Empty after cmd sent
                     break;
                 }
-                //keyup => get last cmd
+                //keyup => traverse through history (back in time)
                 case 38: {
                     event.preventDefault();
-                    let lastCmd = this._cmdHistory.get();
-                    if (lastCmd) {
-                        consoleInDOM.value = lastCmd;
-                    }
+                    let prev = this._cmdHistoryIterator.prev();
+                    if (prev !== undefined) // only set if not undefined
+                        consoleInDOM.value = prev;
+                    break;
+                }
+                //keydown => traverse through history (forward in time)
+                case 40: {
+                    event.preventDefault();
+                    let next = this._cmdHistoryIterator.next();
+                    if (next !== undefined) // only set if not undefined
+                        consoleInDOM.value = next;
                     break;
                 }
                 //tab => auto complete
@@ -193,6 +201,7 @@ export default class LWConsole {
         let splitCMD = cmd.split(" "); //split cmd by space (cmd name, args)
         this.print("> " + cmd); //Print cmd from user
         this._cmdHistory.add(cmd); //Save cmd
+        this._cmdHistoryIterator = this._cmdHistory.iterator(); // update iterator
         this.print(this.executeCMD(splitCMD)); //Print result of cmd-execution
     }
 
