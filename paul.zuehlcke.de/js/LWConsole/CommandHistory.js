@@ -15,48 +15,102 @@
  */
 
 /**
- * Class CommandHistory
- * Stores last <size> commands in buffer
- * @param size amount of commands to store in buffer
- * @constructor
+ * This class is a simple array wrapper, designed to store the history of the commandline.
  */
 export default class CommandHistory {
 
-    constructor(size = 20) {
-        this.size = size;
-        this._history = new Array(size);
-        this._writePos = 0;
-        this._readPos = 0;
+    /**
+     * Initialize a new CommandHistory instance (optionally based on an existing history array).
+     * @param {Array} history - array this history is based on. Leave undefined for empty array.
+     */
+    constructor(history = []) {
+        this._history = history;
     }
 
     /**
-     * Get command in cmd history, goes one back in history every call
-     * @returns{String} cmd
+     * Get history for given index.
+     * @param {int} index - target index in history array.
+     * @returns {string} command - command at given index.
      */
-    get() {
-        let result = this._history[this._readPos];
-        this._readPos--;
-        if (this._readPos === -1) {
-            this._readPos = this.size - 1;
-        }
-        if (typeof this._history[this._readPos] === "undefined") { //if history-array is not completely filled yet
-            this._readPos = this._writePos === 0 ? this.size - 1 : this._writePos - 1;
-        }
-        return result;
+    get(index) {
+        if (index === undefined)
+            return this._history;
+        else
+            return this._history[index];
     }
 
     /**
-     * Add command to history array
-     * @param cmd
+     * Returns the size of the history.
+     * @returns {Number}
      */
-    add(cmd) {
-        if (typeof cmd !== "undefined") {
-            this._readPos = this._writePos; //On cmd-add, reset readpos
-            this._history[this._writePos] = cmd;
-            this._writePos++;
-            if (this._writePos === this.size) {
-                this._writePos = 0;
-            }
-        }
+    size() {
+        return this._history.length;
+    }
+
+    /**
+     * Adds entry to history.
+     * @param entry - entry to be stored in history
+     * @returns {Number}
+     */
+    add(entry) {
+        return this._history.push(entry);
+    }
+
+    /**
+     * Returns an iterator for this history for easy traversal.
+     * @returns {HistoryIterator} iterator
+     */
+    iterator() {
+        return new HistoryIterator(this);
+    }
+}
+
+/**
+ * Small iterator to traverse through a history
+ */
+class HistoryIterator {
+
+    /**
+     * Initialize this iterator on the given history.
+     *
+     * Be aware that you need to initialize a new iterator when the history changes,
+     * as the index is not reset automatically.
+     * @param {CommandHistory} history - history, this iterator is based on.
+     */
+    constructor(history) {
+        this._history = history;
+        this._i = history.size();
+    }
+
+    /**
+     * Returns true, if there is a next element to get via next(), false otherwise.
+     * @returns {boolean}
+     */
+    hasNext() {
+        return this._i < (this._history);
+    }
+
+    /**
+     * Returns the next entry in the history (i.e. forward in time).
+     *
+     * @returns {string | undefined} requested entry, undefined if no next entry exists
+     */
+    next() {
+        let next = this._history.get(++this._i);
+        if (next === undefined)
+            this._i--;
+        return next;
+    }
+
+    /**
+     * Returns the previous entry in the history (i.e. back in time).
+     *
+     * @returns {string | undefined} requested entry, undefined if no previous entry exists
+     */
+    prev() {
+        let prev = this._history.get(--this._i);
+        if (prev === undefined)
+            this._i++;
+        return prev;
     }
 }
