@@ -50,7 +50,7 @@ export default class LWConsole {
 
         this._consoleOut = ""; //Content of console-out text-area
         this._cmdList = new CommandList(this); //Load commands
-        this._cmdHistory = new CommandHistory(); //Initialise cmd history (for ARROW_UP support)
+        this._cmdHistory = new CommandHistory(config().get("history")); //Initialise cmd history (for ARROW_UP support)
         this._cmdHistoryIterator = this._cmdHistory.iterator(); //get iterator of history for easy traversal
 
         //Attach key handler for cmd-send, cmd-history and auto-complete
@@ -202,6 +202,7 @@ export default class LWConsole {
         this.print("> " + cmd); //Print cmd from user
         this._cmdHistory.add(cmd); //Save cmd
         this._cmdHistoryIterator = this._cmdHistory.iterator(); // update iterator
+        config().set("history", this._cmdHistory.get().slice(this._cmdHistory.get().length - 21));
         this.print(this.executeCMD(splitCMD)); //Print result of cmd-execution
     }
 
