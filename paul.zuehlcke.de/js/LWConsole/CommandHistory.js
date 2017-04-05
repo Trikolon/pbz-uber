@@ -29,7 +29,7 @@ export default class CommandHistory {
 
     /**
      * Get history for given index.
-     * @param {int} index - target index in history array.
+     * @param {int} [index] - target index in history array.
      * @returns {string} command - command at given index.
      */
     get(index) {
