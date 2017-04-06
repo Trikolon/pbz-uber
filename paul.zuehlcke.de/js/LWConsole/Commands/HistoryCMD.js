@@ -35,7 +35,10 @@ export default class HistoryCMD extends LWCommand {
                 let result = "";
                 let history = this._cmdHistory.get();
                 for (let i = 0; i < history.length; i++) {
-                    result += i + 1 + ": " + history[i] + "\n";
+                    result += i + 1 + ": " + history[i];
+                    if (i !== history.length - 1) {
+                        result += "\n";
+                    }
                 }
                 return result;
             }
