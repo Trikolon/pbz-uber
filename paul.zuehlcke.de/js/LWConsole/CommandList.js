@@ -44,7 +44,9 @@ export default class CommandList {
             new HelpCMD(this),
             new OpenCMD(),
             new EchoCMD(),
-            new HistoryCMD(this._lwConsole.cmdHistory),
+            new HistoryCMD(this._lwConsole.cmdHistory, (cmdString) => {
+                this._lwConsole.sendCMD(cmdString);
+            }),
             new IpCMD((str) => { //wrapped in anonymous function to prevent this-rebind
                 this._lwConsole.print(str)
             }),

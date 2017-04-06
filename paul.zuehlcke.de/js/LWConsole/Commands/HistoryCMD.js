@@ -15,29 +15,52 @@
  */
 
 import LWCommand from "../LWCommand";
+import UsageError from "../UsageError";
 
 export default class HistoryCMD extends LWCommand {
-    constructor(cmdHistory) {
+    constructor(cmdHistory, sendCmd) {
         super(
             "history",
-            "Shows command history",
-            undefined,
+            "Shows command history or executes command by index",
+            "[index]",
             "Trikolon",
             true);
         this._cmdHistory = cmdHistory;
+        this._sendCmd = sendCmd;
     }
 
     run(args) {
-        if(this._cmdHistory) {
-            let result = "";
-            let history = this._cmdHistory.get();
-            for(let i = 0; i<history.length; i++) {
-                result += i + ": " + history[i] + "\n";
+        if (args.length === 0) {
+            if (this._cmdHistory) {
+                let result = "";
+                let history = this._cmdHistory.get();
+                for (let i = 0; i < history.length; i++) {
+                    result += i + 1 + ": " + history[i] + "\n";
+                }
+                return result;
             }
-            return result;
+            else {
+                return "No entries";
+            }
+        }
+        else if (args.length === 1) {
+            let index;
+            try {
+                index = parseInt(args[0], 10);
+            }
+            catch (e) { // Catch this to mask error
+                throw new UsageError("Index must be number");
+            }
+            index--;
+            if (index >= 0 && index < this._cmdHistory.get().length) {
+                this._sendCmd(this._cmdHistory.get(index));
+            }
+            else {
+                throw new UsageError("Index out of bounds");
+            }
         }
         else {
-            return "No entries";
+            throw new UsageError();
         }
     }
 }
