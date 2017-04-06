@@ -209,10 +209,10 @@ export default class LWConsole {
     sendCMD(cmd) {
         let splitCMD = cmd.split(" "); //split cmd by space (cmd name, args)
         this.print("> " + cmd); //Print cmd from user
+        this.print(this.executeCMD(splitCMD)); //Print result of cmd-execution
         this._cmdHistory.add(cmd); //Save cmd
         this._cmdHistoryIterator = this._cmdHistory.iterator(); // update iterator
         config().set("history", this._cmdHistory.get().slice(this._cmdHistory.get().length - 20));
-        this.print(this.executeCMD(splitCMD)); //Print result of cmd-execution
     }
 
     /**
