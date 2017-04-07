@@ -36,12 +36,21 @@ export default class LWConsole {
         this.consoleOutDOM = consoleOutDOM;
         this.consoleInDOM = consoleInDOM;
         this.hostname = hostname;
-        this.motd = "Welcome to " + hostname + "!\nType 'help' for a list of commands.\n";
+
+        let visitCount = config().get("visitCount");
+        if (visitCount) {
+            visitCount++;
+        }
+        else {
+            visitCount = 1;
+        }
+        config().set("visitCount", visitCount);
+        this.motd = "Welcome to " + hostname + "! [Visit " + visitCount + "]\nType 'help' for a list of commands.\n";
         config().set("motd", this.motd);
 
         this._consoleOut = ""; //Content of console-out text-area
-        this._cmdList = new CommandList(this); //Load commands
-        this._cmdHistory = new CommandHistory(); //Initialise cmd history (for ARROW_UP support)
+        this._cmdHistory = new CommandHistory(config().get("history")); //Initialise cmd history (for ARROW_UP support)
+        this._cmdHistoryIterator = this._cmdHistory.iterator(); //get iterator of history for easy traversal
 
         //Attach key handler for cmd-send, cmd-history and auto-complete
         document.addEventListener("keydown", (e) => {
@@ -55,6 +64,8 @@ export default class LWConsole {
             }
         };
 
+        this._cmdList = new CommandList(this); //Load commands
+
         //Set initial content of textarea
         this.print(this.motd);
 
@@ -62,6 +73,14 @@ export default class LWConsole {
         if (config().get("consoleOpen")) {
             this.show(true);
         }
+    }
+
+    /**
+     * Getter for command history object
+     * @returns {CommandHistory}
+     */
+    get cmdHistory() {
+        return this._cmdHistory;
     }
 
     /**
@@ -84,13 +103,20 @@ export default class LWConsole {
                     consoleInDOM.value = ""; //Empty after cmd sent
                     break;
                 }
-                //keyup => get last cmd
+                //keyup => traverse through history (back in time)
                 case 38: {
                     event.preventDefault();
-                    let lastCmd = this._cmdHistory.get();
-                    if (lastCmd) {
-                        consoleInDOM.value = lastCmd;
-                    }
+                    let prev = this._cmdHistoryIterator.prev();
+                    if (prev !== undefined) // only set if not undefined
+                        consoleInDOM.value = prev;
+                    break;
+                }
+                //keydown => traverse through history (forward in time)
+                case 40: {
+                    event.preventDefault();
+                    let next = this._cmdHistoryIterator.next();
+                    if (next !== undefined) // only set if not undefined
+                        consoleInDOM.value = next;
                     break;
                 }
                 //tab => auto complete
@@ -183,8 +209,10 @@ export default class LWConsole {
     sendCMD(cmd) {
         let splitCMD = cmd.split(" "); //split cmd by space (cmd name, args)
         this.print("> " + cmd); //Print cmd from user
-        this._cmdHistory.add(cmd); //Save cmd
         this.print(this.executeCMD(splitCMD)); //Print result of cmd-execution
+        this._cmdHistory.add(cmd); //Save cmd
+        this._cmdHistoryIterator = this._cmdHistory.iterator(); // update iterator
+        config().set("history", this._cmdHistory.get().slice(this._cmdHistory.get().length - 20));
     }
 
     /**

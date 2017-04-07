@@ -25,6 +25,7 @@ import TimeCMD from "./Commands/TimeCMD";
 import EffectCMD from "./Commands/EffectCMD";
 import ConvertCMD from "./Commands/ConvertCMD";
 import WikiCMD from "./Commands/WikiCMD";
+import HistoryCMD from "./Commands/HistoryCMD";
 
 /**
  * Stores command properties + logic and provides method to query them
@@ -34,9 +35,8 @@ import WikiCMD from "./Commands/WikiCMD";
  */
 export default class CommandList {
 
-    constructor(lwConsole, config) {
+    constructor(lwConsole) {
         this._lwConsole = lwConsole;
-        this._config = config;
 
         //Init cmds
         this._commands = [
@@ -44,6 +44,9 @@ export default class CommandList {
             new HelpCMD(this),
             new OpenCMD(),
             new EchoCMD(),
+            new HistoryCMD(this._lwConsole.cmdHistory, (cmdString) => {
+                this._lwConsole.sendCMD(cmdString);
+            }),
             new IpCMD((str) => { //wrapped in anonymous function to prevent this-rebind
                 this._lwConsole.print(str)
             }),

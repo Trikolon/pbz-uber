@@ -23,13 +23,20 @@ export default class EffectCMD extends LWCommand {
         super("effect", "Toggle effects, such as invert and flicker", "<flicker|invert|maximize> [true|false]", "Trikolon", true);
 
         //Get initial state from config and toggle effects if needed
-        if (config().get("maximize")) {
+        if (config(this.name).get("maximize")) {
             this.run(["maximize", "true"]);
         }
-        if (!config().get("flicker")) {
-            this.run(["flicker", "false"]);
+        let flicker = config(this.name).get("flicker");
+
+        if (typeof flicker === "undefined") {
+            config(this.name).set("flicker", true);
         }
-        if (config().get("invert")) {
+        else {
+            if (!flicker) {
+                this.run(["flicker", "false"]);
+            }
+        }
+        if (config(this.name).get("invert")) {
             this.run(["invert", "true"]);
         }
     }
@@ -42,7 +49,7 @@ export default class EffectCMD extends LWCommand {
         args[0] = args[0].toLowerCase();
 
         if (args.length === 1) { //Toggle
-            state = config().get(args[0]);
+            state = config(this.name).get(args[0]);
             state = !state;
         }
         else { // State overwrite
@@ -50,7 +57,7 @@ export default class EffectCMD extends LWCommand {
         }
         this.setEffect(args[0], state); //this can throw usage-error (caught by execution handler)
 
-        config().set(args[0], state);
+        config(this.name).set(args[0], state);
         return "Effect " + args[0] + " turned " + (state ? "ON" : "OFF");
     }
 
