@@ -17,6 +17,10 @@ This will create the folder ```./paul.zuehlcke.de/dist``` which contains
 ## Development
 If you are developing you can run:
 ``` bash
-npm run build-dev
+npm run build-dev # Watches changes in js-directory and compiles automatically
+```
+or:
+``` bash
+npm run dev # Watches changes and compiles + starts local web-server for development (default: http://localhost:8080)
 ```
 This will generate a source-map and watch file changes for easier debugging.
