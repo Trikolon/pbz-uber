@@ -15,6 +15,7 @@
  */
 
 import LWConsole from "./LWConsole/LWConsole";
+require("font-awesome-webpack");
 
 (function () {
     "use strict";
