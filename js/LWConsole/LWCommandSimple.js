@@ -21,11 +21,11 @@ export default class LWCommandSimple extends LWCommand {
     /**
      * LWConsole Simple Command class for less complex commands
      * @param {String} name - See @link{LWCommand}
-     * @param {String} description
-     * @param {String} usage
-     * @param {String} author
+     * @param {String | undefined} description
+     * @param {String | undefined} usage
+     * @param {String | undefined} author
      * @param {boolean} visible
-     * @param {function || String} handler "run"-handler or static return string handler
+     * @param {function | String} handler "run"-handler or static return string handler
      */
     constructor(name, description, usage, author, visible, handler) {
         super(name, description, usage, author, visible);

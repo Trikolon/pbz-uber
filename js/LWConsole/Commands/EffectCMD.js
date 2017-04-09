@@ -55,13 +55,13 @@ export default class EffectCMD extends LWCommand {
         else { // State overwrite
             state = args[1] === "true";
         }
-        this.setEffect(args[0], state); //this can throw usage-error (caught by execution handler)
+        EffectCMD.setEffect(args[0], state); //this can throw usage-error (caught by execution handler)
 
         config(this.name).set(args[0], state);
         return "Effect " + args[0] + " turned " + (state ? "ON" : "OFF");
     }
 
-    setEffect(effect, state) {
+    static setEffect(effect, state) {
         switch (effect) {
             case "invert": {
                 let invertStr;
