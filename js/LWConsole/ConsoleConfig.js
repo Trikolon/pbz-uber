@@ -21,6 +21,10 @@ import ConfigStorage from "../Config/LocalStorageConfig";
  * Could be extended in the future to support cmd-scopes
  */
 class ConsoleConfig extends ConfigStorage {
+
+    /**
+     * @param {String} name - String identifier for config object
+     */
     constructor(name) {
         super(name);
     }

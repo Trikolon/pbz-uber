@@ -25,10 +25,10 @@ import config from "./ConsoleConfig";
 export default class LWConsole {
 
     /**
-     * @param consoleDiv dom of div holding the console
-     * @param consoleOutDOM dom of text-area for console-output
-     * @param consoleInDOM dom of text-input for console-input
-     * @param hostname included in motd, may have further use in the future
+     * @param consoleDiv -  dom of div holding the console
+     * @param consoleOutDOM - dom of text-area for console-output
+     * @param consoleInDOM - dom of text-input for console-input
+     * @param {String} hostname - included in motd, may have further use in the future
      * @constructor
      */
     constructor(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
@@ -85,7 +85,7 @@ export default class LWConsole {
 
     /**
      * Handles key-press events for console
-     * @param event event including key-code being evaluated
+     * @param event - event including key-code being evaluated
      * @private
      */
     _keyHandler(event) {
@@ -160,7 +160,7 @@ export default class LWConsole {
 
     /**
      * Changes visibility of console-div depending on parameter
-     * @param state boolean true = visible; false = hidden
+     * @param {boolean} state -  true = visible; false = hidden
      */
     show(state) {
         if (state) {
@@ -184,7 +184,7 @@ export default class LWConsole {
 
     /**
      * Prints message to console and updates cursor position (scroll)
-     * @param str message to print
+     * @param {String} str -  message to print
      */
     print(str) {
         if (str && str !== "") {
@@ -204,7 +204,7 @@ export default class LWConsole {
 
     /**
      * Executes user cmd and updates output accordingly
-     * @param cmd raw cmd by user
+     * @param {String} cmd - raw cmd by user
      */
     sendCMD(cmd) {
         let splitCMD = cmd.split(" "); //split cmd by space (cmd name, args)
@@ -217,8 +217,8 @@ export default class LWConsole {
 
     /**
      * Takes command as array and calls corresponding cmd-handler on match
-     * @param cmdArr command-array. cmd[0] is command name, cmd[>1] is parameter
-     * @returns {String} result of command
+     * @param {Array} cmdArr - command-array. cmd[0] is command name, cmd[>1] is parameter
+     * @returns {String} - result of command
      */
     executeCMD(cmdArr) {
         let cmdName = cmdArr[0]; //Name

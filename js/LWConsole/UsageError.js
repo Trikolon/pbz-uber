@@ -18,6 +18,7 @@ import ExtendableError from "./ExtendableError";
 
 /**
  * Custom error type which inherits from ExtendableError. To be thrown on invalid command usage.
+ * @abstract
  */
 export default class UsageError extends ExtendableError {
 }
