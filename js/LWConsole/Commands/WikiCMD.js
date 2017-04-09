@@ -34,10 +34,12 @@ export default class WikiCMD extends LWCommand {
             request.onload = () => {
                 try {
                     if (request.status !== 200) {
+                        //noinspection ExceptionCaughtLocallyJS
                         throw new Error("wikipedia.org returned code " + request.status);
                     }
                     let pages = JSON.parse(request.responseText).query.pages;
                     if (pages.hasOwnProperty("-1")) {
+                        //noinspection ExceptionCaughtLocallyJS
                         throw new Error("No article found");
                     }
                     let article = pages[Object.keys(pages)[0]];

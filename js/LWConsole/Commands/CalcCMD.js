@@ -23,9 +23,9 @@ export default class CalcCMD extends LWCommand {
     }
 
     run(args) {
-        args = args.join("");
-        if (args.length > 0) {
-            let expResult = CalcCMD.parseExpression(args);
+        let argString = args.join("");
+        if (argString.length > 0) {
+            let expResult = CalcCMD.parseExpression(argString);
             if (expResult === undefined || isNaN(expResult))
                 throw new UsageError("This is not a valid expression!");
             return expResult.toString();

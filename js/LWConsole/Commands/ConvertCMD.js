@@ -33,15 +33,15 @@ export default class ConvertCMD extends LWCommand {
         args.shift();
         switch (mode) {
             case "base":
-                return this.convertBase(args);
+                return ConvertCMD.convertBase(args);
             case "ascii":
-                return this.convertAscii(args);
+                return ConvertCMD.convertAscii(args);
             case "curr":
                 return this.convertCurrency(args);
         }
     }
 
-    convertBase(args) {
+    static convertBase(args) {
         if (args.length !== 3) {
             throw new UsageError("Parameters: <FromBase> <ToBase> <Number>");
         }
@@ -51,7 +51,7 @@ export default class ConvertCMD extends LWCommand {
         return parseInt(args[2], fromBase).toString(toBase).toUpperCase();
     }
 
-    convertAscii(args) {
+    static convertAscii(args) {
         //if there are any codes specified
         if (args.length > 0) {
             let output = "";
@@ -62,10 +62,10 @@ export default class ConvertCMD extends LWCommand {
                     if(number>=128) {
                         throw new UsageError("Number is too large (not included in ASCII range)");
                     }
-                    output += this.getAsciiChar(number);
+                    output += ConvertCMD.getAsciiChar(number);
                     
                 } else {
-                    let description = this.getAsciiDesc(args[iter]).toString();
+                    let description = ConvertCMD.getAsciiDesc(args[iter]).toString();
                     if(description === "NaN") {
                         iter++;
                         continue;
@@ -91,7 +91,7 @@ export default class ConvertCMD extends LWCommand {
             let row = 1;
 
             while (iter < 128) {
-                let expression = this.getAsciiChar(iter);
+                let expression = ConvertCMD.getAsciiChar(iter);
                 if (expression.length < 8) output += expression + "\t";
                 else output += expression + "\t";
                 if (iter % 16 === 15 && iter < 128-1) output += "\n" + (row++) + "...\t";
@@ -124,7 +124,7 @@ export default class ConvertCMD extends LWCommand {
         return "Getting data ...";
     }
 
-    getAsciiChar(code) {
+    static getAsciiChar(code) {
         let codes = {
             0: "[NUL]",
             1: "[SOH]",
@@ -169,7 +169,7 @@ export default class ConvertCMD extends LWCommand {
         }
     }
 
-    getAsciiDesc(char) {
+    static getAsciiDesc(char) {
         let descriptions = {
             "[NUL]":"0 (Null Character)",
             "[SOH]":"1 (Start of Header)",
@@ -213,6 +213,4 @@ export default class ConvertCMD extends LWCommand {
             return char.charCodeAt(0);
         }
     }
-
-
 }
