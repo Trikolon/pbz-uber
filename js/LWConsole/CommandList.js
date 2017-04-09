@@ -29,12 +29,13 @@ import HistoryCMD from "./Commands/HistoryCMD";
 
 /**
  * Stores command properties + logic and provides method to query them
- * @param lwConsole reference to console-object, required by some commands
- * @param config reference to configuration object used to store command-states
- * @constructor
  */
 export default class CommandList {
 
+    /**
+     * @param {LWConsole} lwConsole reference to console-object, required by some commands
+     * @constructor
+     */
     constructor(lwConsole) {
         this._lwConsole = lwConsole;
 
@@ -90,10 +91,12 @@ export default class CommandList {
         return this._lwConsole;
     }
 
-    get config() {
-        return this._config;
-    }
 
+    /**
+     * Searches command list for command matching commandName
+     * @param {String} commandName - Command name to search for
+     * @returns {function} Returns matching command handler function or unknown-command handler
+     */
     getCommandHandler(commandName) {
         let result = this.getCommand(commandName);
         if (result) {
@@ -107,6 +110,11 @@ export default class CommandList {
         }
     }
 
+    /**
+     * Searches command list for command matching commandName
+     * @param {String} commandName  - Command name to search for
+     * @returns {undefined || LWCommand} Returns matching command or undefined if no match
+     */
     getCommand(commandName) {
         commandName = commandName.toLowerCase();
         for (let i = 0; i < this._commands.length; i++) {
@@ -116,6 +124,11 @@ export default class CommandList {
         }
     }
 
+    /**
+     * Searches command list for commands which names start with str
+     * @param {String} str - String to match with
+     * @returns {Array} - Array of suitable commands
+     */
     getMatchingCommands(str) {
         str = str.toLowerCase();
         let cmdList = [];

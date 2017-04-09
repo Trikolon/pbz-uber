@@ -21,11 +21,11 @@
  export default class LWCommand {
 
     /**
-     * @param name identifier of the command, shown in help
-     * @param description shown in help
-     * @param usage usage shown in help
-     * @param author name of the author, preferably nickname
-     * @param visible boolean flag, should the command be shown in the command list?
+     * @param {String} name - identifier of the command, shown in help
+     * @param {String} description - shown in help
+     * @param {String} usage - usage shown in help
+     * @param {String} author - name of the author, preferably nickname
+     * @param {boolean} visible - boolean flag, should the command be shown in the command list?
      */
      constructor(name, description, usage, author, visible = true) {
          if (new.target === LWCommand) {
@@ -40,7 +40,7 @@
 
     /**
      * Method called when the user executes a matching command
-     * @param args string-array, arguments provided by user excluding command name
+     * @param {Array} args - string-array, arguments provided by user excluding command name
      * @returns {Error}
      */
      run(args) {
