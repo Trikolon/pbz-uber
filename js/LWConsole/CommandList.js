@@ -71,7 +71,7 @@ export default class CommandList {
                 (args) => {
                     let output = "Paul:\t'Robert ist der Beste!'";
                     if (args.length > 0)
-                        output += "\nRobert:\t'" + args.join(" ") + "'";
+                        output += `\nRobert:\t'${args.join(" ")}'`;
                     else {
                         output += "\nThere was no response...";
                     }
@@ -98,7 +98,7 @@ export default class CommandList {
      * @returns {function} Returns matching command handler function or unknown-command handler
      */
     getCommandHandler(commandName) {
-        let result = this.getCommand(commandName);
+        const result = this.getCommand(commandName);
         if (result) {
             return result.handler;
         }
@@ -113,7 +113,7 @@ export default class CommandList {
     /**
      * Searches command list for command matching commandName
      * @param {String} commandName  - Command name to search for
-     * @returns {undefined || LWCommand} Returns matching command or undefined if no match
+     * @returns {undefined | LWCommand} Returns matching command or undefined if no match
      */
     getCommand(commandName) {
         commandName = commandName.toLowerCase();
@@ -131,7 +131,7 @@ export default class CommandList {
      */
     getMatchingCommands(str) {
         str = str.toLowerCase();
-        let cmdList = [];
+        const cmdList = [];
         for (let i = 0; i < this._commands.length; i++) {
             if (this._commands[i].name.startsWith(str)) {
                 cmdList.push(this._commands[i]);

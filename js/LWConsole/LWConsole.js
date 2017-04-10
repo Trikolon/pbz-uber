@@ -25,9 +25,9 @@ import config from "./ConsoleConfig";
 export default class LWConsole {
 
     /**
-     * @param consoleDiv -  dom of div holding the console
-     * @param consoleOutDOM - dom of text-area for console-output
-     * @param consoleInDOM - dom of text-input for console-input
+     * @param {HTMLElement} consoleDiv -  dom of div holding the console
+     * @param {HTMLElement} consoleOutDOM - dom of text-area for console-output
+     * @param {HTMLElement} consoleInDOM - dom of text-input for console-input
      * @param {String} hostname - included in motd, may have further use in the future
      * @constructor
      */
@@ -45,7 +45,7 @@ export default class LWConsole {
             visitCount = 1;
         }
         config().set("visitCount", visitCount);
-        this.motd = "Welcome to " + hostname + "! [Visit " + visitCount + "]\nType 'help' for a list of commands.\n";
+        this.motd = `Welcome to ${hostname}! [Visit ${visitCount}]\nType 'help' for a list of commands.\n`;
         config().set("motd", this.motd);
 
         this._consoleOut = ""; //Content of console-out text-area
@@ -77,7 +77,7 @@ export default class LWConsole {
 
     /**
      * Getter for command history object
-     * @returns {CommandHistory}
+     * @returns {CommandHistory} Command history
      */
     get cmdHistory() {
         return this._cmdHistory;
@@ -85,38 +85,36 @@ export default class LWConsole {
 
     /**
      * Handles key-press events for console
-     * @param event - event including key-code being evaluated
+     * @param {Object} event - event including key-code being evaluated
+     * @returns {undefined}
      * @private
      */
     _keyHandler(event) {
-        let consoleInDOM = this.consoleInDOM;
-        if (consoleInDOM === document.activeElement) {
+        if (this.consoleInDOM === document.activeElement) {
             switch (event.keyCode) {
                 //enter => send cmd
                 case 13: {
                     event.preventDefault();
-                    let value = consoleInDOM.value;
-                    if (value === "") { //Do not trigger cmd when input is empty
-                        return;
+                    if (this.consoleInDOM.value !== "") { //Do not trigger cmd when input is empty
+                        this.sendCMD(this.consoleInDOM.value);
+                        this.consoleInDOM.value = ""; //Empty after cmd sent
                     }
-                    this.sendCMD(value);
-                    consoleInDOM.value = ""; //Empty after cmd sent
                     break;
                 }
                 //keyup => traverse through history (back in time)
                 case 38: {
                     event.preventDefault();
-                    let prev = this._cmdHistoryIterator.prev();
+                    const prev = this._cmdHistoryIterator.prev();
                     if (prev !== undefined) // only set if not undefined
-                        consoleInDOM.value = prev;
+                        this.consoleInDOM.value = prev;
                     break;
                 }
                 //keydown => traverse through history (forward in time)
                 case 40: {
                     event.preventDefault();
-                    let next = this._cmdHistoryIterator.next();
+                    const next = this._cmdHistoryIterator.next();
                     if (next !== undefined) // only set if not undefined
-                        consoleInDOM.value = next;
+                        this.consoleInDOM.value = next;
                     break;
                 }
                 //tab => auto complete
@@ -132,24 +130,24 @@ export default class LWConsole {
     /**
      * Auto-complete console input by querying command list
      * @private
+     * @returns {undefined}
      */
     _autoComplete() {
-        let consoleInDOM = this.consoleInDOM;
-        if (consoleInDOM.value !== "") { //Require at least one character for auto-complete
-            let cmdList = this._cmdList.getMatchingCommands(consoleInDOM.value); //Get commands matching input
+        if (this.consoleInDOM.value !== "") { //Require at least one character for auto-complete
+            const cmdList = this._cmdList.getMatchingCommands(this.consoleInDOM.value); //Get commands matching input
             if (cmdList.length > 0) {
                 if (cmdList.length === 1) { //Single command match
-                    if (consoleInDOM.value === cmdList[0].name) { //If input fully matches cmd
-                        consoleInDOM.value = cmdList[0].name + (cmdList[0].usage ? " " + cmdList[0].usage : ""); // Show usage
+                    if (this.consoleInDOM.value === cmdList[0].name) { //If input fully matches cmd
+                        this.consoleInDOM.value = cmdList[0].name + (cmdList[0].usage ? ` ${cmdList[0].usage}` : ""); // Show usage
                     }
                     else {
-                        consoleInDOM.value = cmdList[0].name; // Else complete cmd
+                        this.consoleInDOM.value = cmdList[0].name; // Else complete cmd
                     }
                 }
                 else { //Multiple commands match, print a list of them to consoleOUT
                     let cmdListStr = "";
                     cmdList.forEach((cmd) => {
-                        cmdListStr += cmd.name + " "
+                        cmdListStr += `${cmd.name} `;
                     });
                     this.print(cmdListStr);
                 }
@@ -161,6 +159,7 @@ export default class LWConsole {
     /**
      * Changes visibility of console-div depending on parameter
      * @param {boolean} state -  true = visible; false = hidden
+     * @returns {undefined}
      */
     show(state) {
         if (state) {
@@ -176,7 +175,7 @@ export default class LWConsole {
 
     /**
      * Getter for visibility state
-     * @returns {boolean}
+     * @returns {boolean} - Visibility state from config
      */
     isVisible() {
         return config().get("consoleOpen");
@@ -185,10 +184,11 @@ export default class LWConsole {
     /**
      * Prints message to console and updates cursor position (scroll)
      * @param {String} str -  message to print
+     * @returns {undefined}
      */
     print(str) {
         if (str && str !== "") {
-            this._consoleOut += str + "\n"; //Append string to print and newline
+            this._consoleOut += `${str}\n`; //Append string to print and newline
             this.consoleOutDOM.value = this._consoleOut; //update textarea text
             this.consoleOutDOM.scrollTop = this.consoleOutDOM.scrollHeight; //scroll down in textarea for console-like behavior
         }
@@ -196,6 +196,7 @@ export default class LWConsole {
 
     /**
      * Clears console content
+     * @returns {undefined}
      */
     clear() {
         this._consoleOut = "";
@@ -205,10 +206,11 @@ export default class LWConsole {
     /**
      * Executes user cmd and updates output accordingly
      * @param {String} cmd - raw cmd by user
+     * @returns {undefined}
      */
     sendCMD(cmd) {
-        let splitCMD = cmd.split(" "); //split cmd by space (cmd name, args)
-        this.print("> " + cmd); //Print cmd from user
+        const splitCMD = cmd.split(" "); //split cmd by space (cmd name, args)
+        this.print(`> ${cmd}`); //Print cmd from user
         this.print(this.executeCMD(splitCMD)); //Print result of cmd-execution
         this._cmdHistory.add(cmd); //Save cmd
         this._cmdHistoryIterator = this._cmdHistory.iterator(); // update iterator
@@ -221,10 +223,10 @@ export default class LWConsole {
      * @returns {String} - result of command
      */
     executeCMD(cmdArr) {
-        let cmdName = cmdArr[0]; //Name
+        const [cmdName] = cmdArr; //Name
         cmdArr.shift(); //args
 
-        let cmd = this._cmdList.getCommand(cmdName); //Fetch command
+        const cmd = this._cmdList.getCommand(cmdName); //Fetch command
         if (!cmd) {
             return "Unknown command.";
         }
@@ -234,11 +236,11 @@ export default class LWConsole {
         catch (e) {
             if (e instanceof Error) {
                 if (e instanceof UsageError) {
-                    return (e.message ? e.message + "\n" : "") +
-                        (cmd.usage && cmd.usage !== "" ? "Usage: " + cmd.name + " " + cmd.usage : "Invalid usage.");
+                    return (e.message ? `${e.message} \n` : "") +
+                        (cmd.usage && cmd.usage !== "" ? `Usage: ${cmd.name} ${cmd.usage}` : "Invalid usage.");
                 }
                 else {
-                    return e.name + ": " + e.message;
+                    return `${e.name}: ${e.message}`;
                 }
             }
             else { // This only happens when a command is not throwing an error-object (bad practise)
