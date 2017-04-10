@@ -29,7 +29,7 @@ export default class ConvertCMD extends LWCommand {
             throw new UsageError();
         }
 
-        let mode = args[0];
+        const [mode] = args;
         args.shift();
         switch (mode) {
             case "base":
@@ -46,8 +46,8 @@ export default class ConvertCMD extends LWCommand {
             throw new UsageError("Parameters: <FromBase> <ToBase> <Number>");
         }
         //if fromBase, toBase and a Number is specified
-        let fromBase = parseInt(args[0], 10);
-        let toBase = parseInt(args[1], 10);
+        const fromBase = parseInt(args[0], 10);
+        const toBase = parseInt(args[1], 10);
         return parseInt(args[2], fromBase).toString(toBase).toUpperCase();
     }
 
@@ -57,7 +57,7 @@ export default class ConvertCMD extends LWCommand {
             let output = "";
             let iter = 0;
             while (iter < args.length) {
-                let number = parseInt(args[iter], 10);
+                const number = parseInt(args[iter], 10);
                 if(!isNaN(number)){
                     if(number>=128) {
                         throw new UsageError("Number is too large (not included in ASCII range)");
@@ -65,7 +65,7 @@ export default class ConvertCMD extends LWCommand {
                     output += ConvertCMD.getAsciiChar(number);
                     
                 } else {
-                    let description = ConvertCMD.getAsciiDesc(args[iter]).toString();
+                    const description = ConvertCMD.getAsciiDesc(args[iter]).toString();
                     if(description === "NaN") {
                         iter++;
                         continue;
@@ -83,7 +83,7 @@ export default class ConvertCMD extends LWCommand {
             let output = "\t";
             let iter = 0;
             while(iter<16) {
-                output += "..." + parseInt(iter++, 10).toString(16).toUpperCase() + "\t";
+                output += `... ${parseInt(iter++, 10).toString(16).toUpperCase()}\t`;
             }
 
             output += "\n0...\t";
@@ -91,10 +91,11 @@ export default class ConvertCMD extends LWCommand {
             let row = 1;
 
             while (iter < 128) {
-                let expression = ConvertCMD.getAsciiChar(iter);
-                if (expression.length < 8) output += expression + "\t";
-                else output += expression + "\t";
-                if (iter % 16 === 15 && iter < 128-1) output += "\n" + (row++) + "...\t";
+                const expression = ConvertCMD.getAsciiChar(iter);
+                output += `${expression}\t`;
+                if (iter % 16 === 15 && iter < 128 - 1) {
+                    output += "\n" + (row++) + "...\t";
+                }
                 iter++;
             }
             return output;
