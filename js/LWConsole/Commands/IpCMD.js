@@ -42,7 +42,7 @@ export default class IpCMD extends LWCommand {
             }
             this.print(request.responseText);
         };
-        request.onerror = function (e) {
+        request.onerror = (e) => {
             console.error(e);
             this.print("Error: Could not send request to ipinfo.io. Check your internet connection.");
         };
