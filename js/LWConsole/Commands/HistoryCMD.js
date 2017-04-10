@@ -33,9 +33,9 @@ export default class HistoryCMD extends LWCommand {
         if (args.length === 0) {
             if (this._cmdHistory) {
                 let result = "";
-                let history = this._cmdHistory.get();
+                const history = this._cmdHistory.get();
                 for (let i = 0; i < history.length; i++) {
-                    result += i + 1 + ": " + history[i];
+                    result += `${i + 1}: ${history[i]}`;
                     if (i !== history.length - 1) {
                         result += "\n";
                     }

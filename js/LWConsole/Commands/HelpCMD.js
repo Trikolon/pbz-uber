@@ -30,19 +30,16 @@ export default class HelpCMD extends LWCommand {
             let msg = "Available commands:";
             for (let i = 0; i < this.cmdList._commands.length; i++) {
                 if (this.cmdList._commands[i].visible) {
-                    msg += "\n" + this.cmdList._commands[i].name + ": " + this.cmdList._commands[i].description;
+                    msg += `\n ${this.cmdList._commands[i].name}: ${this.cmdList._commands[i].description}`;
                 }
             }
             return msg;
         }
         //Show usage for single cmd
-        let cmd = this.cmdList.getCommand(args[0]);
+        const cmd = this.cmdList.getCommand(args[0]);
         if (!cmd) {
             return "No help page available: Unknown command.";
         }
-        return cmd.name + ":" +
-            (cmd.description && cmd.description !== "" ? "\nDescription: " + cmd.description : "") +
-            (cmd.usage && cmd.description !== "" ? "\nUsage: " + cmd.name + " " + cmd.usage : "") +
-            (cmd.author && cmd.author !== "" ? "\nAuthor: " + cmd.author : "");
+        return `${cmd.name}:${(cmd.description && cmd.description !== "" ? `\nDescription: ${cmd.description}` : "")}${(cmd.usage && cmd.description !== "" ? `\nUsage: ${cmd.name} ${cmd.usage}` : "")}${(cmd.author && cmd.author !== "" ? `\nAuthor: ${cmd.author}` : "")}`;
     }
 }

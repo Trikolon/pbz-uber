@@ -23,7 +23,7 @@ export default class MotdCMD extends LWCommand {
     }
 
     run(args) {
-        let motd = config().get("motd");
+        const motd = config().get("motd");
         if (motd) {
             return motd;
         }
