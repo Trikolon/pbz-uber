@@ -29,7 +29,7 @@
      */
      constructor(name, description, usage, author, visible = true) {
          if (new.target === LWCommand) {
-             throw new TypeError("Can't construct instance of abstract class " + new.target);
+             throw new TypeError(`Can't construct instance of abstract class ${new.target}`);
          }
          this.name = name;
          this.description = description;
@@ -42,7 +42,7 @@
      * Method called when the user executes a matching command
      * @abstract
      * @param {Array} args - string-array, arguments provided by user excluding command name
-     * @returns {String}
+     * @returns {String} - Result of command execution for display
      */
      run(args) {
         throw new Error("No handler set");

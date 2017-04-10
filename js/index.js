@@ -23,7 +23,7 @@ require("font-awesome-webpack");
     console.log("%cWELCOME FELLOW DEV ~", "background: #0088ff; color: #ffffff; font-size: 24px");
     console.log("%cFeel free to contribute!\nSource: https://github.com/Trikolon/pbz-uber", "background: #0088ff; color: #ffffff");
 
-    let lwConsole = new LWConsole(
+    const lwConsole = new LWConsole(
         document.getElementById("lwConsole"),
         document.getElementById("consoleOut"),
         document.getElementById("consoleIn"),
