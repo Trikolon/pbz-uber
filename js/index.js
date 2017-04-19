@@ -15,13 +15,14 @@
  */
 
 import LWConsole from "./LWConsole/LWConsole";
+import * as log from "loglevel";
 require("font-awesome-webpack");
 
 (function () {
     "use strict";
-
-    console.log("%cWELCOME FELLOW DEV ~", "background: #0088ff; color: #ffffff; font-size: 24px");
-    console.log("%cFeel free to contribute!\nSource: https://github.com/Trikolon/pbz-uber", "background: #0088ff; color: #ffffff");
+    log.setDefaultLevel("ERROR");
+    log.info("%cWELCOME FELLOW DEV ~", "background: #0088ff; color: #ffffff; font-size: 24px");
+    log.info("%cFeel free to contribute!\nSource: https://github.com/Trikolon/pbz-uber", "background: #0088ff; color: #ffffff");
 
     const lwConsole = new LWConsole(
         document.getElementById("lwConsole"),
@@ -42,7 +43,7 @@ require("font-awesome-webpack");
     /**
      * Handler for  console shortcuts 'C'=> open and 'ESC'=> close
      */
-    document.addEventListener("keydown", function (e) {
+    document.addEventListener("keydown", (e) => {
         if (!lwConsole.isVisible() && e.keyCode === 67) {
             e.preventDefault();
             lwConsole.show(true);
