@@ -20,6 +20,7 @@ require("font-awesome-webpack");
 
 (function () {
     "use strict";
+    window.log = log;
     log.setDefaultLevel("ERROR");
     log.info("%cWELCOME FELLOW DEV ~", "background: #0088ff; color: #ffffff; font-size: 24px");
     log.info("%cFeel free to contribute!\nSource: https://github.com/Trikolon/pbz-uber", "background: #0088ff; color: #ffffff");
