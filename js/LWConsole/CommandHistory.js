@@ -49,7 +49,7 @@ export default class CommandHistory {
 
     /**
      * Adds entry to history.
-     * @param {LWCommand} entry - entry to be stored in history
+     * @param {String} entry - entry to be stored in history
      * @returns {Number} - New length of history array
      */
     add(entry) {

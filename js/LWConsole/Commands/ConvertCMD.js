@@ -38,6 +38,8 @@ export default class ConvertCMD extends LWCommand {
                 return ConvertCMD.convertAscii(args);
             case "curr":
                 return this.convertCurrency(args);
+            default:
+                throw new UsageError();
         }
     }
 
@@ -94,7 +96,7 @@ export default class ConvertCMD extends LWCommand {
                 const expression = ConvertCMD.getAsciiChar(iter);
                 output += `${expression}\t`;
                 if (iter % 16 === 15 && iter < 128 - 1) {
-                    output += "\n" + (row++) + "...\t";
+                    output += `\n${row++}...\t`;
                 }
                 iter++;
             }
@@ -107,14 +109,14 @@ export default class ConvertCMD extends LWCommand {
         if (args.length !== 3) {
             throw new UsageError("Parameters: <BaseCurrency> <ForeignCurrency> <Amount>");
         }
-        let queryUrl = "https://api.fixer.io/latest?base="+args[0]+";symbols="+args[1];
-        let request = new XMLHttpRequest();
+        const queryUrl = `https://api.fixer.io/latest?base=${args[0]};symbols=${args[1]}`;
+        const request = new XMLHttpRequest();
         request.onload = () => {
             if (request.status !== 200) {
-                this.print("\nError: fixer.io returned code " + request.status);
+                this.print(`\nError: fixer.io returned code ${request.status}`);
             }
-            let json = JSON.parse(request.responseText);
-            this.print((json.rates[args[1]] * parseFloat(args[2])) + " " + args[1]);
+            const json = JSON.parse(request.responseText);
+            this.print(`${json.rates[args[1]] * parseFloat(args[2])} ${args[1]}`);
         };
         request.onerror = function (e) {
             console.error(e);
@@ -126,7 +128,7 @@ export default class ConvertCMD extends LWCommand {
     }
 
     static getAsciiChar(code) {
-        let codes = {
+        const codes = {
             0: "[NUL]",
             1: "[SOH]",
             2: "[STX]",
@@ -171,7 +173,7 @@ export default class ConvertCMD extends LWCommand {
     }
 
     static getAsciiDesc(char) {
-        let descriptions = {
+        const descriptions = {
             "[NUL]":"0 (Null Character)",
             "[SOH]":"1 (Start of Header)",
             "[STX]":"2 (Start of Text)",
