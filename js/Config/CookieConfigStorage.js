@@ -21,17 +21,15 @@ import Cookies from "js-cookie";
  * Implements methods save and load from ConfigStorage to manage config-object in the cookies
  */
 export default class CookieConfigStorage extends ConfigStorage {
-    constructor() {
-        super(...arguments);
-    }
 
     /**
      * Trigger config refresh (reload from cookies)
      * @private
+     * @return {undefined}
      */
     _loadConfig() {
         try {
-            let result = Cookies.getJSON(this.name);
+            const result = Cookies.getJSON(this.name);
             if (typeof result === "undefined") {
                 this._resetConfig();
             }
@@ -48,6 +46,7 @@ export default class CookieConfigStorage extends ConfigStorage {
     /**
      * Store in cookies
      * @private
+     * @return {undefined}
      */
     _saveConfig() {
         Cookies.set(this.name, this._config, {expires: this.expiryTime});

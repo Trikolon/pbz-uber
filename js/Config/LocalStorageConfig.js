@@ -20,8 +20,8 @@ import ConfigStorage from "./ConfigStorage";
  * Implements methods save and load from ConfigStorage to manage config-object in the local storage of the browser
  */
 export default class LocalStorageConfig extends ConfigStorage {
-    constructor() {
-        super(...arguments);
+    constructor(...args) {
+        super(...args);
         this._disabled = typeof(Storage) === "undefined";
     }
 
@@ -29,6 +29,7 @@ export default class LocalStorageConfig extends ConfigStorage {
     /**
      * Trigger config refresh (reload from local storage)
      * @private
+     * @returns {undefined}
      */
     _loadConfig() {
         if (this._disabled) {
@@ -54,13 +55,15 @@ export default class LocalStorageConfig extends ConfigStorage {
     /**
      * Save config to local storage if possible
      * @private
+     * @returns {undefined}
      */
     _saveConfig() {
         if (this._disabled) {
             console.warn("LocalStorageConfig: local-storage not supported / allowed by browser. Data will not be saved.");
-            return;
         }
-        let configStr = JSON.stringify(this._config);
-        localStorage.setItem(this.name, configStr);
+        else {
+            const configStr = JSON.stringify(this._config);
+            localStorage.setItem(this.name, configStr);
+        }
     }
 }

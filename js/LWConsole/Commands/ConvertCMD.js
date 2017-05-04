@@ -29,43 +29,45 @@ export default class ConvertCMD extends LWCommand {
             throw new UsageError();
         }
 
-        let mode = args[0];
+        const [mode] = args;
         args.shift();
         switch (mode) {
             case "base":
-                return this.convertBase(args);
+                return ConvertCMD.convertBase(args);
             case "ascii":
-                return this.convertAscii(args);
+                return ConvertCMD.convertAscii(args);
             case "curr":
                 return this.convertCurrency(args);
+            default:
+                throw new UsageError();
         }
     }
 
-    convertBase(args) {
+    static convertBase(args) {
         if (args.length !== 3) {
             throw new UsageError("Parameters: <FromBase> <ToBase> <Number>");
         }
         //if fromBase, toBase and a Number is specified
-        let fromBase = parseInt(args[0], 10);
-        let toBase = parseInt(args[1], 10);
+        const fromBase = parseInt(args[0], 10);
+        const toBase = parseInt(args[1], 10);
         return parseInt(args[2], fromBase).toString(toBase).toUpperCase();
     }
 
-    convertAscii(args) {
+    static convertAscii(args) {
         //if there are any codes specified
         if (args.length > 0) {
             let output = "";
             let iter = 0;
             while (iter < args.length) {
-                let number = parseInt(args[iter], 10);
+                const number = parseInt(args[iter], 10);
                 if(!isNaN(number)){
                     if(number>=128) {
                         throw new UsageError("Number is too large (not included in ASCII range)");
                     }
-                    output += this.getAsciiChar(number);
+                    output += ConvertCMD.getAsciiChar(number);
                     
                 } else {
-                    let description = this.getAsciiDesc(args[iter]).toString();
+                    const description = ConvertCMD.getAsciiDesc(args[iter]).toString();
                     if(description === "NaN") {
                         iter++;
                         continue;
@@ -83,7 +85,7 @@ export default class ConvertCMD extends LWCommand {
             let output = "\t";
             let iter = 0;
             while(iter<16) {
-                output += "..." + parseInt(iter++, 10).toString(16).toUpperCase() + "\t";
+                output += `... ${parseInt(iter++, 10).toString(16).toUpperCase()}\t`;
             }
 
             output += "\n0...\t";
@@ -91,10 +93,11 @@ export default class ConvertCMD extends LWCommand {
             let row = 1;
 
             while (iter < 128) {
-                let expression = this.getAsciiChar(iter);
-                if (expression.length < 8) output += expression + "\t";
-                else output += expression + "\t";
-                if (iter % 16 === 15 && iter < 128-1) output += "\n" + (row++) + "...\t";
+                const expression = ConvertCMD.getAsciiChar(iter);
+                output += `${expression}\t`;
+                if (iter % 16 === 15 && iter < 128 - 1) {
+                    output += `\n${row++}...\t`;
+                }
                 iter++;
             }
             return output;
@@ -106,14 +109,14 @@ export default class ConvertCMD extends LWCommand {
         if (args.length !== 3) {
             throw new UsageError("Parameters: <BaseCurrency> <ForeignCurrency> <Amount>");
         }
-        let queryUrl = "https://api.fixer.io/latest?base="+args[0]+";symbols="+args[1];
-        let request = new XMLHttpRequest();
+        const queryUrl = `https://api.fixer.io/latest?base=${args[0]};symbols=${args[1]}`;
+        const request = new XMLHttpRequest();
         request.onload = () => {
             if (request.status !== 200) {
-                this.print("\nError: fixer.io returned code " + request.status);
+                this.print(`\nError: fixer.io returned code ${request.status}`);
             }
-            let json = JSON.parse(request.responseText);
-            this.print((json.rates[args[1]] * parseFloat(args[2])) + " " + args[1]);
+            const json = JSON.parse(request.responseText);
+            this.print(`${json.rates[args[1]] * parseFloat(args[2])} ${args[1]}`);
         };
         request.onerror = function (e) {
             console.error(e);
@@ -124,8 +127,8 @@ export default class ConvertCMD extends LWCommand {
         return "Getting data ...";
     }
 
-    getAsciiChar(code) {
-        let codes = {
+    static getAsciiChar(code) {
+        const codes = {
             0: "[NUL]",
             1: "[SOH]",
             2: "[STX]",
@@ -169,8 +172,8 @@ export default class ConvertCMD extends LWCommand {
         }
     }
 
-    getAsciiDesc(char) {
-        let descriptions = {
+    static getAsciiDesc(char) {
+        const descriptions = {
             "[NUL]":"0 (Null Character)",
             "[SOH]":"1 (Start of Header)",
             "[STX]":"2 (Start of Text)",
@@ -213,6 +216,4 @@ export default class ConvertCMD extends LWCommand {
             return char.charCodeAt(0);
         }
     }
-
-
 }

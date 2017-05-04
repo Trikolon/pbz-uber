@@ -21,15 +21,15 @@
  export default class LWCommand {
 
     /**
-     * @param name identifier of the command, shown in help
-     * @param description shown in help
-     * @param usage usage shown in help
-     * @param author name of the author, preferably nickname
-     * @param visible boolean flag, should the command be shown in the command list?
+     * @param {String} name - identifier of the command, shown in help
+     * @param {String | undefined} description - shown in help
+     * @param {String | undefined} usage - usage shown in help
+     * @param {String | undefined} author - name of the author, preferably nickname
+     * @param {boolean} visible - boolean flag, should the command be shown in the command list?
      */
      constructor(name, description, usage, author, visible = true) {
          if (new.target === LWCommand) {
-             throw new TypeError("Can't construct instance of abstract class " + new.target);
+             throw new TypeError(`Can't construct instance of abstract class ${new.target}`);
          }
          this.name = name;
          this.description = description;
@@ -40,10 +40,11 @@
 
     /**
      * Method called when the user executes a matching command
-     * @param args string-array, arguments provided by user excluding command name
-     * @returns {Error}
+     * @abstract
+     * @param {Array} args - string-array, arguments provided by user excluding command name
+     * @returns {String} - Result of command execution for display
      */
      run(args) {
-         return new Error("No handler set");
+        throw new Error("No handler set");
      }
  }

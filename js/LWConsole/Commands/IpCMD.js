@@ -30,19 +30,19 @@ export default class IpCMD extends LWCommand {
         }
 
         if (args.length === 1) { //one arg => query arg ip
-            queryUrl += args[0] + "/"
+            queryUrl += `${args[0]}/`;
         }
 
         queryUrl += "json";
 
-        let request = new XMLHttpRequest();
+        const request = new XMLHttpRequest();
         request.onload = () => {
             if (request.status !== 200) {
-                this.print("\nError: ipinfo.io returned code " + request.status);
+                this.print(`\nError: ipinfo.io returned code ${request.status}`);
             }
             this.print(request.responseText);
         };
-        request.onerror = function (e) {
+        request.onerror = (e) => {
             console.error(e);
             this.print("Error: Could not send request to ipinfo.io. Check your internet connection.");
         };

@@ -46,7 +46,7 @@ rules:
   no-unsafe-finally: off
   no-unsafe-negation: off
   use-isnan: error
-  valid-jsdoc: off
+  valid-jsdoc: error
   valid-typeof: error
 
   # Best Practices
@@ -227,7 +227,7 @@ rules:
   padded-blocks: off
   quote-props: off
   quotes: off
-  require-jsdoc: off
+  require-jsdoc: error
   semi-spacing: off
   semi: off
   sort-keys: off
@@ -243,35 +243,35 @@ rules:
   wrap-regex: off
 
   # ECMAScript 6
-  arrow-body-style: off
+  arrow-body-style: error
   arrow-parens: off
-  arrow-spacing: off
-  constructor-super: off
+  arrow-spacing: error
+  constructor-super: error
   generator-star-spacing: off
   no-class-assign: off
-  no-confusing-arrow: off
-  no-const-assign: off
-  no-dupe-class-members: off
-  no-duplicate-imports: off
-  no-new-symbol: off
-  no-restricted-imports: off
-  no-this-before-super: off
-  no-useless-computed-key: off
-  no-useless-constructor: off
-  no-useless-rename: off
-  no-var: off
-  object-shorthand: off
-  prefer-arrow-callback: off
-  prefer-const: off
-  prefer-destructuring: off
-  prefer-numeric-literals: off
-  prefer-rest-params: off
-  prefer-reflect: off
-  prefer-spread: off
-  prefer-template: off
-  require-yield: off
-  rest-spread-spacing: off
+  no-confusing-arrow: error
+  no-const-assign: error
+  no-dupe-class-members: error
+  no-duplicate-imports: error
+  no-new-symbol: error
+  no-restricted-imports: error
+  no-this-before-super: error
+  no-useless-computed-key: error
+  no-useless-constructor: error
+  no-useless-rename: error
+  no-var: error
+  object-shorthand: error
+  prefer-arrow-callback: error
+  prefer-const: error
+  prefer-destructuring: error
+  prefer-numeric-literals: error
+  prefer-rest-params: error
+  prefer-reflect: error
+  prefer-spread: error
+  prefer-template: error
+  require-yield: error
+  rest-spread-spacing: error
   sort-imports: off
-  symbol-description: off
-  template-curly-spacing: off
-  yield-star-spacing: off
+  symbol-description: error
+  template-curly-spacing: error
+  yield-star-spacing: error
