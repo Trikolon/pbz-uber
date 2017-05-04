@@ -26,7 +26,7 @@ export default class EffectCMD extends LWCommand {
         if (config(this.name).get("maximize")) {
             this.run(["maximize", "true"]);
         }
-        let flicker = config(this.name).get("flicker");
+        const flicker = config(this.name).get("flicker");
 
         if (typeof flicker === "undefined") {
             config(this.name).set("flicker", true);
@@ -55,13 +55,13 @@ export default class EffectCMD extends LWCommand {
         else { // State overwrite
             state = args[1] === "true";
         }
-        this.setEffect(args[0], state); //this can throw usage-error (caught by execution handler)
+        EffectCMD.setEffect(args[0], state); //this can throw usage-error (caught by execution handler)
 
         config(this.name).set(args[0], state);
-        return "Effect " + args[0] + " turned " + (state ? "ON" : "OFF");
+        return `Effect ${args[0]} turned ${(state ? "ON" : "OFF")}`;
     }
 
-    setEffect(effect, state) {
+    static setEffect(effect, state) {
         switch (effect) {
             case "invert": {
                 let invertStr;
@@ -71,12 +71,12 @@ export default class EffectCMD extends LWCommand {
                 else {
                     invertStr = "0%";
                 }
-                document.getElementById("content").style.filter = "invert(" + invertStr + ")";
+                document.getElementById("content").style.filter = `invert(${invertStr})`;
                 break;
             }
             case "flicker": {
-                let contentDom = document.getElementById("content");
-                let containsClass = contentDom.className.indexOf("monitor") !== -1;
+                const contentDom = document.getElementById("content");
+                const containsClass = contentDom.className.indexOf("monitor") !== -1;
                 if (state) {
                     if (!containsClass) {
                         contentDom.className += "monitor";
@@ -91,7 +91,7 @@ export default class EffectCMD extends LWCommand {
                 break;
             }
             case "maximize": {
-                let navigationDom = document.getElementById("navigation");
+                const navigationDom = document.getElementById("navigation");
                 if (state) {
                     navigationDom.style.display = "none";
                 }

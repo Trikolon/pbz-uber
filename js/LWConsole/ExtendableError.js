@@ -14,6 +14,9 @@
  limitations under the License.
  */
 
+/**
+ * ES6 extendable Error Class
+ */
 export default class ExtendableError extends Error {
     constructor(message) {
         super(message);

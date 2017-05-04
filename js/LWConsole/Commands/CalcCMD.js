@@ -23,9 +23,9 @@ export default class CalcCMD extends LWCommand {
     }
 
     run(args) {
-        args = args.join("");
-        if (args.length > 0) {
-            let expResult = CalcCMD.parseExpression(args);
+        const argString = args.join("");
+        if (argString.length > 0) {
+            const expResult = CalcCMD.parseExpression(argString);
             if (expResult === undefined || isNaN(expResult))
                 throw new UsageError("This is not a valid expression!");
             return expResult.toString();
@@ -35,7 +35,7 @@ export default class CalcCMD extends LWCommand {
     }
 
     static parseExpression(expression) {
-        let regex = /([^\d.()+\-*\/^|&%=!]|([^=!]=[^=]))/;
+        const regex = /([^\d.()+\-*\/^|&%=!]|([^=!]=[^=]))/;
         if (!regex.test(expression)) {
 // eslint-disable-next-line no-eval
             return eval(expression);

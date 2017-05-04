@@ -41,7 +41,7 @@ export default class CommandHistory {
 
     /**
      * Returns the size of the history.
-     * @returns {Number}
+     * @returns {Number} - Length of history array
      */
     size() {
         return this._history.length;
@@ -49,8 +49,8 @@ export default class CommandHistory {
 
     /**
      * Adds entry to history.
-     * @param entry - entry to be stored in history
-     * @returns {Number}
+     * @param {String} entry - entry to be stored in history
+     * @returns {Number} - New length of history array
      */
     add(entry) {
         return this._history.push(entry);
@@ -83,8 +83,8 @@ class HistoryIterator {
     }
 
     /**
-     * Returns true, if there is a next element to get via next(), false otherwise.
-     * @returns {boolean}
+     * Evaluates if there is an element after the current one
+     * @returns {boolean} - true, if there is a next element to get via next(), false otherwise.
      */
     hasNext() {
         return this._i < (this._history);
@@ -96,7 +96,7 @@ class HistoryIterator {
      * @returns {string | undefined} requested entry, undefined if no next entry exists
      */
     next() {
-        let next = this._history.get(++this._i);
+        const next = this._history.get(++this._i);
         if (next === undefined)
             this._i--;
         return next;
@@ -108,7 +108,7 @@ class HistoryIterator {
      * @returns {string | undefined} requested entry, undefined if no previous entry exists
      */
     prev() {
-        let prev = this._history.get(--this._i);
+        const prev = this._history.get(--this._i);
         if (prev === undefined)
             this._i++;
         return prev;

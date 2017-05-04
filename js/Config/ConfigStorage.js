@@ -21,9 +21,9 @@
 export default class ConfigStorage {
 
     /**
-     * @param name parent key of config object
-     * @param expiryTime how long should the data be kept in storage
-     * @param defaultConfig initial state for config object, also used for reset
+     * @param {String} name - parent key of config object
+     * @param {Number} expiryTime - how long should the data be kept in storage
+     * @param {Object} defaultConfig initial state for config object, also used for reset
      */
     constructor(name = "consoleConfig", expiryTime = 14, defaultConfig = {}) {
         if (new.target === ConfigStorage) {
@@ -39,7 +39,7 @@ export default class ConfigStorage {
     /**
      * Store a value in config by key
      * This triggers a cookie-write
-     * @param key
+     * @param {String} key
      * @param value
      */
     set(key, value) {
@@ -53,9 +53,9 @@ export default class ConfigStorage {
     }
 
     /**
-     * Get a value from config by key
-     * @param key
-     * @returns {*}
+     * Get a value from config by key, returns undefined if key does not match
+     * @param {String} key
+     * @returns {String || undefined}
      */
     get(key) {
         if (this._config.hasOwnProperty(key)) {
@@ -66,7 +66,7 @@ export default class ConfigStorage {
 
     /**
      * Reset config to default values
-     * @type {_resetConfig}
+     * @private
      */
     _resetConfig() {
         this._config = {};
@@ -80,13 +80,19 @@ export default class ConfigStorage {
     }
 
     /**
-     * Trigger config refresh (reload from cookies)
-     * @type {getConfig}
+     * Trigger config refresh (reload from storage)
+     * @private
+     * @abstract
      */
     _loadConfig() {
         throw new Error("Abstract method call");
     }
 
+    /**
+     * Trigger config save to storage
+     * @private
+     * @abstract
+     */
     _saveConfig() {
         throw new Error("Abstract method call");
     }

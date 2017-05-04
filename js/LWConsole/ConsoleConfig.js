@@ -21,12 +21,9 @@ import ConfigStorage from "../Config/LocalStorageConfig";
  * Could be extended in the future to support cmd-scopes
  */
 class ConsoleConfig extends ConfigStorage {
-    constructor(name) {
-        super(name);
-    }
 }
 
-let instance = {
+const instance = {
     default: undefined,
     custom: {}
 };

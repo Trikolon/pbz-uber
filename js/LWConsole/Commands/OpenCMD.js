@@ -26,7 +26,7 @@ export default class OpenCMD extends LWCommand {
         if (args.length !== 1) {
             throw new UsageError();
         }
-        let urls = {
+        const urls = {
             "keybase": "//keybase.io/pbz",
             "github": "//github.com/Trikolon",
             "twitter": "//twitter.com/deppaws",
@@ -39,6 +39,6 @@ export default class OpenCMD extends LWCommand {
             throw new UsageError("Sorry, I don't know this service");
         }
         window.open(urls[args[0]]);
-        return args[0] + " opened.";
+        return `${args[0]} opened.`
     }
 }
