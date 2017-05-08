@@ -16,6 +16,7 @@
 
 import LWCommand from "../LWCommand";
 import UsageError from "../UsageError";
+import * as log from "loglevel";
 
 export default class IpCMD extends LWCommand {
     constructor(print) {
@@ -36,14 +37,19 @@ export default class IpCMD extends LWCommand {
         queryUrl += "json";
 
         const request = new XMLHttpRequest();
+        request.timeout = 4000;
         request.onload = () => {
             if (request.status !== 200) {
                 this.print(`\nError: ipinfo.io returned code ${request.status}`);
             }
             this.print(request.responseText);
         };
+        request.ontimeout = (e) => {
+            log.error(e);
+            this.print("Error: Could not get data from ipinfo.io. Timeout");
+        };
         request.onerror = (e) => {
-            console.error(e);
+            log.error(e);
             this.print("Error: Could not send request to ipinfo.io. Check your internet connection.");
         };
         request.open("GET", queryUrl, true);
