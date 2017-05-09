@@ -15,7 +15,7 @@
  */
 
 /**
- * ES6 extendable Error Class
+ * ES6 extendable Error Class.
  */
 export default class ExtendableError extends Error {
     constructor(message) {

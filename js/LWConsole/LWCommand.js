@@ -15,16 +15,16 @@
  */
 
 /**
- * Abstract class for LWConsole commands
- * Implemented commands inherit from this
+ * Abstract class for LWConsole commands.
+ * Implemented commands inherit from this.
  */
  export default class LWCommand {
 
     /**
-     * @param {String} name - identifier of the command, shown in help
-     * @param {String | undefined} description - shown in help
-     * @param {String | undefined} usage - usage shown in help
-     * @param {String | undefined} author - name of the author, preferably nickname
+     * @param {String} name - identifier of the command, shown in help.
+     * @param {String | undefined} description - shown in help.
+     * @param {String | undefined} usage - usage shown in help.
+     * @param {String | undefined} author - name of the author, preferably nickname.
      * @param {boolean} visible - boolean flag, should the command be shown in the command list?
      */
      constructor(name, description, usage, author, visible = true) {
@@ -39,10 +39,10 @@
      }
 
     /**
-     * Method called when the user executes a matching command
+     * Method called when the user executes a matching command.
      * @abstract
-     * @param {Array} args - string-array, arguments provided by user excluding command name
-     * @returns {String} - Result of command execution for display
+     * @param {Array} args - string-array, arguments provided by user excluding command name.
+     * @returns {String} - Result of command execution for display.
      */
      run(args) {
         throw new Error("No handler set");

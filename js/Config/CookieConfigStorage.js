@@ -16,14 +16,15 @@
 
 import ConfigStorage from "./ConfigStorage";
 import Cookies from "js-cookie";
+import * as log from "loglevel";
 
 /**
- * Implements methods save and load from ConfigStorage to manage config-object in the cookies
+ * Implements methods save and load from ConfigStorage to manage config-object in the cookies.
  */
 export default class CookieConfigStorage extends ConfigStorage {
 
     /**
-     * Trigger config refresh (reload from cookies)
+     * Trigger config refresh (reload from cookies).
      * @private
      * @return {undefined}
      */
@@ -38,13 +39,13 @@ export default class CookieConfigStorage extends ConfigStorage {
             }
         }
         catch (e) {
-            console.error("ConfigStorage: Error while getting config from cookies");
+            log.error("ConfigStorage: Error while getting config from cookies");
             this._resetConfig();
         }
     }
 
     /**
-     * Store in cookies
+     * Store in cookies.
      * @private
      * @return {undefined}
      */

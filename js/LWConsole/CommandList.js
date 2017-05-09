@@ -27,12 +27,12 @@ import WikiCMD from "./Commands/WikiCMD";
 import HistoryCMD from "./Commands/HistoryCMD";
 
 /**
- * Stores command properties + logic and provides method to query them
+ * Stores command properties + logic and provides method to query them.
  */
 export default class CommandList {
 
     /**
-     * @param {LWConsole} lwConsole reference to console-object, required by some commands
+     * @param {LWConsole} lwConsole - reference to console-object, required by some commands.
      * @constructor
      */
     constructor(lwConsole) {
@@ -94,8 +94,8 @@ export default class CommandList {
     }
 
     /**
-     * Checks command list for duplicates (two or more commands with the same name)
-     * @returns {String[]} List of duplicate command names found, can be empty
+     * Checks command list for duplicates (two or more commands with the same name).
+     * @returns {String[]} - List of duplicate command names found, can be empty.
      * @private
      */
     _checkDuplicateKeys() {
@@ -119,9 +119,9 @@ export default class CommandList {
 
 
     /**
-     * Searches command list for command matching commandName
-     * @param {String} commandName - Command name to search for
-     * @returns {function} Returns matching command handler function or unknown-command handler
+     * Searches command list for command matching commandName.
+     * @param {String} commandName - Command name to search for.
+     * @returns {function} - Matching command handler function or unknown-command handler.
      */
     getCommandHandler(commandName) {
         const result = this.getCommand(commandName);
@@ -137,9 +137,9 @@ export default class CommandList {
     }
 
     /**
-     * Searches command list for command matching commandName
-     * @param {String} commandName  - Command name to search for
-     * @returns {undefined | LWCommand} Returns matching command or undefined if no match
+     * Searches command list for command matching commandName.
+     * @param {String} commandName  - Command name to search for.
+     * @returns {undefined | LWCommand} Returns matching command or undefined if no match.
      */
     getCommand(commandName) {
         commandName = commandName.toLowerCase();
@@ -151,9 +151,9 @@ export default class CommandList {
     }
 
     /**
-     * Searches command list for commands which names start with str
-     * @param {String} str - String to match with
-     * @returns {Array} - Array of suitable commands
+     * Searches command list for commands which names start with str.
+     * @param {String} str - String to match with.
+     * @returns {Array} - Array of suitable commands.
      */
     getMatchingCommands(str) {
         str = str.toLowerCase();
