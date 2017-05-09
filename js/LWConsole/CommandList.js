@@ -15,7 +15,6 @@
  */
 
 import LWCommandSimple from "./LWCommandSimple";
-import MotdCMD from "./Commands/MotdCMD";
 import HelpCMD from "./Commands/HelpCMD";
 import OpenCMD from "./Commands/OpenCMD";
 import EchoCMD from "./Commands/EchoCMD";
@@ -41,7 +40,6 @@ export default class CommandList {
 
         //Init cmds
         this._commands = [
-            new MotdCMD(),
             new HelpCMD(this),
             new OpenCMD(),
             new EchoCMD(),
@@ -60,6 +58,8 @@ export default class CommandList {
                 this._lwConsole.print(str)
             }),
             new EffectCMD(),
+
+            new LWCommandSimple("motd", "Shows the message of the day", undefined, "Trikolon", true, () => lwConsole.motd),
             new LWCommandSimple("clear", "Clears the console", undefined, "Trikolon", true, () => {
                 lwConsole.clear();
             }),
@@ -85,6 +85,32 @@ export default class CommandList {
             new LWCommandSimple("ls", "list directory contents", undefined, "Trikolon", false,
                 "cia_secrets, cute_cat_gifs, videos, passwords.txt")
         ];
+
+        // Check command list for duplicate keys
+        const duplicates = this._checkDuplicateKeys();
+        if (duplicates.length > 0) {
+            throw new Error(`Duplicate command key/s! There are commands with the same name: ${duplicates}`);
+        }
+    }
+
+    /**
+     * Checks command list for duplicates (two or more commands with the same name)
+     * @returns {String[]} List of duplicate command names found, can be empty
+     * @private
+     */
+    _checkDuplicateKeys() {
+        const sorted = this._commands.slice().sort((a, b) => a.name.localeCompare(b.name));
+        const duplicates = [];
+        for (let i = 0; i < sorted.length; i++) {
+            if (i < sorted.length - 1 && sorted[i].name === sorted[i + 1].name) {
+                const currDup = sorted[i].name;
+                duplicates.push(currDup);
+                while (i < sorted.length && currDup === sorted[i + 1].name) {
+                    i++; //Skip next commands if they're also duplicates of current command
+                }
+            }
+        }
+        return duplicates;
     }
 
     get lwConsole() {
