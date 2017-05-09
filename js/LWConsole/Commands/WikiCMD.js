@@ -16,6 +16,7 @@
 
 import LWCommand from "../LWCommand";
 import UsageError from "../UsageError";
+import * as log from "loglevel";
 
 export default class WikiCMD extends LWCommand {
     constructor(print) {
@@ -53,7 +54,7 @@ export default class WikiCMD extends LWCommand {
                 }
             };
             request.onerror = function (e) {
-                console.error(e);
+                log.error(e);
                 this.print("Error: Could not send request to wikipedia.org. Check your internet connection.");
             };
             request.open("GET", queryUrl, true);
