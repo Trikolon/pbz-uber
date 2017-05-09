@@ -46,7 +46,6 @@ export default class LWConsole {
         }
         config().set("visitCount", visitCount);
         this.motd = `Welcome to ${hostname}! [Visit ${visitCount}]\nType 'help' for a list of commands.\n`;
-        config().set("motd", this.motd);
 
         this._consoleOut = ""; //Content of console-out text-area
         this._cmdHistory = new CommandHistory(config().get("history")); //Initialise cmd history (for ARROW_UP support)
