@@ -27,10 +27,11 @@ export default class HelpCMD extends LWCommand {
             return this.cmdList.getCommandHandler("help")(["help"]);
         }
         if (args.length === 0) { //Show list of commands without usage
+            const commands = this.cmdList.getOrderedList();
             let msg = "Available commands:";
-            for (let i = 0; i < this.cmdList._commands.length; i++) {
-                if (this.cmdList._commands[i].visible) {
-                    msg += `\n ${this.cmdList._commands[i].name}: ${this.cmdList._commands[i].description}`;
+            for (let i = 0; i < commands.length; i++) {
+                if (commands[i].visible) {
+                    msg += `\n ${commands[i].name}: ${commands[i].description}`;
                 }
             }
             return msg;
