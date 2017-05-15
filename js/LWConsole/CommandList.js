@@ -25,6 +25,7 @@ import EffectCMD from "./Commands/EffectCMD";
 import ConvertCMD from "./Commands/ConvertCMD";
 import WikiCMD from "./Commands/WikiCMD";
 import HistoryCMD from "./Commands/HistoryCMD";
+import RawCMD from "./Commands/RawCMD";
 
 /**
  * Stores command properties + logic and provides method to query them.
@@ -58,6 +59,7 @@ export default class CommandList {
                 this._lwConsole.print(str)
             }),
             new EffectCMD(),
+            new RawCMD(),
 
             new LWCommandSimple("motd", "Shows the message of the day", undefined, "Trikolon", true, () => lwConsole.motd),
             new LWCommandSimple("clear", "Clears the console", undefined, "Trikolon", true, () => {
