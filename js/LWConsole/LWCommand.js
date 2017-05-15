@@ -31,6 +31,9 @@
          if (new.target === LWCommand) {
              throw new TypeError(`Can't construct instance of abstract class ${new.target}`);
          }
+        if (!name) {
+            throw new Error("Field 'name' is mandatory.");
+        }
          this.name = name;
          this.description = description;
          this.usage = usage;
