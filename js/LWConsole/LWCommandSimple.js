@@ -29,6 +29,9 @@ export default class LWCommandSimple extends LWCommand {
      */
     constructor(name, description, usage, author, visible, handler) {
         super(name, description, usage, author, visible);
+        if (!handler) {
+            throw new Error("Field 'handler' is mandatory.");
+        }
         if (typeof handler === "string") {
             this.run = function () {
                 return handler
