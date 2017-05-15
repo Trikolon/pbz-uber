@@ -31,6 +31,7 @@ import RawCMD from "./Commands/RawCMD";
  * Stores command properties + logic and provides method to query them.
  */
 export default class CommandList {
+    //TODO: Add methods for adding new commands to the list + removing existing ones (on runtime)
 
     /**
      * @param {LWConsole} lwConsole - reference to console-object, required by some commands.
@@ -40,6 +41,7 @@ export default class CommandList {
         this._lwConsole = lwConsole;
 
         //Init cmds
+        // TODO: Commands should be sorted alphabetically from the beginning
         this._commands = [
             new HelpCMD(this),
             new OpenCMD(),
@@ -101,7 +103,7 @@ export default class CommandList {
      * @private
      */
     _checkDuplicateKeys() {
-        const sorted = this._commands.slice().sort((a, b) => a.name.localeCompare(b.name));
+        const sorted = this.getOrderedList();
         const duplicates = [];
         for (let i = 0; i < sorted.length; i++) {
             if (i < sorted.length - 1 && sorted[i].name === sorted[i + 1].name) {
@@ -117,6 +119,15 @@ export default class CommandList {
 
     get lwConsole() {
         return this._lwConsole;
+    }
+
+
+    /**
+     * Get list of commands ordered alphabetically by command name
+     * @returns {Array.<LWCommand>} - Copy of command array, sorted
+     */
+    getOrderedList() {
+        return this._commands.slice().sort((a, b) => a.name.localeCompare(b.name));
     }
 
 
