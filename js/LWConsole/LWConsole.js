@@ -147,6 +147,22 @@ export default class LWConsole {
         }
     }
 
+// eslint-disable-next-line valid-jsdoc
+    /**
+     * @see {@link CommandList#add}
+     */
+    addCommand(command) {
+        return this._cmdList.add(command);
+    }
+
+// eslint-disable-next-line valid-jsdoc
+    /**
+     * @see {@link CommandList#remove}
+     */
+    removeCommand(command) {
+        return this._cmdList.remove(command);
+    }
+
 
     /**
      * Changes visibility of console-div depending on parameter.
