@@ -14,6 +14,7 @@
  limitations under the License.
  */
 
+import LWCommand from "./LWCommand";
 import LWCommandSimple from "./LWCommandSimple";
 import HelpCMD from "./Commands/HelpCMD";
 import OpenCMD from "./Commands/OpenCMD";
@@ -31,7 +32,6 @@ import RawCMD from "./Commands/RawCMD";
  * Stores command properties + logic and provides method to query them.
  */
 export default class CommandList {
-    //TODO: Add methods for adding new commands to the list + removing existing ones (on runtime)
 
     /**
      * @param {LWConsole} lwConsole - reference to console-object, required by some commands.
@@ -39,10 +39,10 @@ export default class CommandList {
      */
     constructor(lwConsole) {
         this._lwConsole = lwConsole;
+        this._commands = [];
 
         //Init cmds
-        // TODO: Commands should be sorted alphabetically from the beginning
-        this._commands = [
+        const commands = [
             new HelpCMD(this),
             new OpenCMD(),
             new EchoCMD(),
@@ -90,46 +90,78 @@ export default class CommandList {
                 "cia_secrets, cute_cat_gifs, videos, passwords.txt")
         ];
 
-        // Check command list for duplicate keys
-        const duplicates = this._checkDuplicateKeys();
-        if (duplicates.length > 0) {
-            throw new Error(`Duplicate command key/s! There are commands with the same name: ${duplicates}`);
+        for (let i = 0; i < commands.length; i++) {
+            this.add(commands[i]);
         }
     }
 
     /**
-     * Checks command list for duplicates (two or more commands with the same name).
-     * @returns {String[]} - List of duplicate command names found, can be empty.
-     * @private
+     * Adds a new command to the list. Checks for duplicate name and object.
+     * @param {LWCommand} command - Command instance to be added to the list.
+     * @throws {Error} - If command object or command with the same name already exists in the list or argument is not
+     * a LWCommand object.
+     * @returns {undefined}
      */
-    _checkDuplicateKeys() {
-        const sorted = this.getOrderedList();
-        const duplicates = [];
-        for (let i = 0; i < sorted.length; i++) {
-            if (i < sorted.length - 1 && sorted[i].name === sorted[i + 1].name) {
-                const currDup = sorted[i].name;
-                duplicates.push(currDup);
-                while (i < sorted.length && currDup === sorted[i + 1].name) {
-                    i++; //Skip next commands if they're also duplicates of current command
+    add(command) {
+        // Only allow LWCommand objects to be added
+        if (!(command instanceof LWCommand)) {
+            throw new Error("Invalid argument type, expected LWCommand");
+        }
+        // Check if command to add (or name) already exists in list
+        for (let i = 0; i < this._commands.length; i++) {
+            if (this._commands[i].name === command.name) {
+                if (this._commands[i] === command) {
+                    // Object matches
+                    throw new Error("Command already in list!");
+                }
+                else {
+                    // Only name matches (different instance)
+                    throw new Error("Command with the same name exists. Field has to be unique");
                 }
             }
         }
-        return duplicates;
+
+        // Add command to list
+        this._commands.push(command);
+        // Sort the list by command name
+        this._commands.sort((a, b) => a.name.localeCompare(b.name));
     }
+
+
+    /**
+     * Removes command from the list.
+     * @param {LWCommand | String} command - Command by object or name to be removed from the list.
+     * @throws {Error} - If argument command is not of type {LWCommand} or {String}.
+     * @returns {boolean} - true if object has been removed from the list, false otherwise.
+     */
+    remove(command) {
+        let index = -1;
+        if (typeof command === "string") {
+            index = this._commands.indexOf(this.getCommand(command));
+        }
+        else if (command instanceof LWCommand) {
+            index = this._commands.indexOf(command);
+        }
+        else {
+            throw new Error(`Invalid argument type ${typeof command}`);
+        }
+        if (index < 0) { // Not found, can't remove
+            return false;
+        }
+        else {
+            this._commands.splice(index, 1);
+            return true;
+        }
+    }
+
 
     get lwConsole() {
         return this._lwConsole;
     }
 
-
-    /**
-     * Get list of commands ordered alphabetically by command name
-     * @returns {Array.<LWCommand>} - Copy of command array, sorted
-     */
-    getOrderedList() {
-        return this._commands.slice().sort((a, b) => a.name.localeCompare(b.name));
+    get commands() {
+        return this._commands;
     }
-
 
     /**
      * Searches command list for command matching commandName.
