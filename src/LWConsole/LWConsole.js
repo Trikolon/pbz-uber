@@ -18,7 +18,6 @@ import CommandList from "./CommandList";
 import CommandHistory from "./CommandHistory";
 import UsageError from "./UsageError";
 import config from "./ConsoleConfig";
-import * as log from "loglevel";
 
 /**
  * Lightweight Console
