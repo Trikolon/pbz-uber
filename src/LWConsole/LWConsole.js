@@ -25,10 +25,10 @@ import config from "./ConsoleConfig";
 export default class LWConsole {
 
     /**
-     * @param {HTMLElement} consoleDiv -  dom of div holding the console
-     * @param {HTMLElement} consoleOutDOM - dom of text-area for console-output
-     * @param {HTMLElement} consoleInDOM - dom of text-input for console-input
-     * @param {String} hostname - included in motd, may have further use in the future
+     * @param {HTMLElement} consoleDiv -  Dom of div holding the console.
+     * @param {HTMLElement} consoleOutDOM - Dom of text-area for console-output.
+     * @param {HTMLElement} consoleInDOM - Dom of text-input for console-input.
+     * @param {String} hostname - Included in motd, may have further use in the future.
      * @constructor
      */
     constructor(consoleDiv, consoleOutDOM, consoleInDOM, hostname) {
@@ -37,16 +37,7 @@ export default class LWConsole {
         this.consoleInDOM = consoleInDOM;
         this.hostname = hostname;
 
-        let visitCount = config().get("visitCount");
-        if (visitCount) {
-            visitCount++;
-        }
-        else {
-            visitCount = 1;
-        }
-        config().set("visitCount", visitCount);
-        this.motd = `Welcome to ${hostname}! [Visit ${visitCount}]\nType 'help' for a list of commands.\n`;
-        config().set("motd", this.motd);
+        this.motd = `Welcome to ${hostname}!\nType 'help' for a list of commands.\n`;
 
         this._consoleOut = ""; //Content of console-out text-area
         this._cmdHistory = new CommandHistory(config().get("history")); //Initialise cmd history (for ARROW_UP support)
@@ -77,7 +68,7 @@ export default class LWConsole {
 
     /**
      * Getter for command history object
-     * @returns {CommandHistory} Command history
+     * @returns {CommandHistory} - Command history
      */
     get cmdHistory() {
         return this._cmdHistory;
@@ -85,7 +76,7 @@ export default class LWConsole {
 
     /**
      * Handles key-press events for console
-     * @param {Object} event - event including key-code being evaluated
+     * @param {Object} event - Event including key-code being evaluated.
      * @returns {undefined}
      * @private
      */
@@ -155,10 +146,26 @@ export default class LWConsole {
         }
     }
 
+// eslint-disable-next-line valid-jsdoc
+    /**
+     * @see {@link CommandList#add}
+     */
+    addCommand(command) {
+        return this._cmdList.add(command);
+    }
+
+// eslint-disable-next-line valid-jsdoc
+    /**
+     * @see {@link CommandList#remove}
+     */
+    removeCommand(command) {
+        return this._cmdList.remove(command);
+    }
+
 
     /**
-     * Changes visibility of console-div depending on parameter
-     * @param {boolean} state -  true = visible; false = hidden
+     * Changes visibility of console-div depending on parameter.
+     * @param {boolean} state - true = visible; false = hidden
      * @returns {undefined}
      */
     show(state) {
@@ -182,8 +189,8 @@ export default class LWConsole {
     }
 
     /**
-     * Prints message to console and updates cursor position (scroll)
-     * @param {String} str -  message to print
+     * Prints message to console and updates cursor position (scroll).
+     * @param {String} str - Message to print.
      * @returns {undefined}
      */
     print(str) {
@@ -195,7 +202,7 @@ export default class LWConsole {
     }
 
     /**
-     * Clears console content
+     * Clears console content.
      * @returns {undefined}
      */
     clear() {
@@ -204,8 +211,8 @@ export default class LWConsole {
     }
 
     /**
-     * Executes user cmd and updates output accordingly
-     * @param {String} cmd - raw cmd by user
+     * Executes user cmd and updates output accordingly.
+     * @param {String} cmd - Raw cmd by user.
      * @returns {undefined}
      */
     sendCMD(cmd) {
@@ -219,8 +226,8 @@ export default class LWConsole {
 
     /**
      * Takes command as array and calls corresponding cmd-handler on match
-     * @param {Array} cmdArr - command-array. cmd[0] is command name, cmd[>1] is parameter
-     * @returns {String} - result of command
+     * @param {Array} cmdArr - Command-array. cmd[0] is command name, cmd[>1] is parameter.
+     * @returns {String} - Result of command.
      */
     executeCMD(cmdArr) {
         const [cmdName] = cmdArr; //Name
@@ -244,8 +251,8 @@ export default class LWConsole {
                 }
             }
             else { // This only happens when a command is not throwing an error-object (bad practise)
-                console.warn("Command returned invalid error-object", "cmd", cmd, "args", cmdArr);
-                console.error(e);
+                log.warn("Command returned invalid error-object", "cmd", cmd, "args", cmdArr);
+                log.error(e);
                 return "Unknown error in command execution, check console for details";
             }
         }

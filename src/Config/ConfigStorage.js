@@ -14,20 +14,22 @@
  limitations under the License.
  */
 
+import * as log from "loglevel";
+
 /**
- * Abstract class which implements methods to manage state/config object
- * Save and load must be overwritten in oder to store config
+ * Abstract class which implements methods to manage state/config object.
+ * Save and load must be overwritten in oder to store config.
  */
 export default class ConfigStorage {
 
     /**
-     * @param {String} name - parent key of config object
-     * @param {Number} expiryTime - how long should the data be kept in storage
-     * @param {Object} defaultConfig initial state for config object, also used for reset
+     * @param {String} name - Parent key of config object.
+     * @param {Number} expiryTime - How long should the data be kept in storage.
+     * @param {Object} defaultConfig - Initial state for config object, also used for reset.
      */
     constructor(name = "consoleConfig", expiryTime = 14, defaultConfig = {}) {
         if (new.target === ConfigStorage) {
-            throw new TypeError("Can't construct instance of abstract class " + new.target);
+            throw new TypeError(`Can't construct instance of abstract class ${new.target}`);
         }
         this.name = name;
         this.expiryTime = expiryTime;
@@ -37,14 +39,15 @@ export default class ConfigStorage {
     }
 
     /**
-     * Store a value in config by key
-     * This triggers a cookie-write
-     * @param {String} key
-     * @param value
+     * Store a value in config by key.
+     * This triggers a cookie-write.
+     * @param {String} key - Key to store object/value in-
+     * @param {Object} value - Object / value to store.
+     * @returns {undefined}
      */
     set(key, value) {
         if (typeof key === "undefined" || typeof value === "undefined") {
-            console.warn("config.store() called with invalid parameters");
+            log.warn("config.store() called with invalid parameters");
         }
         else {
             this._config[key] = value;
@@ -53,9 +56,9 @@ export default class ConfigStorage {
     }
 
     /**
-     * Get a value from config by key, returns undefined if key does not match
-     * @param {String} key
-     * @returns {String || undefined}
+     * Get a value from config by key.
+     * @param {String} key - Key to query object for.
+     * @returns {Object | undefined} - Requested object or undefined if no match.
      */
     get(key) {
         if (this._config.hasOwnProperty(key)) {
@@ -65,13 +68,14 @@ export default class ConfigStorage {
 
 
     /**
-     * Reset config to default values
+     * Reset config to default values.
      * @private
+     * @returns {undefined}
      */
     _resetConfig() {
         this._config = {};
         //copy defaultConfig to config. Beware: Nested objects are still copied as reference
-        for (let p in this.defaultConfig) {
+        for (const p in this.defaultConfig) {
             if (this.defaultConfig.hasOwnProperty(p)) {
                 this._config[p] = this.defaultConfig[p];
             }
@@ -80,18 +84,20 @@ export default class ConfigStorage {
     }
 
     /**
-     * Trigger config refresh (reload from storage)
+     * Trigger config refresh (reload from storage).
      * @private
      * @abstract
+     * @returns {undefined}
      */
     _loadConfig() {
         throw new Error("Abstract method call");
     }
 
     /**
-     * Trigger config save to storage
+     * Trigger config save to storage.
      * @private
      * @abstract
+     * @returns {undefined}
      */
     _saveConfig() {
         throw new Error("Abstract method call");
