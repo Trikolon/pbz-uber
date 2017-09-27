@@ -18,7 +18,7 @@ import ConfigStorage from "../Config/LocalStorageConfig";
 
 /**
  * Singleton, holds populated config for console.
- * Could be extended in the future to support cmd-scopes
+ * Could be extended in the future to support cmd-scopes.
  */
 class ConsoleConfig extends ConfigStorage {
 }

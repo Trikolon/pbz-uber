@@ -16,6 +16,7 @@
 
 import LWCommand from "../LWCommand";
 import UsageError from "../UsageError";
+import * as log from "loglevel";
 
 export default class ConvertCMD extends LWCommand {
     constructor(print) {
@@ -119,7 +120,7 @@ export default class ConvertCMD extends LWCommand {
             this.print(`${json.rates[args[1]] * parseFloat(args[2])} ${args[1]}`);
         };
         request.onerror = function (e) {
-            console.error(e);
+            log.error(e);
             this.print("Error: Could not send request to fixer.io. Check your internet connection.");
         };
         request.open("GET", queryUrl, true);

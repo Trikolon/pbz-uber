@@ -28,9 +28,9 @@ export default class HelpCMD extends LWCommand {
         }
         if (args.length === 0) { //Show list of commands without usage
             let msg = "Available commands:";
-            for (let i = 0; i < this.cmdList._commands.length; i++) {
-                if (this.cmdList._commands[i].visible) {
-                    msg += `\n ${this.cmdList._commands[i].name}: ${this.cmdList._commands[i].description}`;
+            for (let i = 0; i < this.cmdList.commands.length; i++) {
+                if (this.cmdList.commands[i].visible) {
+                    msg += `\n ${this.cmdList.commands[i].name}: ${this.cmdList.commands[i].description}`;
                 }
             }
             return msg;

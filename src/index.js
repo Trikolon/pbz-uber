@@ -15,15 +15,22 @@
  */
 
 import LWConsole from "./LWConsole/LWConsole";
-import * as log from "loglevel";
+import * as loglevel from "loglevel";
 require("font-awesome-webpack");
+import * as OfflinePluginRuntime from "offline-plugin/runtime";
+
 
 (function () {
     "use strict";
-    window.log = log;
-    log.setDefaultLevel("ERROR");
-    log.info("%cWELCOME FELLOW DEV ~", "background: #0088ff; color: #ffffff; font-size: 24px");
-    log.info("%cFeel free to contribute!\nSource: https://github.com/Trikolon/pbz-uber", "background: #0088ff; color: #ffffff");
+    window.log = loglevel.getLogger("pbz-uber");
+
+    if(process.env.NODE_ENV === "production") {
+        log.setDefaultLevel("INFO");
+        OfflinePluginRuntime.install();
+    }
+    else {
+        log.setDefaultLevel("DEBUG");
+    }
 
     const lwConsole = new LWConsole(
         document.getElementById("lwConsole"),

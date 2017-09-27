@@ -15,20 +15,32 @@
  */
 
 import LWCommand from "../LWCommand";
-import config from "./../ConsoleConfig";
+import UsageError from "../UsageError";
+import * as log from "loglevel";
 
-export default class MotdCMD extends LWCommand {
+export default class RawCMD extends LWCommand {
     constructor() {
-        super("motd", "Shows the message of the day", undefined, "Trikolon", true);
+        super(
+            "raw",
+            "Run raw JS statement",
+            "[cmd]",
+            "Trikolon",
+            true);
     }
 
     run(args) {
-        const motd = config().get("motd");
-        if (motd) {
-            return motd;
+        if (args.length === 0) {
+            throw new UsageError();
         }
-        else {
-            return "No motd set!";
+// eslint-disable-next-line no-eval
+        let result = eval(args.join(" "));
+        try {
+            result = JSON.stringify(result, null, 2);
+            return result;
+        }
+        catch (e) {
+            log.info(result);
+            return "Can't stringify result, check console.";
         }
     }
 }
