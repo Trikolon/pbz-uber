@@ -5,7 +5,8 @@ My personal website written in modern Javascript (ES6) and bundled with webpack.
 with custom commands. Also comes with a 
 [service worker](https://developers.google.com/web/fundamentals/primers/service-workers/) for offline usage.
 
-##Build
+## Build
+
 Install dependencies
 ```
 npm install
