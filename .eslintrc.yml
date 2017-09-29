@@ -2,14 +2,14 @@
 parserOptions:
   sourceType: module
   ecmaFeatures:
-    jsx: true
+    jsx: false
 
 env:
   amd: true
   browser: true
   es6: true
-  jquery: true
-  node: true
+  jquery: false
+  node: false
 
 # http://eslint.org/docs/rules/
 rules:
