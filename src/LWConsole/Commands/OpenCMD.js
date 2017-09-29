@@ -19,7 +19,8 @@ import UsageError from "../UsageError";
 
 export default class OpenCMD extends LWCommand {
     constructor() {
-        super("open", "Opens page from main navigation", "[keybase/github/twitter/email/source]", "Trikolon", true);
+        super("open", "Opens page from main navigation", "[keybase/github/twitter/email/liquidradio/source]",
+            "Trikolon", true);
     }
 
     run(args) {
@@ -31,6 +32,7 @@ export default class OpenCMD extends LWCommand {
             "github": "//github.com/Trikolon",
             "twitter": "//twitter.com/deppaws",
             "email": "mailto:paul@zuehlcke.de",
+            "liquidradio": "//liquidradio.pro",
             "source": "//github.com/Trikolon/pbz-uber"
         };
         args[0] = args[0].toLowerCase(); //Ignore case
