@@ -14,31 +14,30 @@
  limitations under the License.
  */
 
-import LWCommand from "../LWCommand";
-import UsageError from "../UsageError";
+import LWCommand from '../LWCommand';
+import UsageError from '../UsageError';
 
 export default class CalcCMD extends LWCommand {
-    constructor() {
-        super("calc", "Calculates a simple math expression", "<expression>", "TheBiochemic", true);
-    }
+  constructor() {
+    super('calc', 'Calculates a simple math expression', '<expression>', 'TheBiochemic', true);
+  }
 
-    run(args) {
-        const argString = args.join("");
-        if (argString.length > 0) {
-            const expResult = CalcCMD.parseExpression(argString);
-            if (expResult === undefined || isNaN(expResult))
-                throw new UsageError("This is not a valid expression!");
-            return expResult.toString();
-        }
-        else
-            throw new UsageError();
+  run(args) {
+    const argString = args.join('');
+    if (argString.length > 0) {
+      const expResult = CalcCMD.parseExpression(argString);
+      if (expResult === undefined || Number.isNaN(expResult)) { throw new UsageError('This is not a valid expression!'); }
+      return expResult.toString();
     }
+    throw new UsageError();
+  }
 
-    static parseExpression(expression) {
-        const regex = /([^\d.()+\-*\/^|&%=!]|([^=!]=[^=]))/;
-        if (!regex.test(expression)) {
-// eslint-disable-next-line no-eval
-            return eval(expression);
-        }
+  static parseExpression(expression) {
+    const regex = /([^\d.()+\-*\/^|&%=!]|([^=!]=[^=]))/;
+    if (!regex.test(expression)) {
+      // eslint-disable-next-line no-eval
+      return eval(expression);
     }
+    return undefined;
+  }
 }

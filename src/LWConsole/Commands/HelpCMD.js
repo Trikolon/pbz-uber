@@ -14,32 +14,35 @@
  limitations under the License.
  */
 
-import LWCommand from "../LWCommand";
+import LWCommand from '../LWCommand';
 
 export default class HelpCMD extends LWCommand {
-    constructor(cmdList) {
-        super("help", "Shows a list of commands", "[command]", "Trikolon", true);
-        this.cmdList = cmdList;
-    }
+  constructor(cmdList) {
+    super('help', 'Shows a list of commands', '[command]', 'Trikolon', true);
+    this.cmdList = cmdList;
+  }
 
-    run(args) {
-        if (args.length > 1) {
-            return this.cmdList.getCommandHandler("help")(["help"]);
-        }
-        if (args.length === 0) { //Show list of commands without usage
-            let msg = "Available commands:";
-            for (let i = 0; i < this.cmdList.commands.length; i++) {
-                if (this.cmdList.commands[i].visible) {
-                    msg += `\n ${this.cmdList.commands[i].name}: ${this.cmdList.commands[i].description}`;
-                }
-            }
-            return msg;
-        }
-        //Show usage for single cmd
-        const cmd = this.cmdList.getCommand(args[0]);
-        if (!cmd) {
-            return "No help page available: Unknown command.";
-        }
-        return `${cmd.name}:${(cmd.description && cmd.description !== "" ? `\nDescription: ${cmd.description}` : "")}${(cmd.usage && cmd.description !== "" ? `\nUsage: ${cmd.name} ${cmd.usage}` : "")}${(cmd.author && cmd.author !== "" ? `\nAuthor: ${cmd.author}` : "")}`;
+  run(args) {
+    if (args.length > 1) {
+      return this.cmdList.getCommandHandler('help')(['help']);
     }
+    if (args.length === 0) { // Show list of commands without usage
+      let msg = 'Available commands:';
+      for (let i = 0; i < this.cmdList.commands.length; i += 1) {
+        if (this.cmdList.commands[i].visible) {
+          msg += `\n ${this.cmdList.commands[i].name}: ${this.cmdList.commands[i].description}`;
+        }
+      }
+      return msg;
+    }
+    // Show usage for single cmd
+    const cmd = this.cmdList.getCommand(args[0]);
+    if (!cmd) {
+      return 'No help page available: Unknown command.';
+    }
+    return `${cmd.name}:${(cmd.description && cmd.description !== '' ?
+      `\nDescription: ${cmd.description}` : '')}${(cmd.usage && cmd.description !== '' ?
+      `\nUsage: ${cmd.name} ${cmd.usage}` : '')}${(cmd.author && cmd.author !== '' ?
+      `\nAuthor: ${cmd.author}` : '')}`;
+  }
 }

@@ -14,52 +14,52 @@
  limitations under the License.
  */
 
-import LWCommand from "../LWCommand";
-import UsageError from "../UsageError";
-import * as log from "loglevel";
+import * as log from 'loglevel';
+import LWCommand from '../LWCommand';
+import UsageError from '../UsageError';
 
 export default class WikiCMD extends LWCommand {
-    constructor(print) {
-        super("wiki", "Provides a Wikipedia summary of the requested topic, if possible", "<topic>", "TheBiochemic", true);
-        this.print = print;
-    }
+  constructor(print) {
+    super('wiki', 'Provides a Wikipedia summary of the requested topic, if possible', '<topic>', 'TheBiochemic', true);
+    this.print = print;
+  }
 
-    run(args) {
-        const keyword = args.join(" ");
-        const queryUrl = `https://en.wikipedia.org/w/api.php?format=json&action=query&redirects=1&prop=extracts&exintro=&explaintext=&origin=*&titles=${keyword}`;
-        if (args.length < 1) {
-            throw new UsageError();
-        } else {
-            //If the pattern is met:
-            const request = new XMLHttpRequest();
-            request.onload = () => {
-                try {
-                    if (request.status !== 200) {
-                        //noinspection ExceptionCaughtLocallyJS
-                        throw new Error(`wikipedia.org returned code ${request.status}`);
-                    }
-                    const pages = JSON.parse(request.responseText).query.pages;
-                    if (pages.hasOwnProperty("-1")) {
-                        //noinspection ExceptionCaughtLocallyJS
-                        throw new Error("No article found");
-                    }
-                    const article = pages[Object.keys(pages)[0]];
-                    let text = article.extract;
-                    if (text.length > 1000) text = `${text.substring(0, 1000)} [...]`;
-                    this.print(`\n *** ${article.title} ***\n\n${text 
-                        }\n\nFull article under: https://en.wikipedia.org/wiki/${article.title.split(" ").join("_")}`);
-                }
-                catch (e) {
-                    this.print(`${e.name}: ${e.message}`);
-                }
-            };
-            request.onerror = function (e) {
-                log.error(e);
-                this.print("Error: Could not send request to wikipedia.org. Check your internet connection.");
-            };
-            request.open("GET", queryUrl, true);
-            request.send();
-            return "Loading ...";
+  run(args) {
+    const keyword = args.join(' ');
+    const queryUrl = `https://en.wikipedia.org/w/api.php?format=json&action=query&redirects=1&prop=
+    extracts&exintro=&explaintext=&origin=*&titles=${keyword}`;
+    if (args.length < 1) {
+      throw new UsageError();
+    } else {
+      // If the pattern is met:
+      const request = new XMLHttpRequest();
+      request.onload = () => {
+        try {
+          if (request.status !== 200) {
+            // noinspection ExceptionCaughtLocallyJS
+            throw new Error(`wikipedia.org returned code ${request.status}`);
+          }
+          const { pages } = JSON.parse(request.responseText).query;
+          if (pages['-1']) {
+            // noinspection ExceptionCaughtLocallyJS
+            throw new Error('No article found');
+          }
+          const article = pages[Object.keys(pages)[0]];
+          let text = article.extract;
+          if (text.length > 1000) text = `${text.substring(0, 1000)} [...]`;
+          this.print(`\n *** ${article.title} ***\n\n${text
+          }\n\nFull article under: https://en.wikipedia.org/wiki/${article.title.split(' ').join('_')}`);
+        } catch (e) {
+          this.print(`${e.name}: ${e.message}`);
         }
+      };
+      request.onerror = (e) => {
+        log.error(e);
+        this.print('Error: Could not send request to wikipedia.org. Check your internet connection.');
+      };
+      request.open('GET', queryUrl, true);
+      request.send();
+      return 'Loading ...';
     }
+  }
 }

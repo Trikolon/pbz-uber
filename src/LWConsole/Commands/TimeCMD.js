@@ -14,39 +14,39 @@
  limitations under the License.
  */
 
-import LWCommand from "../LWCommand";
-import UsageError from "../UsageError";
+import LWCommand from '../LWCommand';
+import UsageError from '../UsageError';
 
 export default class TimeCMD extends LWCommand {
-    constructor() {
-        super("time", "Show time in different formats", "<utc/local/unix>", "Trikolon", true);
-    }
+  constructor() {
+    super('time', 'Show time in different formats', '<utc/local/unix>', 'Trikolon', true);
+  }
 
-    run(args) {
-        let date = new Date();
-        let found = true;
+  // eslint-disable-next-line class-methods-use-this
+  run(args) {
+    let date = new Date();
+    let found = true;
 
-        if (args && args.length === 1) {
-            switch (args[0].toLowerCase()) {
-                case "utc":
-                    date = date.toUTCString();
-                    break;
-                case "local":
-                    date = date.toLocaleString();
-                    break;
-                case "unix":
-                    date = Math.floor(date / 1000);
-                    break;
-                default:
-                    found = false;
-            }
-        }
-        else {
-            found = false;
-        }
-        if (!found) {
-            throw new UsageError();
-        }
-        return date;
+    if (args && args.length === 1) {
+      switch (args[0].toLowerCase()) {
+        case 'utc':
+          date = date.toUTCString();
+          break;
+        case 'local':
+          date = date.toLocaleString();
+          break;
+        case 'unix':
+          date = Math.floor(date / 1000);
+          break;
+        default:
+          found = false;
+      }
+    } else {
+      found = false;
     }
+    if (!found) {
+      throw new UsageError();
+    }
+    return date;
+  }
 }

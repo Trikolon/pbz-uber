@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /*
  Copyright 2017 Paul Zuehlcke - paul.zuehlcke.de
 
@@ -14,92 +15,94 @@
  limitations under the License.
  */
 
-import * as log from "loglevel";
+import * as log from 'loglevel';
 
 /**
  * Abstract class which implements methods to manage state/config object.
  * Save and load must be overwritten in oder to store config.
  */
 export default class ConfigStorage {
-
-    /**
+  /**
      * @param {String} name - Parent key of config object.
      * @param {Number} expiryTime - How long should the data be kept in storage.
      * @param {Object} defaultConfig - Initial state for config object, also used for reset.
      */
-    constructor(name = "consoleConfig", expiryTime = 14, defaultConfig = {}) {
-        if (new.target === ConfigStorage) {
-            throw new TypeError(`Can't construct instance of abstract class ${new.target}`);
-        }
-        this.name = name;
-        this.expiryTime = expiryTime;
-        this.defaultConfig = defaultConfig;
-        this._config = defaultConfig;
-        this._loadConfig();
+  constructor(name = 'consoleConfig', expiryTime = 14, defaultConfig = {}) {
+    if (new.target === ConfigStorage) {
+      throw new TypeError(`Can't construct instance of abstract class ${new.target}`);
     }
+    this.name = name;
+    this.expiryTime = expiryTime;
+    this.defaultConfig = defaultConfig;
+    this._config = defaultConfig;
+    this._loadConfig();
+  }
 
-    /**
+  /**
      * Store a value in config by key.
      * This triggers a cookie-write.
      * @param {String} key - Key to store object/value in-
      * @param {Object} value - Object / value to store.
      * @returns {undefined}
      */
-    set(key, value) {
-        if (typeof key === "undefined" || typeof value === "undefined") {
-            log.warn("config.store() called with invalid parameters");
-        }
-        else {
-            this._config[key] = value;
-            this._saveConfig();
-        }
+  set(key, value) {
+    if (typeof key === 'undefined' || typeof value === 'undefined') {
+      log.warn('config.store() called with invalid parameters');
+    } else {
+      this._config[key] = value;
+      this._saveConfig();
     }
+  }
 
-    /**
+  /**
      * Get a value from config by key.
      * @param {String} key - Key to query object for.
      * @returns {Object | undefined} - Requested object or undefined if no match.
      */
-    get(key) {
-        if (this._config.hasOwnProperty(key)) {
-            return this._config[key];
-        }
+  get(key) {
+    if (this._config.key) {
+      return this._config[key];
     }
+    return undefined;
+  }
 
 
-    /**
+  /**
      * Reset config to default values.
      * @private
      * @returns {undefined}
      */
-    _resetConfig() {
-        this._config = {};
-        //copy defaultConfig to config. Beware: Nested objects are still copied as reference
-        for (const p in this.defaultConfig) {
-            if (this.defaultConfig.hasOwnProperty(p)) {
-                this._config[p] = this.defaultConfig[p];
-            }
-        }
-        this._saveConfig();
-    }
+  _resetConfig() {
+    this._config = {};
+    // copy defaultConfig to config. Beware: Nested objects are still copied as reference
 
-    /**
+    Object.keys(this.defaultConfig).forEach((p) => {
+      log.info(p);
+      if (this.defaultConfig.p) {
+        this._config[p] = this.defaultConfig[p];
+      }
+    });
+
+    this._saveConfig();
+  }
+
+  /**
      * Trigger config refresh (reload from storage).
      * @private
      * @abstract
      * @returns {undefined}
      */
-    _loadConfig() {
-        throw new Error("Abstract method call");
-    }
+  _loadConfig() {
+    throw new Error('Abstract method call');
+  }
 
-    /**
+  /**
      * Trigger config save to storage.
      * @private
      * @abstract
      * @returns {undefined}
      */
-    _saveConfig() {
-        throw new Error("Abstract method call");
-    }
+  _saveConfig() {
+    throw new Error('Abstract method call');
+  }
 }

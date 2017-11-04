@@ -14,51 +14,48 @@
  limitations under the License.
  */
 
-import LWConsole from "./LWConsole/LWConsole";
-import * as loglevel from "loglevel";
-require("font-awesome-webpack");
-import * as OfflinePluginRuntime from "offline-plugin/runtime";
+import * as loglevel from 'loglevel';
+import * as OfflinePluginRuntime from 'offline-plugin/runtime';
+import LWConsole from './LWConsole/LWConsole';
+
+require('font-awesome-webpack');
 
 
-(function () {
-    "use strict";
-    window.log = loglevel.getLogger("pbz-uber");
+window.log = loglevel.getLogger('pbz-uber');
 
-    if(process.env.NODE_ENV === "production") {
-        log.setDefaultLevel("INFO");
-        OfflinePluginRuntime.install();
-    }
-    else {
-        log.setDefaultLevel("DEBUG");
-    }
+if (process.env.NODE_ENV === 'production') {
+  log.setDefaultLevel('INFO');
+  OfflinePluginRuntime.install();
+} else {
+  log.setDefaultLevel('DEBUG');
+}
 
-    const lwConsole = new LWConsole(
-        document.getElementById("lwConsole"),
-        document.getElementById("consoleOut"),
-        document.getElementById("consoleIn"),
-        window.location.hostname
-    );
+const lwConsole = new LWConsole(
+  document.getElementById('lwConsole'),
+  document.getElementById('consoleOut'),
+  document.getElementById('consoleIn'),
+  window.location.hostname,
+);
 
-    //Methods used by onclick handlers
-    window.toggleConsole = function () {
-        lwConsole.show(!lwConsole.isVisible());
-    };
+// Methods used by onclick handlers
+window.toggleConsole = () => {
+  lwConsole.show(!lwConsole.isVisible());
+};
 
-    window.maxConsole = function () {
-        lwConsole.executeCMD(["effect", "maximize"]);
-    };
+window.maxConsole = () => {
+  lwConsole.executeCMD(['effect', 'maximize']);
+};
 
-    /**
-     * Handler for  console shortcuts 'C'=> open and 'ESC'=> close
-     */
-    document.addEventListener("keydown", (e) => {
-        if (!lwConsole.isVisible() && e.keyCode === 67) {
-            e.preventDefault();
-            lwConsole.show(true);
-        }
-        else if (lwConsole.isVisible() && e.keyCode === 27) {
-            e.preventDefault();
-            lwConsole.show(false);
-        }
-    });
-}());
+/**
+ * Handler for  console shortcuts 'C'=> open and 'ESC'=> close
+ */
+document.addEventListener('keydown', (e) => {
+  if (!lwConsole.isVisible() && e.keyCode === 67) {
+    // FIXME: isVisible broken, likely config storage
+    e.preventDefault();
+    lwConsole.show(true);
+  } else if (lwConsole.isVisible() && e.keyCode === 27) {
+    e.preventDefault();
+    lwConsole.show(false);
+  }
+});
