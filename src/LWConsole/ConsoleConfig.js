@@ -30,7 +30,7 @@ const instance = {
 
 export default (key) => {
   if (key) {
-    if (!instance.custom.key) {
+    if (instance.custom[key] === undefined) {
       instance.custom[key] = new ConsoleConfig(key);
     }
     return instance.custom[key];
