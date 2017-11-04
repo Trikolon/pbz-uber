@@ -44,8 +44,8 @@ class HistoryIterator {
    * @returns {string | undefined} requested entry, undefined if no next entry exists
    */
   next() {
-    const next = this._history.get(this._i);
     this._i += 1;
+    const next = this._history.get(this._i);
     if (next === undefined) { this._i -= 1; }
     return next;
   }
@@ -56,9 +56,9 @@ class HistoryIterator {
    * @returns {string | undefined} requested entry, undefined if no previous entry exists
    */
   prev() {
-    const prev = this._history.get(this._i);
     this._i -= 1;
-    if (prev === undefined) { this._i -= 1; }
+    const prev = this._history.get(this._i);
+    if (prev === undefined) { this._i += 1; }
     return prev;
   }
 }
