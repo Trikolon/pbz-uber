@@ -15,102 +15,98 @@
  */
 
 /**
+ * Small iterator to traverse through a history
+ */
+class HistoryIterator {
+  /**
+   * Initialize this iterator on the given history.
+   *
+   * Be aware that you need to initialize a new iterator when the history changes,
+   * as the index is not reset automatically.
+   * @param {CommandHistory} history - history, this iterator is based on.
+   */
+  constructor(history) {
+    this._history = history;
+    this._i = history.size();
+  }
+
+  /**
+   * Evaluates if there is an element after the current one
+   * @returns {boolean} - true, if there is a next element to get via next(), false otherwise.
+   */
+  hasNext() {
+    return this._i < (this._history);
+  }
+
+  /**
+   * Returns the next entry in the history (i.e. forward in time).
+   *
+   * @returns {string | undefined} requested entry, undefined if no next entry exists
+   */
+  next() {
+    this._i += 1;
+    const next = this._history.get(this._i);
+    if (next === undefined) { this._i -= 1; }
+    return next;
+  }
+
+  /**
+   * Returns the previous entry in the history (i.e. back in time).
+   *
+   * @returns {string | undefined} requested entry, undefined if no previous entry exists
+   */
+  prev() {
+    this._i -= 1;
+    const prev = this._history.get(this._i);
+    if (prev === undefined) { this._i += 1; }
+    return prev;
+  }
+}
+
+/**
  * This class is a simple array wrapper, designed to store the history of the commandline.
  */
 export default class CommandHistory {
-
-    /**
+  /**
      * Initialize a new CommandHistory instance (optionally based on an existing history array).
      * @param {Array} history - array this history is based on. Leave undefined for empty array.
      */
-    constructor(history = []) {
-        this._history = history;
-    }
+  constructor(history = []) {
+    this._history = history;
+  }
 
-    /**
+  /**
      * Get history for given index.
      * @param {int} [index] - target index in history array.
      * @returns {string} command - command at given index.
      */
-    get(index) {
-        if (index === undefined)
-            return this._history;
-        else
-            return this._history[index];
-    }
+  get(index) {
+    if (index === undefined) { return this._history; }
+    return this._history[index];
+  }
 
-    /**
+  /**
      * Returns the size of the history.
      * @returns {Number} - Length of history array
      */
-    size() {
-        return this._history.length;
-    }
+  size() {
+    return this._history.length;
+  }
 
-    /**
+  /**
      * Adds entry to history.
      * @param {String} entry - entry to be stored in history
      * @returns {Number} - New length of history array
      */
-    add(entry) {
-        return this._history.push(entry);
-    }
+  add(entry) {
+    return this._history.push(entry);
+  }
 
-    /**
+  /**
      * Returns an iterator for this history for easy traversal.
      * @returns {HistoryIterator} iterator
      */
-    iterator() {
-        return new HistoryIterator(this);
-    }
-}
-
-/**
- * Small iterator to traverse through a history
- */
-class HistoryIterator {
-
-    /**
-     * Initialize this iterator on the given history.
-     *
-     * Be aware that you need to initialize a new iterator when the history changes,
-     * as the index is not reset automatically.
-     * @param {CommandHistory} history - history, this iterator is based on.
-     */
-    constructor(history) {
-        this._history = history;
-        this._i = history.size();
-    }
-
-    /**
-     * Evaluates if there is an element after the current one
-     * @returns {boolean} - true, if there is a next element to get via next(), false otherwise.
-     */
-    hasNext() {
-        return this._i < (this._history);
-    }
-
-    /**
-     * Returns the next entry in the history (i.e. forward in time).
-     *
-     * @returns {string | undefined} requested entry, undefined if no next entry exists
-     */
-    next() {
-        const next = this._history.get(++this._i);
-        if (next === undefined)
-            this._i--;
-        return next;
-    }
-
-    /**
-     * Returns the previous entry in the history (i.e. back in time).
-     *
-     * @returns {string | undefined} requested entry, undefined if no previous entry exists
-     */
-    prev() {
-        const prev = this._history.get(--this._i);
-        if (prev === undefined)
-            this._i++;
-        return prev;
-    }
+  iterator() {
+    return new HistoryIterator(this);
+  }
 }

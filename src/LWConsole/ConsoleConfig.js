@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import ConfigStorage from "../Config/LocalStorageConfig";
+import ConfigStorage from '../Config/LocalStorageConfig';
 
 /**
  * Singleton, holds populated config for console.
@@ -24,22 +24,20 @@ class ConsoleConfig extends ConfigStorage {
 }
 
 const instance = {
-    default: undefined,
-    custom: {}
+  default: undefined,
+  custom: {},
 };
 
 export default (key) => {
-    if (key) {
-        if (!instance.custom.hasOwnProperty(key)) {
-            instance.custom[key] = new ConsoleConfig(key);
-        }
-        return instance.custom[key];
+  if (key) {
+    if (instance.custom[key] === undefined) {
+      instance.custom[key] = new ConsoleConfig(key);
     }
-    else {
-        if (!instance.default) {
-            instance.default = new ConsoleConfig();
-        }
-        return instance.default;
-    }
+    return instance.custom[key];
+  }
 
+  if (!instance.default) {
+    instance.default = new ConsoleConfig();
+  }
+  return instance.default;
 };
