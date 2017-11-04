@@ -14,56 +14,53 @@
  limitations under the License.
  */
 
-import LWCommand from "../LWCommand";
-import UsageError from "../UsageError";
+import LWCommand from '../LWCommand';
+import UsageError from '../UsageError';
 
 export default class HistoryCMD extends LWCommand {
-    constructor(cmdHistory, sendCmd) {
-        super(
-            "history",
-            "Shows command history or executes command by index",
-            "[index]",
-            "Trikolon",
-            true);
-        this._cmdHistory = cmdHistory;
-        this._sendCmd = sendCmd;
-    }
+  constructor(cmdHistory, sendCmd) {
+    super(
+      'history',
+      'Shows command history or executes command by index',
+      '[index]',
+      'Trikolon',
+      true,
+    );
+    this._cmdHistory = cmdHistory;
+    this._sendCmd = sendCmd;
+  }
 
-    run(args) {
-        if (args.length === 0) {
-            if (this._cmdHistory) {
-                let result = "";
-                const history = this._cmdHistory.get();
-                for (let i = 0; i < history.length; i++) {
-                    result += `${i + 1}: ${history[i]}`;
-                    if (i !== history.length - 1) {
-                        result += "\n";
-                    }
-                }
-                return result;
-            }
-            else {
-                return "No entries";
-            }
+  run(args) {
+    if (args.length === 0) {
+      if (this._cmdHistory) {
+        let result = '';
+        const history = this._cmdHistory.get();
+        for (let i = 0; i < history.length; i += 1) {
+          result += `${i + 1}: ${history[i]}`;
+          if (i !== history.length - 1) {
+            result += '\n';
+          }
         }
-        else if (args.length === 1) {
-            let index;
-            try {
-                index = parseInt(args[0], 10);
-            }
-            catch (e) { // Catch this to mask error
-                throw new UsageError("Index must be number");
-            }
-            index--;
-            if (index >= 0 && index < this._cmdHistory.get().length) {
-                this._sendCmd(this._cmdHistory.get(index));
-            }
-            else {
-                throw new UsageError("Index out of bounds");
-            }
-        }
-        else {
-            throw new UsageError();
-        }
+        return result;
+      }
+
+      return 'No entries';
+    } else if (args.length === 1) {
+      let index;
+      try {
+        index = parseInt(args[0], 10);
+      } catch (e) { // Catch this to mask error
+        throw new UsageError('Index must be number');
+      }
+      index -= 1;
+      if (index >= 0 && index < this._cmdHistory.get().length) {
+        this._sendCmd(this._cmdHistory.get(index));
+      } else {
+        throw new UsageError('Index out of bounds');
+      }
+    } else {
+      throw new UsageError();
     }
+    return undefined;
+  }
 }

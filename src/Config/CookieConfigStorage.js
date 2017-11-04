@@ -14,42 +14,40 @@
  limitations under the License.
  */
 
-import ConfigStorage from "./ConfigStorage";
-import Cookies from "js-cookie";
-import * as log from "loglevel";
+// eslint-disable-next-line import/no-unresolved,import/extensions,import/no-extraneous-dependencies
+import Cookies from 'js-cookie';
+import * as log from 'loglevel';
+import ConfigStorage from './ConfigStorage';
 
 /**
  * Implements methods save and load from ConfigStorage to manage config-object in the cookies.
  */
 export default class CookieConfigStorage extends ConfigStorage {
-
-    /**
+  /**
      * Trigger config refresh (reload from cookies).
      * @private
      * @return {undefined}
      */
-    _loadConfig() {
-        try {
-            const result = Cookies.getJSON(this.name);
-            if (typeof result === "undefined") {
-                this._resetConfig();
-            }
-            else {
-                this._config = result;
-            }
-        }
-        catch (e) {
-            log.error("ConfigStorage: Error while getting config from cookies");
-            this._resetConfig();
-        }
+  _loadConfig() {
+    try {
+      const result = Cookies.getJSON(this.name);
+      if (typeof result === 'undefined') {
+        this._resetConfig();
+      } else {
+        this._config = result;
+      }
+    } catch (e) {
+      log.error('ConfigStorage: Error while getting config from cookies');
+      this._resetConfig();
     }
+  }
 
-    /**
+  /**
      * Store in cookies.
      * @private
      * @return {undefined}
      */
-    _saveConfig() {
-        Cookies.set(this.name, this._config, {expires: this.expiryTime});
-    }
+  _saveConfig() {
+    Cookies.set(this.name, this._config, { expires: this.expiryTime });
+  }
 }

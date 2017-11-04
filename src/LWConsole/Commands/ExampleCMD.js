@@ -14,46 +14,46 @@
  limitations under the License.
  */
 
-import LWCommand from "../LWCommand";
-import UsageError from "../UsageError";
-import config from "../ConsoleConfig"; //Singleton global config object for commands
+import LWCommand from '../LWCommand';
+import UsageError from '../UsageError';
+import config from '../ConsoleConfig'; // Singleton global config object for commands
 
 export default class ExampleCMD extends LWCommand {
-    constructor() {
-        super(
-            "example",
-            "This is an example cmd to explain how commands are implemented",
-            "<param1> <param2>",
-            "Trikolon",
-            true);
+  constructor() {
+    super(
+      'example',
+      'This is an example cmd to explain how commands are implemented',
+      '<param1> <param2>',
+      'Trikolon',
+      true,
+    );
+  }
+
+  run(args) {
+    if (args.length !== 2) {
+      throw new UsageError('Invalid command usage! This message is optional');
+    }
+    if (args[0] === 'bananas') {
+      // Commands can also throw other errors, which will be shown in the console
+      throw new Error('No bananas allowed!');
     }
 
-    run(args) {
-        if (args.length !== 2) {
-            throw new UsageError("Invalid command usage! This message is optional");
-        }
-        if (args[0] === "bananas") {
-            //Commands can also throw other errors, which will be shown in the console
-            throw new Error("No bananas allowed!");
-        }
+    let output = '';
 
-        let output = "";
-
-        //Commands can store options in the config object. They are preserved across calls.
-        // If the user has cookies enabled they are also preserved across sessions
-        // In the future cmds will have their own config-scope so you won't have to mind key-conflicts with
-        // other cmds anymore.
-        if (config(this.name).get("cakeSetting")) {
-            output += "Cake for you!\n";
-        }
-        else {
-            output += "Maybe next time!\n";
-            config(this.name).set("cakeSetting", true);
-        }
-
-        output += "The return value is the result of the cmd, this message will be displayed in the console"
-            + "\nAlso, new lines are supported";
-
-        return output;
+    // Commands can store options in the config object. They are preserved across calls.
+    // If the user has cookies enabled they are also preserved across sessions
+    // In the future cmds will have their own config-scope so you won't have to mind key-conflicts
+    // with other cmds anymore.
+    if (config(this.name).get('cakeSetting')) {
+      output += 'Cake for you!\n';
+    } else {
+      output += 'Maybe next time!\n';
+      config(this.name).set('cakeSetting', true);
     }
+
+    output += 'The return value is the result of the cmd, this message will be displayed in the console'
+            + '\nAlso, new lines are supported';
+
+    return output;
+  }
 }

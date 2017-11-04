@@ -14,18 +14,19 @@
  limitations under the License.
  */
 
-import LWCommand from "../LWCommand";
-import UsageError from "../UsageError";
+import LWCommand from '../LWCommand';
+import UsageError from '../UsageError';
 
 export default class EchoCMD extends LWCommand {
-    constructor() {
-        super("echo", "Displays message on console - no pipes yet :-(", "<message>", "Trikolon", true);
-    }
+  constructor() {
+    super('echo', 'Displays message on console - no pipes yet :-(', '<message>', 'Trikolon', true);
+  }
 
-    run(args) {
-        if (!args || args.length === 0) {
-            throw new UsageError();
-        }
-        return args.join(" ");
+  // eslint-disable-next-line class-methods-use-this
+  run(args) {
+    if (!args || args.length === 0) {
+      throw new UsageError();
     }
+    return args.join(' ');
+  }
 }

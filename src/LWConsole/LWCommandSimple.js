@@ -14,31 +14,27 @@
  limitations under the License.
  */
 
-import LWCommand from "./LWCommand";
+import LWCommand from './LWCommand';
 
 export default class LWCommandSimple extends LWCommand {
-
-    /**
-     * LWConsole Simple Command class for less complex commands.
-     * @param {String} name - See @link{LWCommand}.
-     * @param {String | undefined} description - See @link{LWCommand}.
-     * @param {String | undefined} usage - See @link{LWCommand}.
-     * @param {String | undefined} author - See @link{LWCommand}.
-     * @param {boolean} visible - See @link{LWCommand}.
-     * @param {function | String} handler - "run"-handler or static return string handler.
-     */
-    constructor(name, description, usage, author, visible, handler) {
-        super(name, description, usage, author, visible);
-        if (!handler) {
-            throw new Error("Field 'handler' is mandatory.");
-        }
-        if (typeof handler === "string") {
-            this.run = function () {
-                return handler
-            }
-        }
-        else {
-            this.run = handler;
-        }
+  /**
+   * LWConsole Simple Command class for less complex commands.
+   * @param {String} name - See @link{LWCommand}.
+   * @param {String | undefined} description - See @link{LWCommand}.
+   * @param {String | undefined} usage - See @link{LWCommand}.
+   * @param {String | undefined} author - See @link{LWCommand}.
+   * @param {boolean} visible - See @link{LWCommand}.
+   * @param {function | String} handler - "run"-handler or static return string handler.
+   */
+  constructor(name, description, usage, author, visible, handler) {
+    super(name, description, usage, author, visible);
+    if (!handler) {
+      throw new Error("Field 'handler' is mandatory.");
     }
+    if (typeof handler === 'string') {
+      this.run = () => handler;
+    } else {
+      this.run = handler;
+    }
+  }
 }
