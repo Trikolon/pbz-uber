@@ -14,46 +14,47 @@
  limitations under the License.
  */
 
-import LWCommand from "../LWCommand";
-import UsageError from "../UsageError";
-import * as log from "loglevel";
+import * as log from 'loglevel';
+import LWCommand from '../LWCommand';
+import UsageError from '../UsageError';
+
 
 export default class IpCMD extends LWCommand {
-    constructor(print) {
-        super("ip", "Lookup an IP (queries your IP if no argument is provided)", "[ip]", "Trikolon", true);
-        this.print = print;
+  constructor(print) {
+    super('ip', 'Lookup an IP (queries your IP if no argument is provided)', '[ip]', 'Trikolon', true);
+    this.print = print;
+  }
+
+  run(args) {
+    let queryUrl = 'https://ipinfo.io/';
+    if (args.length > 1) {
+      throw new UsageError();
     }
 
-    run(args) {
-        let queryUrl = "https://ipinfo.io/";
-        if (args.length > 1) {
-            throw new UsageError();
-        }
-
-        if (args.length === 1) { //one arg => query arg ip
-            queryUrl += `${args[0]}/`;
-        }
-
-        queryUrl += "json";
-
-        const request = new XMLHttpRequest();
-        request.timeout = 4000;
-        request.onload = () => {
-            if (request.status !== 200) {
-                this.print(`\nError: ipinfo.io returned code ${request.status}`);
-            }
-            this.print(request.responseText);
-        };
-        request.ontimeout = (e) => {
-            log.error(e);
-            this.print("Error: Could not get data from ipinfo.io. Timeout");
-        };
-        request.onerror = (e) => {
-            log.error(e);
-            this.print("Error: Could not send request to ipinfo.io. Check your internet connection.");
-        };
-        request.open("GET", queryUrl, true);
-        request.send();
-        return "Getting data ...";
+    if (args.length === 1) { // one arg => query arg ip
+      queryUrl += `${args[0]}/`;
     }
+
+    queryUrl += 'json';
+
+    const request = new XMLHttpRequest();
+    request.timeout = 4000;
+    request.onload = () => {
+      if (request.status !== 200) {
+        this.print(`\nError: ipinfo.io returned code ${request.status}`);
+      }
+      this.print(request.responseText);
+    };
+    request.ontimeout = (e) => {
+      log.error(e);
+      this.print('Error: Could not get data from ipinfo.io. Timeout');
+    };
+    request.onerror = (e) => {
+      log.error(e);
+      this.print('Error: Could not send request to ipinfo.io. Check your internet connection.');
+    };
+    request.open('GET', queryUrl, true);
+    request.send();
+    return 'Getting data ...';
+  }
 }

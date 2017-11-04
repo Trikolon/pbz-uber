@@ -14,33 +14,34 @@
  limitations under the License.
  */
 
-import LWCommand from "../LWCommand";
-import UsageError from "../UsageError";
-import * as log from "loglevel";
+import * as log from 'loglevel';
+import LWCommand from '../LWCommand';
+import UsageError from '../UsageError';
 
 export default class RawCMD extends LWCommand {
-    constructor() {
-        super(
-            "raw",
-            "Run raw JS statement",
-            "[cmd]",
-            "Trikolon",
-            true);
-    }
+  constructor() {
+    super(
+      'raw',
+      'Run raw JS statement',
+      '[cmd]',
+      'Trikolon',
+      true,
+    );
+  }
 
-    run(args) {
-        if (args.length === 0) {
-            throw new UsageError();
-        }
-// eslint-disable-next-line no-eval
-        let result = eval(args.join(" "));
-        try {
-            result = JSON.stringify(result, null, 2);
-            return result;
-        }
-        catch (e) {
-            log.info(result);
-            return "Can't stringify result, check console.";
-        }
+  // eslint-disable-next-line class-methods-use-this
+  run(args) {
+    if (args.length === 0) {
+      throw new UsageError();
     }
+    // eslint-disable-next-line no-eval
+    let result = eval(args.join(' '));
+    try {
+      result = JSON.stringify(result, null, 2);
+      return result;
+    } catch (e) {
+      log.info(result);
+      return "Can't stringify result, check console.";
+    }
+  }
 }
