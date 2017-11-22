@@ -6,7 +6,7 @@
   "dependencies": {
     "font-awesome": "^4.7.0",
     "font-awesome-webpack": "0.0.5-beta.2",
-    "loglevel": "^1.5.1",
+    "loglevel": "^1.6.0",
     "offline-plugin": "^4.8.4",
     "raven-js": "^3.20.1"
   },
@@ -15,10 +15,10 @@
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "babili-webpack-plugin": "^0.1.2",
-    "copy-webpack-plugin": "^4.2.0",
+    "copy-webpack-plugin": "^4.2.1",
     "cross-env": "^5.1.1",
     "css-loader": "^0.28.7",
-    "eslint": "^4.10.0",
+    "eslint": "^4.11.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
     "file-loader": "^1.1.5",
