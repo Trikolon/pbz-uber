@@ -16,7 +16,12 @@
 
 import * as loglevel from 'loglevel';
 import * as OfflinePluginRuntime from 'offline-plugin/runtime';
+import Raven from 'raven-js';
 import LWConsole from './LWConsole/LWConsole';
+
+Raven
+  .config('https://81882876703347e89790f8c3cc71362e@sentry.io/248115')
+  .install();
 
 require('font-awesome-webpack');
 
