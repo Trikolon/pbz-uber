@@ -5,9 +5,10 @@
   "main": "index.html",
   "dependencies": {
     "font-awesome": "^4.7.0",
+    "font-awesome-webpack": "0.0.5-beta.2",
     "loglevel": "^1.5.1",
     "offline-plugin": "^4.8.4",
-    "font-awesome-webpack": "0.0.5-beta.2"
+    "raven-js": "^3.20.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
