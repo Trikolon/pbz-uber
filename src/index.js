@@ -20,7 +20,7 @@ import Raven from 'raven-js';
 import LWConsole from './LWConsole/LWConsole';
 
 Raven
-  .config('https://81882876703347e89790f8c3cc71362e@sentry.io/248115')
+  .config('https://4b4d268edd0b4443a683b62e03c59c2f@sentry.io/249081')
   .install();
 
 require('font-awesome-webpack');
