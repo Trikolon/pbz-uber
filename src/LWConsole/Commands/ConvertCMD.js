@@ -14,7 +14,6 @@
  limitations under the License.
  */
 
-import * as log from 'loglevel';
 import LWCommand from '../LWCommand';
 import UsageError from '../UsageError';
 
@@ -115,9 +114,14 @@ export default class ConvertCMD extends LWCommand {
     const request = new XMLHttpRequest();
     request.onload = () => {
       if (request.status !== 200) {
-        this.print(`\nError: fixer.io returned code ${request.status}`);
+        this.print(`Error: fixer.io returned code ${request.status}`);
+        return;
       }
       const json = JSON.parse(request.responseText);
+      if (!json.rates[args[1]]) {
+        this.print(`Error: fixer.io does not know currency '${args[1]}'.`);
+        return;
+      }
       this.print(`${json.rates[args[1]] * parseFloat(args[2])} ${args[1]}`);
     };
     request.onerror = (e) => {
