@@ -38,12 +38,13 @@ export default class OpenCMD extends LWCommand {
       liquidradio: '//liquidradio.pro',
       source: '//github.com/Trikolon/pbz-uber',
     };
-    args[0] = args[0].toLowerCase(); // Ignore case
 
-    if (!urls[args[0]]) {
+    const serviceName = args[0].toLowerCase();
+
+    if (!urls[serviceName]) {
       throw new UsageError("Sorry, I don't know this service");
     }
-    window.open(urls[args[0]]);
+    window.open(urls[serviceName]);
     return `${args[0]} opened.`;
   }
 }
