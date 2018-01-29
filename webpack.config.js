@@ -52,6 +52,7 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: 'pwa' },
       { from: 'css' },
+      { from: 'deploy' },
     ]),
   ],
 };
