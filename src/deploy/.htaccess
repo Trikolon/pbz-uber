@@ -1,0 +1,4 @@
+RewriteEngine on
+RewriteBase /
+RewriteCond %{HTTP_USER_AGENT} "curl"
+RewriteRule . curl.json [L]
