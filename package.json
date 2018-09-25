@@ -7,7 +7,7 @@
     "font-awesome": "^4.7.0",
     "font-awesome-webpack": "0.0.5-beta.2",
     "loglevel": "^1.6.1",
-    "offline-plugin": "^4.9.0",
+    "offline-plugin": "^5.0.5",
     "raven-js": "^3.22.1"
   },
   "devDependencies": {
